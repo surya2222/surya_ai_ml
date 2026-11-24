@@ -1,0 +1,1441 @@
+<!DOCTYPE html>
+<html lang="hi">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Jupyter Notebook Fundamentals - संपूर्ण हिंदी नोट्स (Complete Notes)</title>
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Fira+Code:wght@400;500;600&family=Inter:wght@300;400;500;600;700&family=Noto+Sans+Devanagari:wght@400;500;600;700&display=swap" rel="stylesheet">
+    <style>
+        :root {
+            --primary: #f37626;
+            --primary-dark: #d85d10;
+            --primary-light: #fff3ec;
+            --secondary: #4a5568;
+            --accent: #2b6cb0;
+            --accent-light: #ebf8ff;
+            --bg-main: #f8fafc;
+            --bg-card: #ffffff;
+            --text-main: #1a202c;
+            --text-muted: #4a5568;
+            --border: #e2e8f0;
+            --code-bg: #1e1e2e;
+            --code-text: #cdd6f4;
+            --kbd-bg: #edf2f7;
+            --kbd-border: #cbd5e0;
+            --success: #38a169;
+            --warning: #dd6b20;
+            --danger: #e53e3e;
+            --info: #3182ce;
+        }
+
+        * {
+            box-sizing: border-box;
+            margin: 0;
+            padding: 0;
+        }
+
+        body {
+            font-family: 'Noto Sans Devanagari', 'Inter', -apple-system, BlinkMacSystemFont, sans-serif;
+            background-color: var(--bg-main);
+            color: var(--text-main);
+            line-height: 1.75;
+            display: flex;
+            min-height: 100vh;
+        }
+
+        /* Sidebar Navigation */
+        .sidebar {
+            width: 320px;
+            background: #ffffff;
+            border-right: 1px solid var(--border);
+            height: 100vh;
+            position: sticky;
+            top: 0;
+            overflow-y: auto;
+            padding: 24px 16px;
+            flex-shrink: 0;
+            box-shadow: 2px 0 10px rgba(0,0,0,0.02);
+        }
+
+        .sidebar-brand {
+            display: flex;
+            align-items: center;
+            gap: 12px;
+            padding-bottom: 20px;
+            border-bottom: 2px solid var(--border);
+            margin-bottom: 20px;
+        }
+
+        .sidebar-brand svg {
+            width: 38px;
+            height: 38px;
+            fill: var(--primary);
+        }
+
+        .sidebar-brand h2 {
+            font-size: 1.25rem;
+            color: var(--text-main);
+            font-weight: 700;
+            line-height: 1.2;
+        }
+
+        .sidebar-brand span {
+            font-size: 0.8rem;
+            color: var(--primary);
+            font-weight: 600;
+            display: block;
+        }
+
+        .part-nav-btn {
+            display: block;
+            background: var(--primary-light);
+            color: var(--primary-dark);
+            text-align: center;
+            padding: 8px 12px;
+            border-radius: 8px;
+            font-size: 0.84rem;
+            font-weight: 600;
+            text-decoration: none;
+            margin-bottom: 18px;
+            border: 1px solid #fed7aa;
+            transition: all 0.2s ease;
+        }
+
+        .part-nav-btn:hover {
+            background: #ffedd5;
+            transform: translateY(-1px);
+        }
+
+        .toc-list {
+            list-style: none;
+        }
+
+        .toc-item {
+            margin-bottom: 6px;
+        }
+
+        .toc-link {
+            display: flex;
+            align-items: center;
+            gap: 10px;
+            padding: 10px 14px;
+            border-radius: 8px;
+            color: var(--text-muted);
+            text-decoration: none;
+            font-size: 0.92rem;
+            font-weight: 500;
+            transition: all 0.2s ease;
+        }
+
+        .toc-link:hover, .toc-link.active {
+            background-color: var(--primary-light);
+            color: var(--primary-dark);
+            font-weight: 600;
+            transform: translateX(4px);
+        }
+
+        .toc-badge {
+            background: #edf2f7;
+            color: #4a5568;
+            font-size: 0.75rem;
+            padding: 2px 7px;
+            border-radius: 12px;
+            font-weight: 600;
+        }
+
+        .toc-link:hover .toc-badge {
+            background: var(--primary);
+            color: white;
+        }
+
+        /* Main Content Container */
+        .main-wrapper {
+            flex-grow: 1;
+            padding: 40px 60px;
+            max-width: 1200px;
+            overflow-x: hidden;
+        }
+
+        header.hero {
+            background: linear-gradient(135deg, #fff7f2 0%, #ffffff 100%);
+            border: 1px solid #fed7aa;
+            border-radius: 16px;
+            padding: 36px 40px;
+            margin-bottom: 40px;
+            box-shadow: 0 4px 20px rgba(243, 118, 38, 0.08);
+            position: relative;
+        }
+
+        .hero h1 {
+            font-size: 2.3rem;
+            color: #c05621;
+            margin-bottom: 12px;
+            font-weight: 700;
+        }
+
+        .hero p {
+            font-size: 1.1rem;
+            color: #4a5568;
+            max-width: 850px;
+        }
+
+        .hero-meta {
+            display: flex;
+            gap: 20px;
+            margin-top: 18px;
+            font-size: 0.88rem;
+            color: #718096;
+        }
+
+        .hero-meta span {
+            display: flex;
+            align-items: center;
+            gap: 6px;
+        }
+
+        /* Chapter Sections */
+        .chapter-card {
+            background: var(--bg-card);
+            border-radius: 14px;
+            border: 1px solid var(--border);
+            padding: 36px 40px;
+            margin-bottom: 40px;
+            box-shadow: 0 2px 12px rgba(0,0,0,0.03);
+            scroll-margin-top: 30px;
+        }
+
+        .chapter-header {
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            border-bottom: 2px solid #edf2f7;
+            padding-bottom: 16px;
+            margin-bottom: 24px;
+        }
+
+        .chapter-header h2 {
+            font-size: 1.65rem;
+            color: #2d3748;
+            display: flex;
+            align-items: center;
+            gap: 12px;
+        }
+
+        .chapter-num {
+            background: var(--primary);
+            color: white;
+            font-size: 0.95rem;
+            padding: 4px 12px;
+            border-radius: 20px;
+            font-weight: 600;
+            display: inline-block;
+        }
+
+        h3 {
+            font-size: 1.25rem;
+            color: #2b6cb0;
+            margin: 26px 0 12px 0;
+            font-weight: 600;
+            display: flex;
+            align-items: center;
+            gap: 8px;
+        }
+
+        h3::before {
+            content: "❖";
+            color: var(--primary);
+            font-size: 0.95rem;
+        }
+
+        h4 {
+            font-size: 1.05rem;
+            color: #4a5568;
+            margin: 18px 0 8px 0;
+            font-weight: 600;
+        }
+
+        p {
+            margin-bottom: 14px;
+            color: #2d3748;
+        }
+
+        ul, ol {
+            margin-left: 24px;
+            margin-bottom: 18px;
+        }
+
+        li {
+            margin-bottom: 8px;
+            color: #374151;
+        }
+
+        strong {
+            color: #1a202c;
+        }
+
+        /* Callouts / Alert Boxes */
+        .callout {
+            border-radius: 10px;
+            padding: 16px 20px;
+            margin: 20px 0;
+            display: flex;
+            gap: 14px;
+            align-items: flex-start;
+            font-size: 0.96rem;
+        }
+
+        .callout-icon {
+            font-size: 1.3rem;
+            flex-shrink: 0;
+            margin-top: 2px;
+        }
+
+        .callout-content h5 {
+            font-size: 1rem;
+            font-weight: 700;
+            margin-bottom: 4px;
+        }
+
+        .callout-tip {
+            background-color: #f0fff4;
+            border-left: 4px solid var(--success);
+            color: #22543d;
+        }
+        .callout-tip .callout-content h5 { color: #22543d; }
+
+        .callout-note {
+            background-color: #ebf8ff;
+            border-left: 4px solid var(--info);
+            color: #2b6cb0;
+        }
+        .callout-note .callout-content h5 { color: #2b6cb0; }
+
+        .callout-warning {
+            background-color: #fffaf0;
+            border-left: 4px solid var(--warning);
+            color: #7b341e;
+        }
+        .callout-warning .callout-content h5 { color: #7b341e; }
+
+        .callout-danger {
+            background-color: #fff5f5;
+            border-left: 4px solid var(--danger);
+            color: #742a2a;
+        }
+
+        /* Tables */
+        .table-responsive {
+            overflow-x: auto;
+            margin: 20px 0 26px 0;
+            border-radius: 10px;
+            border: 1px solid var(--border);
+        }
+
+        table {
+            width: 100%;
+            border-collapse: collapse;
+            text-align: left;
+            font-size: 0.94rem;
+        }
+
+        th {
+            background-color: #f7fafc;
+            color: #2d3748;
+            font-weight: 600;
+            padding: 12px 16px;
+            border-bottom: 2px solid var(--border);
+        }
+
+        td {
+            padding: 12px 16px;
+            border-bottom: 1px solid var(--border);
+            vertical-align: top;
+        }
+
+        tr:nth-child(even) {
+            background-color: #fafbfd;
+        }
+
+        tr:hover {
+            background-color: #f0f7ff;
+        }
+
+        /* Code Blocks */
+        pre {
+            background-color: var(--code-bg);
+            color: var(--code-text);
+            padding: 16px 20px;
+            border-radius: 10px;
+            overflow-x: auto;
+            font-family: 'Fira Code', Consolas, Monaco, monospace;
+            font-size: 0.9rem;
+            margin: 16px 0 20px 0;
+            position: relative;
+            line-height: 1.5;
+            box-shadow: 0 4px 12px rgba(0,0,0,0.1);
+        }
+
+        code.inline {
+            background-color: #edf2f7;
+            color: #c53030;
+            padding: 2px 6px;
+            border-radius: 4px;
+            font-family: 'Fira Code', Consolas, monospace;
+            font-size: 0.88em;
+            font-weight: 500;
+        }
+
+        /* Keyboard Badges */
+        kbd {
+            display: inline-block;
+            background-color: var(--kbd-bg);
+            border: 1px solid var(--kbd-border);
+            border-bottom: 2px solid #a0aec0;
+            border-radius: 5px;
+            padding: 2px 7px;
+            font-family: 'Inter', monospace;
+            font-size: 0.82rem;
+            font-weight: 600;
+            color: #2d3748;
+            box-shadow: 0 1px 2px rgba(0,0,0,0.06);
+            margin: 0 2px;
+        }
+
+        /* Visual Diagrams / Box Flows */
+        .flow-container {
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            gap: 12px;
+            margin: 24px 0;
+            flex-wrap: wrap;
+        }
+
+        .flow-step {
+            background: #ffffff;
+            border: 2px solid #cbd5e0;
+            border-radius: 10px;
+            padding: 12px 18px;
+            font-weight: 600;
+            text-align: center;
+            color: #2d3748;
+            box-shadow: 0 2px 5px rgba(0,0,0,0.04);
+            min-width: 140px;
+        }
+
+        .flow-arrow {
+            font-size: 1.4rem;
+            color: var(--primary);
+            font-weight: bold;
+        }
+
+        /* Footer */
+        footer {
+            margin-top: 60px;
+            border-top: 1px solid var(--border);
+            padding: 30px 0 10px 0;
+            text-align: center;
+            color: #a0aec0;
+            font-size: 0.9rem;
+        }
+
+        @media (max-width: 1024px) {
+            body {
+                flex-direction: column;
+            }
+            .sidebar {
+                width: 100%;
+                height: auto;
+                position: relative;
+                border-right: none;
+                border-bottom: 1px solid var(--border);
+            }
+            .main-wrapper {
+                padding: 20px;
+            }
+        }
+    </style>
+</head>
+<body>
+
+    <!-- Sidebar Navigation -->
+    <aside class="sidebar">
+        <div class="sidebar-brand">
+            <svg viewBox="0 0 448 512">
+                <path d="M224 256c70.7 0 128-57.3 128-128S294.7 0 224 0 96 57.3 96 128s57.3 128 128 128zm89.6 32h-16.7c-22.2 10.2-46.9 16-72.9 16s-50.6-5.8-72.9-16h-16.7C60.2 288 0 348.2 0 422.4V464c0 26.5 21.5 48 48 48h352c26.5 0 48-21.5 48-48v-41.6c0-74.2-60.2-134.4-134.4-134.4z"/>
+            </svg>
+            <div>
+                <h2>Jupyter नोट्स</h2>
+                <span>Part 1: Fundamentals</span>
+            </div>
+        </div>
+
+        <div class="nav-links-box" style="display:flex; flex-direction:column; gap:6px; margin-bottom:18px;">
+            <a href="index.html" class="part-nav-btn" style="background:#1a365d; color:#ffffff; font-weight:700; border:1px solid #2b6cb0; box-shadow:0 2px 4px rgba(0,0,0,0.1);">
+                🏠 मुख्य पृष्ठ (Surya's Gist)
+            </a>
+            <a href="Jupyter_Notebook_Part2_Markdown_Formatting_Hindi.html" class="part-nav-btn">
+                Part 2: Markdown & Formatting ➡
+            </a>
+            <a href="Jupyter_Notebook_Part3_Python_Inside_Jupyter_Hindi.html" class="part-nav-btn">
+                Part 3: Python Inside Jupyter ➡
+            </a>
+            <a href="Jupyter_Notebook_Part4_Advanced_Features_Hindi.html" class="part-nav-btn">
+                Part 4: Advanced Features ➡
+            </a>
+            <a href="Jupyter_Notebook_Part5_Data_Science_Libraries_Hindi.html" class="part-nav-btn">
+                Part 5: Data Science Libraries ➡
+            </a>
+            <a href="Jupyter_Notebook_Part6_Database_API_Integration_Hindi.html" class="part-nav-btn">
+                Part 6: Database & API Integration ➡
+            </a>
+            <a href="Jupyter_Notebook_Part7_Data_Science_and_Machine_Learning_Hindi.html" class="part-nav-btn">
+                Part 7: Data Science & ML ➡
+            </a>
+            <a href="Jupyter_Notebook_Part8_Production_Level_Jupyter_Hindi.html" class="part-nav-btn">
+                Part 8: Production Jupyter ➡
+            </a>
+        </div>
+
+                <div class="community-sidebar-card" style="margin-bottom:16px; padding:12px; background:#f8fafc; border:1px solid #e2e8f0; border-radius:10px; text-align:center;">
+            <div style="font-size:0.8rem; font-weight:700; color:#334155; margin-bottom:8px; display:flex; align-items:center; justify-content:center; gap:5px;">
+                🤖 ProgRobo Community
+            </div>
+            <div style="display:flex; flex-direction:column; gap:6px;">
+                <a href="https://chat.whatsapp.com/LGOqoPMt3IO1C6R33qviuT?s=cl&p=a&iam=2" target="_blank" rel="noopener noreferrer" style="display:inline-flex; align-items:center; justify-content:center; gap:6px; background:#25D366; color:#ffffff; padding:7px 10px; border-radius:6px; font-size:0.78rem; font-weight:700; text-decoration:none; box-shadow:0 2px 4px rgba(37,211,102,0.2);">
+                    💬 Join WhatsApp Group
+                </a>
+                <a href="https://github.com/surya2222" target="_blank" rel="noopener noreferrer" style="display:inline-flex; align-items:center; justify-content:center; gap:6px; background:#24292e; color:#ffffff; padding:7px 10px; border-radius:6px; font-size:0.78rem; font-weight:600; text-decoration:none;">
+                    🐙 GitHub: @surya2222
+                </a>
+            </div>
+        </div>
+<ul class="toc-list">
+            <li class="toc-item">
+                <a href="#ch1" class="toc-link">
+                    <span class="toc-badge">Ch 1</span>
+                    <span>1. Introduction (परिचय)</span>
+                </a>
+            </li>
+            <li class="toc-item">
+                <a href="#ch2" class="toc-link">
+                    <span class="toc-badge">Ch 2</span>
+                    <span>2. Installation (इन्स्टॉलेशन)</span>
+                </a>
+            </li>
+            <li class="toc-item">
+                <a href="#ch3" class="toc-link">
+                    <span class="toc-badge">Ch 3</span>
+                    <span>3. Launching (शुरू करना)</span>
+                </a>
+            </li>
+            <li class="toc-item">
+                <a href="#ch4" class="toc-link">
+                    <span class="toc-badge">Ch 4</span>
+                    <span>4. Interface (इंटरफ़ेस)</span>
+                </a>
+            </li>
+            <li class="toc-item">
+                <a href="#ch5" class="toc-link">
+                    <span class="toc-badge">Ch 5</span>
+                    <span>5. Creating Notebook (नोटबुक निर्माण)</span>
+                </a>
+            </li>
+            <li class="toc-item">
+                <a href="#ch6" class="toc-link">
+                    <span class="toc-badge">Ch 6</span>
+                    <span>6. Notebook Cells (सेल्स के प्रकार)</span>
+                </a>
+            </li>
+            <li class="toc-item">
+                <a href="#ch7" class="toc-link">
+                    <span class="toc-badge">Ch 7</span>
+                    <span>7. Cell Execution (निष्पादन)</span>
+                </a>
+            </li>
+            <li class="toc-item">
+                <a href="#ch8" class="toc-link">
+                    <span class="toc-badge">Ch 8</span>
+                    <span>8. Keyboard Shortcuts (शॉर्टकट्स)</span>
+                </a>
+            </li>
+            <li class="toc-item">
+                <a href="#ch9" class="toc-link">
+                    <span class="toc-badge">Ch 9</span>
+                    <span>9. Kernel (कर्नल प्रबंधन)</span>
+                </a>
+            </li>
+            <li class="toc-item">
+                <a href="#ch10" class="toc-link">
+                    <span class="toc-badge">Ch 10</span>
+                    <span>10. File Management (फ़ाइल प्रारूप)</span>
+                </a>
+            </li>
+        </ul>
+    </aside>
+
+    <!-- Main Content Area -->
+    <main class="main-wrapper">
+
+        <!-- Hero Banner -->
+        <header class="hero">
+            <h1>Jupyter Notebook Fundamentals - संपूर्ण हिंदी नोट्स</h1>
+            <p>डेटा साइंस, मशीन लर्निंग और पायथन प्रोग्रामिंग के सबसे लोकप्रिय टूल <strong>Jupyter Notebook</strong> का विस्तृत, संपूर्ण और चरणबद्ध (Step-by-Step) अध्ययन गाइड।</p>
+            <div class="hero-meta">
+                <span>📘 <strong>भाग:</strong> Part 1 (मूलभूत सिद्धांत)</span>
+                <span>📑 <strong>कुल अध्याय:</strong> 10 Chapters</span>
+                <span>🎯 <strong>माध्यम:</strong> सरल हिंदी व तकनीकी शब्दावली (Hindi + Technical Terms)</span>
+            </div>
+        </header>
+
+        <!-- Chapter 1 -->
+        <section id="ch1" class="chapter-card">
+            <div class="chapter-header">
+                <h2><span>Chapter 1: Introduction (परिचय)</span></h2>
+                <span class="chapter-num">अध्याय 1</span>
+            </div>
+
+            <h3>1.1 What is Jupyter Notebook? (जुपिटर नोटबुक क्या है?)</h3>
+            <p><strong>Jupyter Notebook</strong> एक ओपन-सोर्स (Open-Source), वेब-आधारित इंटरैक्टिव कम्प्यूटेशनल वातावरण (Web-based Interactive Computing Platform) है। यह प्रोग्रामर्स, डेटा साइंटिस्ट्स और रिसर्चर्स को लाइव कोड लिखने, उसे तुरंत रन करने, गणितीय समीकरण (Equations), विज़ुअलाइज़ेशन (Charts/Graphs) और विवरणात्मक टेक्स्ट (Narrative Text / Markdown) को एक ही दस्तावेज़ में संकलित करने की सुविधा प्रदान करता है।</p>
+            
+            <p><strong>नामकरण का इतिहास:</strong> "Jupyter" नाम तीन मुख्य वैज्ञानिक प्रोग्रामिंग भाषाओं के संयोजन से बना है:</p>
+            <ul>
+                <li><strong>Ju:</strong> Julia (जूलिया)</li>
+                <li><strong>Py:</strong> Python (पायथन)</li>
+                <li><strong>R:</strong> R लैंग्वेज (सांख्यिकी के लिए)</li>
+            </ul>
+            <p>हालाँकि यह प्रोजेक्ट मूल रूप से 2014 में <strong>Fernando Pérez</strong> द्वारा <em>IPython</em> से अलग होकर <strong>Project Jupyter</strong> के रूप में विकसित हुआ था और आज यह 40 से अधिक प्रोग्रामिंग भाषाओं का समर्थन करता है।</p>
+
+            <h3>1.2 Features of Jupyter Notebook (मुख्य विशेषताएँ)</h3>
+            <ul>
+                <li><strong>इंटरैक्टिव एक्ज़ीक्यूशन (Interactive Execution):</strong> पूरे प्रोग्राम को एक साथ रन करने के बजाय कोड को छोटे-छोटे टुकड़ों (Cells) में रन किया जा सकता है और आउटपुट तुरंत सेल के नीचे दिखाई देता है।</li>
+                <li><strong>रिच मीडिया व विज़ुअलाइज़ेशन सपोर्ट (Rich Media Integration):</strong> Matplotlib, Seaborn, Plotly आदि के माध्यम से बनाए गए चार्ट, इमेज, वीडियो और HTML टेबल सीधे नोटबुक के अंदर एम्बेड हो जाते हैं।</li>
+                <li><strong>मार्कडाउन व LaTeX सपोर्ट (Markdown & LaTeX):</strong> तकनीकी प्रलेखन (Technical Documentation) और जटिल गणितीय सूत्रों को स्पष्ट रूप से लिखने के लिए Markdown तथा MathJax/LaTeX का सहज समर्थन।</li>
+                <li><strong>मल्टी-लैंग्वेज सपोर्ट (Kernels):</strong> विभिन्न भाषाओं के लिए कर्नल उपलब्ध हैं (Python, R, Julia, Scala, C++, आदि)।</li>
+                <li><strong>शेयरेबल और पोर्टेबल (Shareable):</strong> नोटबुक फ़ाइलों को <code>.ipynb</code>, PDF, HTML, Python Script, या Markdown फ़ाइलों के रूप में आसानी से शेयर किया जा सकता है। GitHub सीधे <code>.ipynb</code> फ़ाइलों को रेंडर करता है।</li>
+            </ul>
+
+            <h3>1.3 Uses & Applications (उपयोग व अनुप्रयोग)</h3>
+            <ul>
+                <li><strong>डेटा क्लीनिंग और ट्रांसफॉर्मेशन (Data Cleaning & Wrangling):</strong> असंरचित डेटा को लोड करना, मिसिंग वैल्यूज भरना, और डेटा की रीशेपिंग करना।</li>
+                <li><strong>डेटा विज़ुअलाइज़ेशन (Exploratory Data Analysis - EDA):</strong> डेटा के पैटर्न, आउटलायर्स (Outliers) और डिस्ट्रीब्यूशन को ग्राफ्स द्वारा समझना।</li>
+                <li><strong>मशीन लर्निंग और डीप लर्निंग (ML & DL Modeling):</strong> Scikit-Learn, TensorFlow, PyTorch का उपयोग करके मॉडल्स को स्टेप-बाय-स्टेप ट्रेन और ट्यून करना।</li>
+                <li><strong>वैज्ञानिक कंप्यूटिंग व अनुसंधान (Scientific Research):</strong> प्रयोगों के परिणाम, कोड और निष्कर्षों का एक रीप्रॉड्यूसिबल (Reproducible) रिकॉर्ड तैयार करना।</li>
+                <li><strong>शैक्षणिक उद्देश्य (Teaching & Learning):</strong> कोडिंग ट्यूटोरियल, इंटरैक्टिव बुक्स और प्रैक्टिकल नोट्स बनाना।</li>
+            </ul>
+
+            <h3>1.4 Jupyter Notebook vs Traditional Python IDE</h3>
+            <p>अक्सर शुरुआती छात्रों में यह संशय होता है कि क्या Jupyter एक IDE (जैसे VS Code, PyCharm) का विकल्प है? आइए नीचे दी गई तुलना से समझें:</p>
+
+            <div class="table-responsive">
+                <table>
+                    <thead>
+                        <tr>
+                            <th>विशेषता (Feature)</th>
+                            <th>Jupyter Notebook</th>
+                            <th>Traditional IDE (VS Code, PyCharm)</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        <tr>
+                            <td><strong>कोड निष्पादन (Execution)</strong></td>
+                            <td>सेल-दर-सेल (Cell-by-Cell) इंटरैक्टिव निष्पादन।</td>
+                            <td>संपूर्ण स्क्रिप्ट या मॉड्यूल एक साथ रन होता है।</td>
+                        </tr>
+                        <tr>
+                            <td><strong>डेटा पर्सिस्टेंस (State in Memory)</strong></td>
+                            <td>एक सेल रन होने के बाद वैरिएबल्स मेमोरी में सुरक्षित रहते हैं। बार-बार डेटा लोड करने की आवश्यकता नहीं होती।</td>
+                            <td>स्क्रिप्ट खत्म होते ही मेमोरी खाली हो जाती है (जब तक कि डीबगर न लगा हो)।</td>
+                        </tr>
+                        <tr>
+                            <td><strong>डेटा विज़ुअलाइज़ेशन</strong></td>
+                            <td>ग्राफ और चार्ट्स सीधे कोड के नीचे इनलाइन दिखते हैं।</td>
+                            <td>चार्ट्स अलग विंडो (Pop-up GUI) में खुलते हैं।</td>
+                        </tr>
+                        <tr>
+                            <td><strong>दस्तावेज़ीकरण (Documentation)</strong></td>
+                            <td>कोड के साथ-साथ समृद्ध टेक्स्ट, हेडिंग और इमेज एम्बेड होते हैं।</td>
+                            <td>केवल कोड कमेंट्स (<code>#</code> या docstrings) का सहारा होता है।</td>
+                        </tr>
+                        <tr>
+                            <td><strong>डीबगिंग व रिफैक्टरिंग</strong></td>
+                            <td>बेसिक डीबगिंग (pdb/IPython) संभव है, लेकिन जटिल प्रोजेक्ट रिफैक्टरिंग सीमित है।</td>
+                            <td>शक्तिशाली डीबगर, ब्रेकपॉइंट्स, लिंटर्स और गिट इंटीग्रेशन।</td>
+                        </tr>
+                        <tr>
+                            <td><strong>सर्वश्रेष्ठ उपयोग (Best For)</strong></td>
+                            <td>डेटा एक्सप्लोरेशन, प्रोटोटाइपिंग, मशीन लर्निंग, एनालिसिस।</td>
+                            <td>फुल-स्टैक सॉफ्टवेयर डेवलपमेंट, वेब ऐप्स (Django/Flask), लार्ज कोडबेस।</td>
+                        </tr>
+                    </tbody>
+                </table>
+            </div>
+
+            <div class="callout callout-tip">
+                <div class="callout-icon">💡</div>
+                <div class="callout-content">
+                    <h5>गोल्डन टिप:</h5>
+                    <p>डेटा एनालिसिस, रिसर्च और मॉडल एक्सप्लोरेशन के लिए <strong>Jupyter Notebook</strong> सर्वोत्तम है, जबकि प्रोडक्शन-रेडी सॉफ्टवेयर और APIs बनाने के लिए <strong>VS Code</strong> या <strong>PyCharm</strong> सबसे उपयुक्त हैं।</p>
+                </div>
+            </div>
+        </section>
+
+        <!-- Chapter 2 -->
+        <section id="ch2" class="chapter-card">
+            <div class="chapter-header">
+                <h2><span>Chapter 2: Installation (इन्स्टॉलेशन)</span></h2>
+                <span class="chapter-num">अध्याय 2</span>
+            </div>
+
+            <p>Jupyter Notebook को इंस्टॉल करने के मुख्य रूप से दो तरीके हैं: <strong>pip</strong> (Python Package Manager) के माध्यम से या <strong>Anaconda Distribution</strong> के माध्यम से।</p>
+
+            <h3>2.1 Python Installation (पायथन की स्थापना)</h3>
+            <p>यदि आपके सिस्टम में पायथन नहीं है, तो सबसे पहले पायथन इंस्टॉल करें:</p>
+            <ol>
+                <li>आधिकारिक वेबसाइट <a href="https://www.python.org" target="_blank" style="color:var(--accent);">python.org</a> पर जाएं।</li>
+                <li>Windows / macOS के लिए नवीनतम Python 3.x इंस्टॉलर डाउनलोड करें।</li>
+                <li><strong>महत्वपूर्ण चरण:</strong> इंस्टॉलर खोलते ही सबसे नीचे दिए गए चेकबॉक्स <code>☑ Add python.exe to PATH</code> को अवश्य टिक करें।</li>
+                <li>"Install Now" पर क्लिक करें।</li>
+                <li>कमांड प्रॉम्प्ट (CMD) खोलकर पुष्टि करें:
+                    <pre><code>python --version
+pip --version</code></pre>
+                </li>
+            </ol>
+
+            <h3>2.2 pip द्वारा Jupyter Notebook इंस्टॉल करना</h3>
+            <p>यदि आपके पास शुद्ध पायथन (Vanilla Python) पहले से मौजूद है, तो टर्मिनल या कमांड प्रॉम्प्ट में निम्न कमांड चलाएं:</p>
+            
+            <pre><code># pip को अपडेट करें
+python -m pip install --upgrade pip
+
+# क्लासिक Jupyter Notebook इंस्टॉल करें
+pip install notebook
+
+# या आधुनिक JupyterLab इंस्टॉल करें (वैकल्पिक)
+pip install jupyterlab</code></pre>
+
+            <h3>2.3 Anaconda Distribution द्वारा इंस्टॉलेशन (अनुशंसित / Recommended)</h3>
+            <p><strong>Anaconda क्या है?</strong> यह डेटा साइंस और मशीन लर्निंग के लिए दुनिया का सबसे लोकप्रिय प्लेटफॉर्म है। इसमें Python, Jupyter Notebook, JupyterLab, Spyder, और 1500+ महत्वपूर्ण साइंटिफिक लाइब्रेरीज़ (NumPy, Pandas, Matplotlib, Scikit-Learn आदि) पहले से इंस्टॉल मिलती हैं।</p>
+            
+            <h4>Anaconda इंस्टॉलेशन के चरण:</h4>
+            <ol>
+                <li><a href="https://www.anaconda.com" target="_blank" style="color:var(--accent);">anaconda.com</a> पर जाएं और "Download Anaconda Distribution" पर क्लिक करें।</li>
+                <li>इंस्टॉलर चलाएं और डिफ़ॉल्ट सेटिंग्स के साथ Next-Next करते हुए इंस्टॉल पूरा करें।</li>
+                <li>इंस्टॉल होने के बाद आपके स्टार्ट मेनू में <strong>Anaconda Navigator</strong> और <strong>Anaconda Prompt</strong> उपलब्ध हो जाएंगे।</li>
+            </ol>
+
+            <div class="table-responsive">
+                <table>
+                    <thead>
+                        <tr>
+                            <th>पैरामीटर</th>
+                            <th>pip विधि (Lightweight)</th>
+                            <th>Anaconda विधि (All-in-One)</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        <tr>
+                            <td><strong>डाउनलोड साइज</strong></td>
+                            <td>छोटा (~100 MB केवल पायथन + जुपिटर)</td>
+                            <td>बड़ा (~600 MB - 1 GB पूरा डेटा साइंस पैकेज)</td>
+                        </tr>
+                        <tr>
+                            <td><strong>डिपेंडेंसी हैंडलिंग</strong></td>
+                            <td>प्रत्येक पैकेज (pandas, sklearn) अलग से <code>pip install</code> करना होगा</td>
+                            <td>लगभग सभी जरूरी पैकेजेस पहले से शामिल रहते हैं</td>
+                        </tr>
+                        <tr>
+                            <td><strong>एनवायरनमेंट मैनेजमेंट</strong></td>
+                            <td><code>venv</code> / <code>virtualenv</code></td>
+                            <td><code>conda</code> (Conda Environments)</td>
+                        </tr>
+                    </tbody>
+                </table>
+            </div>
+
+            <h3>2.4 इंस्टॉलेशन की पुष्टि (Verification)</h3>
+            <p>अपने टर्मिनल में निम्न कमांड टाइप करके देखें कि क्या जुपिटर सही से इंस्टॉल हो गया है:</p>
+            <pre><code>jupyter --version</code></pre>
+            <p>यह आपके सिस्टम में इंस्टॉल <code>IPython</code>, <code>notebook</code>, और <code>jupyter_core</code> के वर्ज़न प्रदर्शित करेगा।</p>
+        </section>
+
+        <!-- Chapter 3 -->
+        <section id="ch3" class="chapter-card">
+            <div class="chapter-header">
+                <h2><span>Chapter 3: Launching (लॉन्च करना)</span></h2>
+                <span class="chapter-num">अध्याय 3</span>
+            </div>
+
+            <h3>3.1 Start Notebook (नोटबुक शुरू करना)</h3>
+            <p>Jupyter Notebook को शुरू करने के तीन सामान्य तरीके हैं:</p>
+            
+            <h4>विधि 1: Command Prompt / Terminal द्वारा (सर्वश्रेष्ठ तरीका)</h4>
+            <p>जिस फ़ोल्डर में आप अपना काम या प्रोजेक्ट सेव करना चाहते हैं, टर्मिनल में उस फ़ोल्डर तक जाएं:</p>
+            <pre><code># अपने प्रोजेक्ट फ़ोल्डर में जाएं
+cd "C:\Users\M_SURYA\Desktop\jupyter notebook"
+
+# जुपिटर नोटबुक सर्वर प्रारंभ करें
+jupyter notebook</code></pre>
+
+            <h4>विधि 2: Anaconda Prompt द्वारा</h4>
+            <p>विंडोज़ स्टार्ट मेन्यू से <strong>Anaconda Prompt</strong> खोलें और टाइप करें: <code>jupyter notebook</code></p>
+
+            <h4>विधि 3: Anaconda Navigator (GUI) द्वारा</h4>
+            <p>Anaconda Navigator ऐप खोलें और होम स्क्रीन पर <strong>Jupyter Notebook</strong> टाइल के नीचे <strong>"Launch"</strong> बटन पर क्लिक करें।</p>
+
+            <h3>3.2 Browser Interface (वेब ब्राउज़र इंटरफ़ेस)</h3>
+            <p>जैसे ही आप कमांड चलाते हैं, जुपिटर आपके डिफ़ॉल्ट वेब ब्राउज़र (Chrome, Edge, Firefox) में एक नया टैब खोलता है।</p>
+            <ul>
+                <li>डिफ़ॉल्ट यूआरएल: <code>http://localhost:8888/tree</code></li>
+                <li>यदि ऑटोमैटिकली ब्राउज़र न खुले, तो टर्मिनल में प्रिंट हुए टोकन वाले लिंक (उदा. <code>http://127.0.0.1:8888/?token=abcdef...</code>) को कॉपी करके किसी भी ब्राउज़र में पेस्ट कर सकते हैं।</li>
+            </ul>
+
+            <h3>3.3 Local Server Concept (लोकल सर्वर सिद्धांत)</h3>
+            <p>यह समझना अत्यंत महत्वपूर्ण है कि जुपिटर नोटबुक क्लाउड पर नहीं, बल्कि आपकी अपनी मशीन पर चलता है:</p>
+            
+            <div class="flow-container">
+                <div class="flow-step">
+                    <strong>टर्मिनल (CLI)</strong><br>
+                    <small>Background Python Server</small>
+                </div>
+                <div class="flow-arrow">⇄</div>
+                <div class="flow-step">
+                    <strong>Localhost:8888</strong><br>
+                    <small>HTTP Protocol / Sockets</small>
+                </div>
+                <div class="flow-arrow">⇄</div>
+                <div class="flow-step">
+                    <strong>वेब ब्राउज़र</strong><br>
+                    <small>User Frontend Interface</small>
+                </div>
+            </div>
+
+            <ul>
+                <li><strong>Localhost (127.0.0.1):</strong> इसका अर्थ है कि सर्वर आपके ही कंप्यूटर के आंतरिक नेटवर्क लूप पर सुन रहा है।</li>
+                <li><strong>Port 8888:</strong> यह वह नेटवर्क पोर्ट है जिस पर जुपिटर संचार करता है। यदि 8888 पोर्ट व्यस्त हो, तो यह स्वतः 8889 या 8890 चुन लेता है।</li>
+                <li><strong>टर्मिनल बंद न करें:</strong> जब तक आप नोटबुक में काम कर रहे हैं, उस ब्लैक टर्मिनल विंडो को बंद न करें! वह बैकएंड इंजन है। यदि आपने वह विंडो बंद कर दी, तो सर्वर क्रैश हो जाएगा और नोटबुक रिस्पॉन्स देना बंद कर देगी।</li>
+                <li><strong>सर्वर को बंद करने का सही तरीका:</strong> टर्मिनल में जाकर दो बार <kbd>Ctrl</kbd> + <kbd>C</kbd> दबाएं।</li>
+            </ul>
+        </section>
+
+        <!-- Chapter 4 -->
+        <section id="ch4" class="chapter-card">
+            <div class="chapter-header">
+                <h2><span>Chapter 4: Interface (इंटरफ़ेस)</span></h2>
+                <span class="chapter-num">अध्याय 4</span>
+            </div>
+
+            <h3>4.1 Dashboard (डैशबोर्ड / Tree View)</h3>
+            <p>ब्राउज़र खुलते ही जो पहला पेज दिखाई देता है, उसे <strong>Jupyter Dashboard</strong> कहते हैं। इसमें मुख्य रूप से तीन टैब होते हैं:</p>
+            <ul>
+                <li><strong>Files Tab:</strong> आपकी वर्तमान डायरेक्टरी की सभी फ़ाइलें और सब-फ़ोल्डर्स दिखाता है। यहाँ से आप फ़ाइलों को खोल सकते हैं, डिलीट कर सकते हैं या मूव कर सकते हैं।</li>
+                <li><strong>Running Tab:</strong> यह दिखाता है कि इस समय बैकग्राउंड में कौन-कौन से नोटबुक्स और कर्नल्स सक्रिय (Active) हैं। यदि सिस्टम स्लो हो जाए, तो यहाँ से निष्क्रिय कर्नल्स को Shutdown किया जा सकता है।</li>
+                <li><strong>Clusters Tab:</strong> IPython Parallel कंप्यूटिंग के लिए उपयोग होता है (सामान्य उपयोगकर्ताओं के लिए यह कम उपयोग में आता है)।</li>
+            </ul>
+
+            <h3>4.2 Notebook View Components (नोटबुक दृश्य के घटक)</h3>
+            <p>जब आप कोई नोटबुक (<code>.ipynb</code>) खोलते हैं, तो इंटरफ़ेस 5 मुख्य भागों में विभाजित होता है:</p>
+            
+            <ol>
+                <li><strong>Header (शीर्षक क्षेत्र):</strong>
+                    <ul>
+                        <li>Jupyter लोगो और नोटबुक का नाम (डिफ़ॉल्ट रूप से <em>Untitled</em>)। नाम पर क्लिक करके इसे कभी भी रीनेम किया जा सकता है।</li>
+                        <li>लास्ट सेव चेकपॉइंट (Last Checkpoint status) का समय प्रदर्शित होता है।</li>
+                    </ul>
+                </li>
+                <li><strong>Menu Bar (मेनू बार):</strong> विभिन्न ऑपरेशन्स के लिए ड्रॉप-डाउन मेनू (File, Edit, View, Insert, Cell, Kernel, Widgets, Help)।</li>
+                <li><strong>Toolbar (टूलबार):</strong> सामान्य कार्यों के लिए एक-क्लिक शॉर्टकट आइकन्स (Save, Add cell, Cut, Copy, Paste, Move up/down, Run, Stop, Restart, Cell-type dropdown)।</li>
+                <li><strong>Notebook Canvas / Cells Area:</strong> मुख्य कार्यक्षेत्र जहाँ कोड लिखा और आउटपुट देखा जाता है।</li>
+                <li><strong>Status / Kernel Indicator:</strong> ऊपर दाईं ओर एक छोटा वृत्त (Circle) दिखता है:
+                    <ul>
+                        <li>⭕ <strong>Empty Circle:</strong> Kernel Idle (कर्नल खाली है और इनपुट के लिए तैयार है)।</li>
+                        <li>⚫ <strong>Filled Circle:</strong> Kernel Busy (कर्नल कोड निष्पादित कर रहा है)।</li>
+                    </ul>
+                </li>
+            </ol>
+
+            <h3>4.3 Detailed Menu Bar Breakdown (मेनू बार का विस्तृत विश्लेषण)</h3>
+            <div class="table-responsive">
+                <table>
+                    <thead>
+                        <tr>
+                            <th>मेनू</th>
+                            <th>उपलब्ध प्रमुख विकल्प और कार्य</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        <tr>
+                            <td><strong>File</strong></td>
+                            <td>New Notebook, Open, Make a Copy, Save and Checkpoint, Revert to Checkpoint, Rename, Download as (.ipynb, .py, .html, .pdf, .md), Close and Halt।</td>
+                        </tr>
+                        <tr>
+                            <td><strong>Edit</strong></td>
+                            <td>Cut Cells, Copy Cells, Paste Cells, Delete Cells, Undo Delete Cells, Split Cell, Merge Cell Above/Below, Find and Replace।</td>
+                        </tr>
+                        <tr>
+                            <td><strong>View</strong></td>
+                            <td>Toggle Header (हेडर छुपाना/दिखाना), Toggle Toolbar, Toggle Line Numbers (सेल में कोड लाइन नंबर्स चालू करना)।</td>
+                        </tr>
+                        <tr>
+                            <td><strong>Insert</strong></td>
+                            <td>Insert Cell Above (ऊपर सेल जोड़ें), Insert Cell Below (नीचे सेल जोड़ें)।</td>
+                        </tr>
+                        <tr>
+                            <td><strong>Cell</strong></td>
+                            <td>Run Cells, Run Cells and Select Below, Run All, Run All Above/Below, Change Cell Type (Code/Markdown/Raw), Current Outputs (Clear/Toggle Scroll)।</td>
+                        </tr>
+                        <tr>
+                            <td><strong>Kernel</strong></td>
+                            <td>Interrupt, Restart, Restart & Clear Output, Restart & Run All, Reconnect, Shutdown, Change Kernel (Python वातावरण बदलना)।</td>
+                        </tr>
+                        <tr>
+                            <td><strong>Help</strong></td>
+                            <td>Keyboard Shortcuts चीट शीट, Notebook Tour, Python/NumPy/Pandas/Matplotlib के आधिकारिक प्रलेखन (Official Docs) के सीधे लिंक्स।</td>
+                        </tr>
+                    </tbody>
+                </table>
+            </div>
+        </section>
+
+        <!-- Chapter 5 -->
+        <section id="ch5" class="chapter-card">
+            <div class="chapter-header">
+                <h2><span>Chapter 5: Creating & Managing Notebook (नोटबुक निर्माण एवं प्रबंधन)</span></h2>
+                <span class="chapter-num">अध्याय 5</span>
+            </div>
+
+            <h3>5.1 Create New Notebook (नई नोटबुक बनाना)</h3>
+            <ol>
+                <li>Jupyter Dashboard (फ़ाइल ब्राउज़र) में जाएं।</li>
+                <li>ऊपर दाईं ओर स्थित <strong>"New"</strong> ड्रॉपडाउन बटन पर क्लिक करें।</li>
+                <li><strong>Notebook</strong> सेक्शन के अंतर्गत <strong>"Python 3 (ipykernel)"</strong> चुनें।</li>
+                <li>एक नया ब्राउज़र टैब खुलेगा जिसमें एक खाली कोड सेल के साथ एक नई नोटबुक तैयार होगी।</li>
+            </ol>
+
+            <h3>5.2 Rename Notebook (नोटबुक का नाम बदलना)</h3>
+            <ul>
+                <li><strong>तरीका 1:</strong> हेडर में सबसे ऊपर लिखे नाम (उदा. <code>Untitled</code>) पर सीधे क्लिक करें। एक पॉप-अप डायलॉग बॉक्स खुलेगा, उसमें नया नाम लिखें और <em>Rename</em> दबाएं।</li>
+                <li><strong>तरीका 2:</strong> मेनू बार से <code>File -> Rename...</code> पर जाएं।</li>
+            </ul>
+
+            <h3>5.3 Save and Checkpoints (सुरक्षित करना और चेकपॉइंट्स)</h3>
+            <p>Jupyter Notebook में ऑटोसेव (Auto-save) सुविधा होती है, जो हर 2 मिनट में आपकी प्रोग्रेस को स्वतः सेव करती है। इसके अलावा <strong>Checkpoints</strong> की एक शक्तिशाली प्रणाली होती है:</p>
+            <ul>
+                <li><strong>Manual Save:</strong> <kbd>Ctrl</kbd> + <kbd>S</kbd> दबाने पर एक विशेष <em>Checkpoint</em> बन जाता है।</li>
+                <li><strong>चेकपॉइंट क्या है?</strong> यह आपकी नोटबुक की स्थिति का एक स्नैपशॉट है जो <code>.ipynb_checkpoints</code> नाम के एक गुप्त फ़ोल्डर में सहेजा जाता है।</li>
+                <li><strong>Revert to Checkpoint:</strong> यदि कोड में कोई बड़ी गलती हो जाए, तो आप <code>File -> Revert to Checkpoint</code> पर जाकर पिछली सुरक्षित स्थिति में वापस लौट सकते हैं।</li>
+            </ul>
+
+            <h3>5.4 Download Options (नोटबुक डाउनलोड/निर्यात करना)</h3>
+            <p>अपनी नोटबुक को अन्य प्रारूपों में निर्यात करने के लिए <code>File -> Download as</code> पर जाएं:</p>
+            <ul>
+                <li><strong>Notebook (.ipynb):</strong> पूर्ण इंटरैक्टिव नोटबुक फ़ाइल।</li>
+                <li><strong>Python (.py):</strong> सभी कोड सेल्स को मिलाकर एक स्टैंडर्ड पायथन स्क्रिप्ट बनाता है (मार्कडाउन को कमेंट <code>#</code> में बदल देता है)।</li>
+                <li><strong>HTML (.html):</strong> एक स्टैंडअलोन वेबपेज जिसमें आउटपुट और चार्ट्स शामिल होते हैं (क्लाइंट्स या टीम को बिना जुपिटर के रिपोर्ट भेजने के लिए सर्वोत्तम)।</li>
+                <li><strong>PDF via LaTeX (.pdf):</strong> प्रिंट करने योग्य डॉक्यूमेंट। (इसके लिए सिस्टम में MikTeX/TeXLive आवश्यक है)।</li>
+                <li><strong>Markdown (.md):</strong> GitHub README या ब्लॉग्स के लिए उपयुक्त।</li>
+            </ul>
+
+            <h3>5.5 Upload Files & Notebooks (अपलोड करना)</h3>
+            <ol>
+                <li>डैशबोर्ड पर ऊपर दाईं ओर <strong>"Upload"</strong> बटन पर क्लिक करें।</li>
+                <li>अपने कंप्यूटर से कोई भी <code>.ipynb</code> फ़ाइल, CSV डेटासेट या इमेज चुनें।</li>
+                <li>फ़ाइल लिस्ट में आने के बाद नीले रंग के <strong>"Upload"</strong> बटन पर क्लिक करके अपलोड पूरा करें।</li>
+            </ol>
+        </section>
+
+        <!-- Chapter 6 -->
+        <section id="ch6" class="chapter-card">
+            <div class="chapter-header">
+                <h2><span>Chapter 6: Notebook Cells (नोटबुक सेल्स)</span></h2>
+                <span class="chapter-num">अध्याय 6</span>
+            </div>
+
+            <p>Jupyter Notebook की आधारशिला <strong>Cells (कोशिकाएँ/ब्लॉक्स)</strong> हैं। नोटबुक दस्तावेज़ इन्हीं अलग-अलग सेल्स का संग्रह होता है। सेल मुख्य रूप से तीन प्रकार के होते हैं:</p>
+
+            <h3>6.1 Code Cell (कोड सेल)</h3>
+            <p>यह डिफ़ॉल्ट सेल प्रकार है। इसमें आप निष्पादन योग्य (Executable) पायथन कोड लिखते हैं।</p>
+            <ul>
+                <li>जब सेल रन होता है, तो उसका इनपुट लेबल <code>In [n]:</code> बन जाता है, जहाँ <code>n</code> निष्पादन क्रम (Execution count) है।</li>
+                <li>यदि कोड कोई परिणाम प्रिंट करता है या कोई मान लौटाता है, तो वह ठीक नीचे <code>Out [n]:</code> में प्रदर्शित होता है।</li>
+            </ul>
+            <pre><code># यह एक कोड सेल का उदाहरण है
+import numpy as np
+arr = np.array([10, 20, 30, 40])
+print("Array Sum:", arr.sum())
+arr * 2</code></pre>
+
+            <h3>6.2 Markdown Cell (मार्कडाउन सेल)</h3>
+            <p>मार्कडाउन सेल्स का उपयोग टेक्स्ट, हेडिंग्स, व्याख्या, इमेज और गणितीय समीकरणों को सुंदर रूप में प्रस्तुत करने के लिए किया जाता है। सेल टाइप को मार्कडाउन में बदलने के लिए कमांड मोड में <kbd>M</kbd> दबाएं।</p>
+            
+            <div class="table-responsive">
+                <table>
+                    <thead>
+                        <tr>
+                            <th>एलिमेंट</th>
+                            <th>मार्कडाउन सिंटैक्स (Markdown Syntax)</th>
+                            <th>रेंडर होने पर आउटपुट</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        <tr>
+                            <td><strong>Headings</strong></td>
+                            <td><code># H1 Heading</code><br><code>## H2 Heading</code><br><code>### H3 Heading</code></td>
+                            <td>शीर्षक और उप-शीर्षक (आकार के अनुसार घटते क्रम में)</td>
+                        </tr>
+                        <tr>
+                            <td><strong>Bold & Italic</strong></td>
+                            <td><code>**मोटा (Bold)**</code> और <code>*तिरछा (Italic)*</code></td>
+                            <td><strong>मोटा (Bold)</strong> और <em>तिरछा (Italic)</em></td>
+                        </tr>
+                        <tr>
+                            <td><strong>Bullet List</strong></td>
+                            <td><code>- Item 1</code><br><code>- Item 2</code></td>
+                            <td>• Item 1<br>• Item 2</td>
+                        </tr>
+                        <tr>
+                            <td><strong>Numbered List</strong></td>
+                            <td><code>1. First</code><br><code>2. Second</code></td>
+                            <td>1. First<br>2. Second</td>
+                        </tr>
+                        <tr>
+                            <td><strong>Hyperlink</strong></td>
+                            <td><code>[Google Link](https://google.com)</code></td>
+                            <td>क्लिक करने योग्य लिंक</td>
+                        </tr>
+                        <tr>
+                            <td><strong>Image</strong></td>
+                            <td><code>![Alt Text](image_url_or_path.png)</code></td>
+                            <td>एम्बेडेड छवि (Embedded Image)</td>
+                        </tr>
+                        <tr>
+                            <td><strong>LaTeX Math</strong></td>
+                            <td><code>$E = mc^2$</code> (Inline)<br><code>$$\sigma = \sqrt{\frac{\sum (x - \mu)^2}{N}}$$</code> (Block)</td>
+                            <td>सुंदर गणितीय सूत्र (MathJax द्वारा रेंडर)</td>
+                        </tr>
+                    </tbody>
+                </table>
+            </div>
+
+            <h3>6.3 Raw Cell (Raw NBConvert Cell)</h3>
+            <p>रॉ सेल्स में लिखा गया टेक्स्ट कर्नल द्वारा निष्पादित <strong>नहीं</strong> किया जाता है और न ही मार्कडाउन की तरह रेंडर होता है। यह टेक्स्ट जैसा लिखा है, हूबहू वैसा ही आउटपुट में रहता है।</p>
+            <ul>
+                <li><strong>उपयोग:</strong> जब आप <code>nbconvert</code> कमांड-लाइन टूल का उपयोग करके नोटबुक को LaTeX या HTML में बदल रहे हों, तो विशेष कंपाइलर निर्देशों (Directives) को पास करने के लिए Raw Cells का उपयोग होता है।</li>
+                <li>शॉर्टकट: कमांड मोड में <kbd>R</kbd> दबाएं।</li>
+            </ul>
+        </section>
+
+        <!-- Chapter 7 -->
+        <section id="ch7" class="chapter-card">
+            <div class="chapter-header">
+                <h2><span>Chapter 7: Cell Execution (सेल निष्पादन)</span></h2>
+                <span class="chapter-num">अध्याय 7</span>
+            </div>
+
+            <h3>7.1 Running Cells (सेल चलाने के विकल्प)</h3>
+            <p>Jupyter Notebook में किसी सेल को निष्पादित करने के लिए विभिन्न कीबोर्ड शॉर्टकट्स और मेनू ऑप्शन्स उपलब्ध हैं:</p>
+            
+            <div class="table-responsive">
+                <table>
+                    <thead>
+                        <tr>
+                            <th>शॉर्टकट</th>
+                            <th>क्रिया (Action)</th>
+                            <th>व्यवहार (Behavior)</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        <tr>
+                            <td><kbd>Shift</kbd> + <kbd>Enter</kbd></td>
+                            <td><strong>Run and Advance</strong></td>
+                            <td>वर्तमान सेल को रन करता है और अगले सेल को सेलेक्ट करता है। यदि नीचे कोई सेल नहीं है, तो एक नया खाली सेल जोड़ देता है। (सर्वाधिक प्रयुक्त)</td>
+                        </tr>
+                        <tr>
+                            <td><kbd>Ctrl</kbd> + <kbd>Enter</kbd></td>
+                            <td><strong>Run In-Place</strong></td>
+                            <td>वर्तमान सेल को रन करता है और कर्सर/फ़ोकस उसी सेल में बनाए रखता है। (क्विक टेस्टिंग के लिए बेस्ट)</td>
+                        </tr>
+                        <tr>
+                            <td><kbd>Alt</kbd> + <kbd>Enter</kbd></td>
+                            <td><strong>Run and Insert Below</strong></td>
+                            <td>वर्तमान सेल को रन करता है और ठीक नीचे तुरंत एक नया खाली कोड सेल इंसर्ट कर देता है।</td>
+                        </tr>
+                    </tbody>
+                </table>
+            </div>
+
+            <h3>7.2 Global Execution Commands (एक साथ चलाना)</h3>
+            <p>मेनू बार में <code>Cell</code> मेनू के तहत निम्न शक्तिशाली विकल्प मिलते हैं:</p>
+            <ul>
+                <li><strong>Run All:</strong> ऊपर से नीचे तक नोटबुक के सभी सेल्स को क्रमानुसार चलाता है।</li>
+                <li><strong>Run All Above:</strong> वर्तमान सेल से ऊपर के सभी सेल्स को चलाता है। यह तब बहुत काम आता है जब आप बीच के किसी सेल पर काम कर रहे हों और पहले के सभी वैरिएबल्स को री-लोड करना हो।</li>
+                <li><strong>Run All Below:</strong> वर्तमान सेल से लेकर अंत तक के सभी सेल्स को निष्पादित करता है।</li>
+            </ul>
+
+            <h3>7.3 Interrupting the Kernel (निष्पादन बीच में रोकना)</h3>
+            <p>कई बार कोड में कोई <em>Infinite Loop</em> (जैसे <code>while True:</code>) बन जाता है या कोई बड़ा डेटासेट लोड होने में बहुत समय लेता है और नोटबुक हैंग हो जाती है।</p>
+            <ul>
+                <li>ऐसी स्थिति में टूलबार में स्थित काले चौकोर <strong>Stop Icon (■)</strong> पर क्लिक करें या <code>Kernel -> Interrupt</code> चुनें।</li>
+                <li>कीबोर्ड शॉर्टकट: कमांड मोड में दो बार <kbd>I</kbd>, <kbd>I</kbd> दबाएं।</li>
+                <li>इससे वर्तमान निष्पादन तुरंत रुक जाता है और <code>KeyboardInterrupt</code> अपवाद (Exception) दिखता है। आपके पहले से बने वैरिएबल्स सुरक्षित रहते हैं।</li>
+            </ul>
+
+            <h3>7.4 Restart Kernel vs Restart & Run All</h3>
+            <ul>
+                <li><strong>Restart Kernel:</strong> यदि कोड में कोई बड़ी गड़बड़ी हो गई हो या मेमोरी फुल हो गई हो, तो कर्नल को रीस्टार्ट किया जाता है। इससे सभी डिक्लेयर्ड वैरिएबल्स और इम्पोर्ट्स मेमोरी से साफ़ हो जाते हैं।</li>
+                <li><strong>Restart & Run All:</strong> यह डेटा साइंस में बेस्ट प्रैक्टिस मानी जाती है। अपने प्रोजेक्ट को फाइनल करने से पहले हमेशा <em>Restart & Run All</em> चलाकर देखना चाहिए ताकि यह सुनिश्चित हो सके कि आपका कोड शुरू से अंत तक बिना किसी आउट-ऑफ-ऑर्डर डिपेंडेंसी के सही क्रम में चल रहा है।</li>
+            </ul>
+        </section>
+
+        <!-- Chapter 8 -->
+        <section id="ch8" class="chapter-card">
+            <div class="chapter-header">
+                <h2><span>Chapter 8: Keyboard Shortcuts (कीबोर्ड शॉर्टकट्स)</span></h2>
+                <span class="chapter-num">अध्याय 8</span>
+            </div>
+
+            <h3>8.1 Modal Editor Concept (दो मोड्स की अवधारणा)</h3>
+            <p>Jupyter Notebook एक <strong>Modal Editor</strong> है, ठीक वैसे ही जैसे लोकप्रिय टेक्स्ट एडिटर <em>Vim</em> होता है। इसका मतलब है कि कीबोर्ड की कुंजियाँ इस बात पर निर्भर करती हैं कि आप किस मोड में हैं:</p>
+
+            <div class="flow-container">
+                <div class="flow-step" style="border-color: #3182ce; background: #ebf8ff;">
+                    <strong style="color: #2b6cb0;">Command Mode</strong><br>
+                    <small>नीला बॉर्डर (Blue Border)<br>सेल स्तर के ऑपरेशन्स (Delete, Add, Move)</small>
+                </div>
+                <div class="flow-arrow">⇋ (Esc / Enter) ⇋</div>
+                <div class="flow-step" style="border-color: #38a169; background: #f0fff4;">
+                    <strong style="color: #276749;">Edit Mode</strong><br>
+                    <small>हरा बॉर्डर (Green Border)<br>सेल के अंदर टाइपिंग और कोड एडिटिंग</small>
+                </div>
+            </div>
+
+            <ul>
+                <li><strong>Edit Mode (संपादन मोड):</strong> जब आप सेल के अंदर टाइप कर रहे होते हैं। सेल का बायां किनारा <strong>हरा (Green)</strong> होता है। एडिट मोड से बाहर निकलने के लिए <kbd>Esc</kbd> दबाएं।</li>
+                <li><strong>Command Mode (कमांड मोड):</strong> जब आप सेल के बाहर होते हैं और पूरी नोटबुक को नेविगेट कर रहे होते हैं। सेल का बायां किनारा <strong>नीला (Blue)</strong> होता है। कमांड मोड से सेल के अंदर जाने के लिए <kbd>Enter</kbd> दबाएं।</li>
+            </ul>
+
+            <h3>8.2 Master Shortcuts Cheat Sheet</h3>
+
+            <h4>A. कमांड मोड शॉर्टकट्स (Command Mode - पहले <kbd>Esc</kbd> दबाएं):</h4>
+            <div class="table-responsive">
+                <table>
+                    <thead>
+                        <tr>
+                            <th>कुंजी (Key)</th>
+                            <th>कार्य (Action)</th>
+                            <th>विवरण</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        <tr>
+                            <td><kbd>A</kbd></td>
+                            <td>Insert Above</td>
+                            <td>वर्तमान सेल के <strong>ऊपर</strong> एक नया सेल जोड़ता है।</td>
+                        </tr>
+                        <tr>
+                            <td><kbd>B</kbd></td>
+                            <td>Insert Below</td>
+                            <td>वर्तमान सेल के <strong>नीचे</strong> एक नया सेल जोड़ता है।</td>
+                        </tr>
+                        <tr>
+                            <td><kbd>D</kbd> + <kbd>D</kbd> (दो बार)</td>
+                            <td>Delete Cell</td>
+                            <td>वर्तमान सेल को पूरी तरह मिटा देता है।</td>
+                        </tr>
+                        <tr>
+                            <td><kbd>Z</kbd></td>
+                            <td>Undo Delete</td>
+                            <td>गलती से डिलीट हुए सेल को वापस लाता है (Undo cell deletion)।</td>
+                        </tr>
+                        <tr>
+                            <td><kbd>Y</kbd></td>
+                            <td>To Code Cell</td>
+                            <td>सेल को <strong>Code Cell</strong> में बदल देता है।</td>
+                        </tr>
+                        <tr>
+                            <td><kbd>M</kbd></td>
+                            <td>To Markdown</td>
+                            <td>सेल को <strong>Markdown Cell</strong> में बदल देता है।</td>
+                        </tr>
+                        <tr>
+                            <td><kbd>R</kbd></td>
+                            <td>To Raw</td>
+                            <td>सेल को <strong>Raw Cell</strong> में बदल देता है।</td>
+                        </tr>
+                        <tr>
+                            <td><kbd>1</kbd> से <kbd>6</kbd></td>
+                            <td>Heading 1 to 6</td>
+                            <td>मार्कडाउन हेडिंग स्तर 1 से 6 तुरंत सेट करता है।</td>
+                        </tr>
+                        <tr>
+                            <td><kbd>C</kbd> / <kbd>X</kbd> / <kbd>V</kbd></td>
+                            <td>Copy / Cut / Paste</td>
+                            <td>सेल को कॉपी, कट या नीचे पेस्ट करना।</td>
+                        </tr>
+                        <tr>
+                            <td><kbd>Shift</kbd> + <kbd>M</kbd></td>
+                            <td>Merge Cells</td>
+                            <td>वर्तमान और नीचे वाले सेल को आपस में जोड़ (Merge) देता है।</td>
+                        </tr>
+                        <tr>
+                            <td><kbd>L</kbd></td>
+                            <td>Toggle Line Numbers</td>
+                            <td>सेल में लाइन नंबर्स दिखाना या छुपाना।</td>
+                        </tr>
+                        <tr>
+                            <td><kbd>H</kbd></td>
+                            <td>Help / Cheat Sheet</td>
+                            <td>सभी उपलब्ध शॉर्टकट्स की पूरी सूची स्क्रीन पर प्रदर्शित करता है।</td>
+                        </tr>
+                    </tbody>
+                </table>
+            </div>
+
+            <h4>B. एडिट मोड शॉर्टकट्स (Edit Mode - सेल के अंदर):</h4>
+            <div class="table-responsive">
+                <table>
+                    <thead>
+                        <tr>
+                            <th>कुंजी (Key)</th>
+                            <th>कार्य (Action)</th>
+                            <th>विवरण</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        <tr>
+                            <td><kbd>Tab</kbd></td>
+                            <td>Code Completion</td>
+                            <td>कोड ऑटोकम्प्लीट करता है या वैरिएबल/मेथड के सुझाव दिखाता है।</td>
+                        </tr>
+                        <tr>
+                            <td><kbd>Shift</kbd> + <kbd>Tab</kbd></td>
+                            <td>Docstring Tooltip</td>
+                            <td>किसी भी फ़ंक्शन का डॉक्यूमेंटेशन, पैरामीटर्स और सिग्नेचर तुरंत दिखाता है।</td>
+                        </tr>
+                        <tr>
+                            <td><kbd>Ctrl</kbd> + <kbd>/</kbd></td>
+                            <td>Toggle Comment</td>
+                            <td>चुनी हुई लाइन्स पर कमेंट (<code>#</code>) लगाता या हटाता है।</td>
+                        </tr>
+                        <tr>
+                            <td><kbd>Ctrl</kbd> + <kbd>Shift</kbd> + <kbd>-</kbd></td>
+                            <td>Split Cell</td>
+                            <td>कर्सर की स्थिति से वर्तमान सेल को दो अलग-अलग सेल्स में विभाजित कर देता है।</td>
+                        </tr>
+                    </tbody>
+                </table>
+            </div>
+        </section>
+
+        <!-- Chapter 9 -->
+        <section id="ch9" class="chapter-card">
+            <div class="chapter-header">
+                <h2><span>Chapter 9: Kernel (कर्नल प्रबंधन)</span></h2>
+                <span class="chapter-num">अध्याय 9</span>
+            </div>
+
+            <h3>9.1 What is a Kernel? (कर्नल क्या है?)</h3>
+            <p><strong>Kernel</strong> जुपिटर नोटबुक का वास्तविक <em>"कम्प्यूटेशनल इंजन" (Computational Engine)</em> है।</p>
+            <ul>
+                <li>जब आप किसी सेल में कोड लिखते हैं, तो ब्राउज़र उस कोड को नेटवर्क सॉकेट के माध्यम से कर्नल को भेजता है।</li>
+                <li>कर्नल कोड को निष्पादित करता है, गणना करता है और परिणाम (या त्रुटि/Error) वापस ब्राउज़र को भेजता है जिसे आप आउटपुट के रूप में देखते हैं।</li>
+                <li>पायथन के लिए डिफ़ॉल्ट कर्नल का नाम <strong>IPython (ipykernel)</strong> है।</li>
+            </ul>
+
+            <div class="callout callout-warning">
+                <div class="callout-icon">⚠️</div>
+                <div class="callout-content">
+                    <h5>आउट-ऑफ-ऑर्डर एक्ज़ीक्यूशन ट्रैप (Execution Order Bug):</h5>
+                    <p>याद रखें कि कर्नल सेल्स को भौतिक स्थिति (ऊपर से नीचे) के अनुसार याद नहीं रखता, बल्कि <strong>आपके चलाने के क्रम</strong> के अनुसार याद रखता है। यदि आपने सेल 5 पहले चलाया और सेल 2 बाद में, तो मेमोरी में सेल 5 का प्रभाव पहले दर्ज होगा। <code>In [ ]</code> के अंदर की संख्या ही वास्तविक क्रम बताती है!</p>
+                </div>
+            </div>
+
+            <h3>9.2 Kernel States (कर्नल की स्थितियाँ)</h3>
+            <ul>
+                <li><strong>Idle (निष्क्रिय):</strong> कर्नल खाली है और नया कोड चलाने के लिए पूरी तरह तैयार है। (ऊपर दाईं ओर खाली वृत्त ⭕)</li>
+                <li><strong>Busy (व्यस्त):</strong> कर्नल वर्तमान में कोई गणना कर रहा है। सेल का इनपुट <code>In [*]:</code> दिखेगा और वृत्त भरा हुआ ⚫ होगा।</li>
+                <li><strong>Dead / Disconnected:</strong> कर्नल क्रैश हो चुका है। ऐसी स्थिति में जुपिटर ऑटो-रीकनेक्ट करने की कोशिश करता है या आपको रीस्टार्ट का संकेत देता है।</li>
+            </ul>
+
+            <h3>9.3 Kernel Management (कर्नल संचालन)</h3>
+            <ul>
+                <li><strong>Interrupt:</strong> चल रहे भारी लूप या फंक्शन को समाप्त करना बिना मेमोरी खोए।</li>
+                <li><strong>Restart:</strong> मेमोरी खाली करके कर्नल को पुनः स्वच्छ स्थिति में शुरू करना।</li>
+                <li><strong>Shutdown:</strong> कर्नल को पूरी तरह बंद कर देना ताकि वह सिस्टम की RAM और CPU संसाधनों का उपभोग करना बंद कर दे। डैशबोर्ड के "Running" टैब से ऐसा किया जा सकता है।</li>
+                <li><strong>Change Kernel:</strong> यदि आपके पास कई वर्चुअल एनवायरनमेंट्स (Virtual Environments) हैं, तो आप <code>Kernel -> Change Kernel</code> से किसी अन्य एनवायरनमेंट में स्विच कर सकते हैं।</li>
+            </ul>
+
+            <h3>9.4 Virtual Environment को Jupyter Kernel में जोड़ना</h3>
+            <p>यदि आपने <code>conda</code> या <code>venv</code> में कोई अलग वातावरण बनाया है, तो उसे जुपिटर में कर्नल के रूप में पंजीकृत करने का तरीका:</p>
+            <pre><code># अपने वर्चुअल एनवायरनमेंट को सक्रिय करें
+conda activate my_env
+# अथवा: source my_env/bin/activate (Linux/Mac) या my_env\Scripts\activate (Windows)
+
+# ipykernel इंस्टॉल करें
+pip install ipykernel
+
+# एनवायरनमेंट को जुपिटर में कर्नल के रूप में जोड़ें
+python -m ipykernel install --user --name=my_env --display-name="Python (My ML Env)"</code></pre>
+            <p>अब जुपिटर में <code>Kernel -> Change Kernel</code> में "Python (My ML Env)" दिखाई देने लगेगा!</p>
+        </section>
+
+        <!-- Chapter 10 -->
+        <section id="ch10" class="chapter-card">
+            <div class="chapter-header">
+                <h2><span>Chapter 10: File Management (फ़ाइल प्रबंधन एवं प्रारूप)</span></h2>
+                <span class="chapter-num">अध्याय 10</span>
+            </div>
+
+            <h3>10.1 The .ipynb File Format (IPython Notebook प्रारूप)</h3>
+            <p>जब आप जुपिटर में कोई नोटबुक सेव करते हैं, तो वह <strong><code>.ipynb</code></strong> एक्सटेंशन के साथ सेव होती है। आंतरिक रूप से यह एक शुद्ध <strong>JSON (JavaScript Object Notation)</strong> टेक्स्ट फ़ाइल होती है। इसमें निम्नलिखित मुख्य भाग होते हैं:</p>
+            
+            <ul>
+                <li><strong>metadata:</strong> कर्नल की जानकारी, पायथन वर्ज़न और ऑथर डिटेल्स।</li>
+                <li><strong>cells:</strong> एक ऐरे (Array) जिसमें प्रत्येक सेल का प्रकार (<code>code</code>, <code>markdown</code>), सेल का सोर्स कोड, इनपुट क्रम और आउटपुट्स (टेक्स्ट, बेस64 इमेज, एरर ट्रेसबैक) शामिल होते हैं।</li>
+                <li><strong>nbformat:</strong> नोटबुक का स्कीमा वर्ज़न (उदा. nbformat: 4)।</li>
+            </ul>
+
+            <pre><code>// .ipynb फ़ाइल की आंतरिक JSON संरचना का एक नमूना
+{
+ "cells": [
+  {
+   "cell_type": "code",
+   "execution_count": 1,
+   "metadata": {},
+   "outputs": [
+    {
+     "name": "stdout",
+     "output_type": "stream",
+     "text": [ "Hello, Jupyter!\n" ]
+    }
+   ],
+   "source": [ "print('Hello, Jupyter!')" ]
+  }
+ ],
+ "metadata": {
+  "language_info": { "name": "python", "version": "3.11.0" }
+ },
+ "nbformat": 4,
+ "nbformat_minor": 5
+}</code></pre>
+
+            <h3>10.2 Comparison of Export Formats (.ipynb, .py, .html, .pdf, .md)</h3>
+            <p>Jupyter Notebook आपको विभिन्न प्रारूपों में अपनी फ़ाइलों को निर्यात और प्रबंधित करने की सुविधा देता है:</p>
+
+            <div class="table-responsive">
+                <table>
+                    <thead>
+                        <tr>
+                            <th>फ़ाइल प्रारूप</th>
+                            <th>विवरण व संरचना</th>
+                            <th>मुख्य उपयोगिता (Primary Use-Case)</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        <tr>
+                            <td><strong>.ipynb</strong></td>
+                            <td>डिफ़ॉल्ट JSON-आधारित इंटरैक्टिव नोटबुक फ़ाइल।</td>
+                            <td>कोड, आउटपुट, चार्ट्स और नोट्स को एक साथ सहेजने और साथी डेटा साइंटिस्ट्स के साथ शेयर करने के लिए।</td>
+                        </tr>
+                        <tr>
+                            <td><strong>.py</strong></td>
+                            <td>शुद्ध पायथन स्क्रिप्ट। सभी मार्कडाउन सेल्स को कमेंट (<code>#</code>) में बदल दिया जाता है।</td>
+                            <td>प्रोडक्शन पाइपलाइन, ऑटोमेशन स्क्रिप्ट्स, और GitHub पर वर्ज़न कंट्रोल (Git diff) के लिए।</td>
+                        </tr>
+                        <tr>
+                            <td><strong>.html</strong></td>
+                            <td>स्टैंडअलोन वेबपेज जिसमें CSS और इनलाइन बेस64 चार्ट्स एम्बेड होते हैं।</td>
+                            <td>प्रबंधकों, क्लाइंट्स या गैर-तकनीकी टीम के साथ रिपोर्ट्स साझा करने के लिए (जिन्हें पायथन इंस्टॉल करने की आवश्यकता नहीं होती)।</td>
+                        </tr>
+                        <tr>
+                            <td><strong>.pdf</strong></td>
+                            <td>प्रिंट-रेडी डॉक्युमेंट (LaTeX या हेडलैस ब्राउज़र द्वारा जनरेटेड)।</td>
+                            <td>अकादमिक रिसर्च पेपर्स, असाइनमेंट सबमिशन और औपचारिक दस्तावेज़ीकरण।</td>
+                        </tr>
+                        <tr>
+                            <td><strong>.md</strong></td>
+                            <td>मार्कडाउन टेक्स्ट फ़ाइल। कोड को कोड-ब्लॉक (<code>```python ... ```</code>) के रूप में रखा जाता है।</td>
+                            <td>GitHub रिपॉजिटरी के README.md, तकनीकी ब्लॉग्स और विकी पेजेस के निर्माण के लिए।</td>
+                        </tr>
+                    </tbody>
+                </table>
+            </div>
+
+            <h3>10.3 Best Practices for Jupyter File Management (सर्वश्रेष्ठ कार्यप्रणाली)</h3>
+            <ol>
+                <li><strong>अर्थपूर्ण नामकरण (Meaningful Naming):</strong> कभी भी फ़ाइल को <code>Untitled.ipynb</code> या <code>test.ipynb</code> के रूप में न छोड़ें। प्रोजेक्ट और क्रम के अनुसार नाम दें, जैसे:
+                    <pre><code>01_data_ingestion.ipynb
+02_exploratory_data_analysis.ipynb
+03_feature_engineering.ipynb
+04_model_training_and_evaluation.ipynb</code></pre>
+                </li>
+                <li><strong>Clear Outputs Before Git Commit:</strong> यदि आप Git का उपयोग करते हैं, तो कमिट करने से पहले <code>Cell -> All Output -> Clear</code> कर लें। इससे गिट रिपॉजिटरी में भारी बाइनरी इमेज नहीं भरतीं और Git Diff साफ़ दिखाई देता है।</li>
+                <li><strong>.gitignore कॉन्फ़िगरेशन:</strong> अपनी गिट रिपॉजिटरी में चेकपॉइंट फ़ोल्डर को अवश्य अनदेखा (Ignore) करें:
+                    <pre><code>.ipynb_checkpoints/
+__pycache__/
+*.pyc</code></pre>
+                </li>
+            </ol>
+        </section>
+
+                <!-- Footer -->
+        <footer>
+            <div style="display:flex; justify-content:center; gap:16px; margin-bottom:12px; flex-wrap:wrap; font-size:0.9rem;">
+                <a href="index.html" style="color:var(--primary); text-decoration:none; font-weight:700;">🏠 Home (Surya's Gist)</a>
+                <span style="color:#cbd5e0;">•</span>
+                <a href="https://github.com/surya2222" target="_blank" rel="noopener noreferrer" style="color:#2d3748; text-decoration:none; font-weight:600; display:inline-flex; align-items:center; gap:5px;">🐙 GitHub (@surya2222)</a>
+                <span style="color:#cbd5e0;">•</span>
+                <a href="https://chat.whatsapp.com/LGOqoPMt3IO1C6R33qviuT?s=cl&p=a&iam=2" target="_blank" rel="noopener noreferrer" style="color:#25D366; text-decoration:none; font-weight:700; display:inline-flex; align-items:center; gap:5px;">💬 Join ProgRobo on WhatsApp</a>
+            </div>
+            <p>Jupyter Notebook Master Series by Surya | सर्वाधिकार सुरक्षित © 2026</p>
+        </footer>
+
+    </main>
+
+    <script>
+        // Smooth scrolling for table of contents
+        document.querySelectorAll('.toc-link').forEach(anchor => {
+            anchor.addEventListener('click', function (e) {
+                e.preventDefault();
+                const targetId = this.getAttribute('href');
+                const targetElement = document.querySelector(targetId);
+                if (targetElement) {
+                    targetElement.scrollIntoView({
+                        behavior: 'smooth'
+                    });
+                    document.querySelectorAll('.toc-link').forEach(link => link.classList.remove('active'));
+                    this.classList.add('active');
+                }
+            });
+        });
+
+        // Intersection Observer for highlighting current TOC link on scroll
+        const observerOptions = {
+            root: null,
+            rootMargin: '0px 0px -70% 0px',
+            threshold: 0
+        };
+
+        const observer = new IntersectionObserver((entries) => {
+            entries.forEach(entry => {
+                if (entry.isIntersecting) {
+                    const id = entry.target.getAttribute('id');
+                    document.querySelectorAll('.toc-link').forEach(link => {
+                        if (link.getAttribute('href') === `#${id}`) {
+                            link.classList.add('active');
+                        } else {
+                            link.classList.remove('active');
+                        }
+                    });
+                }
+            });
+        }, observerOptions);
+
+        document.querySelectorAll('.chapter-card').forEach(section => {
+            observer.observe(section);
+        });
+    </script>
+</body>
+</html>

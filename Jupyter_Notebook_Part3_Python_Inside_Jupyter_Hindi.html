@@ -1,0 +1,1377 @@
+<!DOCTYPE html>
+<html lang="hi">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Jupyter Notebook - Part 3: Python Programming Inside Jupyter (संपूर्ण हिंदी नोट्स)</title>
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Fira+Code:wght@400;500;600&family=Inter:wght@300;400;500;600;700&family=Noto+Sans+Devanagari:wght@400;500;600;700&display=swap" rel="stylesheet">
+    <style>
+        :root {
+            --primary: #0d9488;
+            --primary-dark: #0f766e;
+            --primary-light: #f0fdfa;
+            --secondary: #0284c7;
+            --secondary-light: #f0f9ff;
+            --accent: #6366f1;
+            --accent-light: #eef2ff;
+            --bg-main: #f8fafc;
+            --bg-card: #ffffff;
+            --text-main: #0f172a;
+            --text-muted: #475569;
+            --border: #e2e8f0;
+            --code-bg: #0b1329;
+            --code-text: #e2e8f0;
+            --cell-in: #2563eb;
+            --cell-out: #dc2626;
+            --kbd-bg: #f1f5f9;
+            --kbd-border: #cbd5e1;
+            --success: #10b981;
+            --warning: #f59e0b;
+            --danger: #ef4444;
+            --info: #0284c7;
+        }
+
+        * {
+            box-sizing: border-box;
+            margin: 0;
+            padding: 0;
+        }
+
+        body {
+            font-family: 'Noto Sans Devanagari', 'Inter', -apple-system, BlinkMacSystemFont, sans-serif;
+            background-color: var(--bg-main);
+            color: var(--text-main);
+            line-height: 1.8;
+            display: flex;
+            min-height: 100vh;
+        }
+
+        /* Sidebar Navigation */
+        .sidebar {
+            width: 320px;
+            background: #ffffff;
+            border-right: 1px solid var(--border);
+            height: 100vh;
+            position: sticky;
+            top: 0;
+            overflow-y: auto;
+            padding: 24px 16px;
+            flex-shrink: 0;
+            box-shadow: 2px 0 10px rgba(0,0,0,0.02);
+        }
+
+        .sidebar-brand {
+            display: flex;
+            align-items: center;
+            gap: 12px;
+            padding-bottom: 16px;
+            border-bottom: 2px solid var(--border);
+            margin-bottom: 16px;
+        }
+
+        .sidebar-brand svg {
+            width: 38px;
+            height: 38px;
+            fill: var(--primary);
+        }
+
+        .sidebar-brand h2 {
+            font-size: 1.25rem;
+            color: var(--text-main);
+            font-weight: 700;
+            line-height: 1.2;
+        }
+
+        .sidebar-brand span {
+            font-size: 0.8rem;
+            color: var(--primary);
+            font-weight: 600;
+            display: block;
+        }
+
+        .nav-links-box {
+            display: flex;
+            flex-direction: column;
+            gap: 6px;
+            margin-bottom: 18px;
+        }
+
+        .part-nav-btn {
+            display: block;
+            background: var(--primary-light);
+            color: var(--primary-dark);
+            text-align: center;
+            padding: 7px 10px;
+            border-radius: 7px;
+            font-size: 0.82rem;
+            font-weight: 600;
+            text-decoration: none;
+            border: 1px solid #ccfbf1;
+            transition: all 0.2s ease;
+        }
+
+        .part-nav-btn:hover {
+            background: #ccfbf1;
+            transform: translateY(-1px);
+        }
+
+        .toc-list {
+            list-style: none;
+        }
+
+        .toc-item {
+            margin-bottom: 4px;
+        }
+
+        .toc-link {
+            display: flex;
+            align-items: center;
+            gap: 10px;
+            padding: 8px 12px;
+            border-radius: 8px;
+            color: var(--text-muted);
+            text-decoration: none;
+            font-size: 0.88rem;
+            font-weight: 500;
+            transition: all 0.2s ease;
+        }
+
+        .toc-link:hover, .toc-link.active {
+            background-color: var(--primary-light);
+            color: var(--primary-dark);
+            font-weight: 600;
+            transform: translateX(4px);
+        }
+
+        .toc-badge {
+            background: #f1f5f9;
+            color: #475569;
+            font-size: 0.7rem;
+            padding: 2px 6px;
+            border-radius: 12px;
+            font-weight: 600;
+        }
+
+        .toc-link:hover .toc-badge, .toc-link.active .toc-badge {
+            background: var(--primary);
+            color: white;
+        }
+
+        /* Main Content Container */
+        .main-wrapper {
+            flex-grow: 1;
+            padding: 40px 60px;
+            max-width: 1200px;
+            overflow-x: hidden;
+        }
+
+        header.hero {
+            background: linear-gradient(135deg, #f0fdfa 0%, #ffffff 100%);
+            border: 1px solid #99f6e4;
+            border-radius: 16px;
+            padding: 36px 40px;
+            margin-bottom: 40px;
+            box-shadow: 0 4px 20px rgba(13, 148, 136, 0.08);
+            position: relative;
+        }
+
+        .hero h1 {
+            font-size: 2.2rem;
+            color: var(--primary-dark);
+            margin-bottom: 12px;
+            font-weight: 700;
+        }
+
+        .hero p {
+            font-size: 1.08rem;
+            color: #334155;
+            max-width: 850px;
+        }
+
+        .hero-meta {
+            display: flex;
+            gap: 20px;
+            margin-top: 18px;
+            font-size: 0.88rem;
+            color: #64748b;
+            flex-wrap: wrap;
+        }
+
+        .hero-meta span {
+            display: flex;
+            align-items: center;
+            gap: 6px;
+        }
+
+        /* Chapter Sections */
+        .chapter-card {
+            background: var(--bg-card);
+            border-radius: 14px;
+            border: 1px solid var(--border);
+            padding: 36px 40px;
+            margin-bottom: 40px;
+            box-shadow: 0 2px 12px rgba(0,0,0,0.03);
+            scroll-margin-top: 30px;
+        }
+
+        .chapter-header {
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            border-bottom: 2px solid #f1f5f9;
+            padding-bottom: 16px;
+            margin-bottom: 24px;
+        }
+
+        .chapter-header h2 {
+            font-size: 1.65rem;
+            color: #0f172a;
+            display: flex;
+            align-items: center;
+            gap: 12px;
+        }
+
+        .chapter-num {
+            background: var(--primary);
+            color: white;
+            font-size: 0.95rem;
+            padding: 4px 14px;
+            border-radius: 20px;
+            font-weight: 600;
+            display: inline-block;
+        }
+
+        h3 {
+            font-size: 1.25rem;
+            color: #0f766e;
+            margin: 28px 0 12px 0;
+            font-weight: 600;
+            display: flex;
+            align-items: center;
+            gap: 8px;
+        }
+
+        h3::before {
+            content: "❖";
+            color: var(--secondary);
+            font-size: 0.95rem;
+        }
+
+        h4 {
+            font-size: 1.06rem;
+            color: #334155;
+            margin: 20px 0 8px 0;
+            font-weight: 600;
+        }
+
+        p {
+            margin-bottom: 14px;
+            color: #334155;
+        }
+
+        ul, ol {
+            margin-left: 24px;
+            margin-bottom: 18px;
+        }
+
+        li {
+            margin-bottom: 8px;
+            color: #334155;
+        }
+
+        strong {
+            color: #0f172a;
+        }
+
+        /* Jupyter Cell Simulator */
+        .jupyter-cell {
+            background: #ffffff;
+            border: 1px solid #cbd5e1;
+            border-radius: 8px;
+            margin: 20px 0;
+            overflow: hidden;
+            box-shadow: 0 2px 8px rgba(0,0,0,0.04);
+        }
+
+        .cell-input-block {
+            display: flex;
+            background: #f8fafc;
+            border-bottom: 1px solid #e2e8f0;
+        }
+
+        .cell-prompt {
+            font-family: 'Fira Code', monospace;
+            font-size: 0.84rem;
+            font-weight: 600;
+            padding: 12px 14px;
+            min-width: 90px;
+            text-align: right;
+            user-select: none;
+        }
+
+        .cell-prompt.in {
+            color: var(--cell-in);
+        }
+
+        .cell-prompt.out {
+            color: var(--cell-out);
+        }
+
+        .cell-code-area {
+            flex-grow: 1;
+            padding: 12px 16px;
+            font-family: 'Fira Code', Consolas, monospace;
+            font-size: 0.9rem;
+            background: #0f172a;
+            color: #f8fafc;
+            overflow-x: auto;
+            line-height: 1.5;
+        }
+
+        .cell-output-block {
+            display: flex;
+            background: #ffffff;
+            padding: 10px 0;
+        }
+
+        .cell-output-area {
+            flex-grow: 1;
+            padding: 2px 16px;
+            font-family: 'Fira Code', Consolas, monospace;
+            font-size: 0.88rem;
+            color: #1e293b;
+            overflow-x: auto;
+            white-space: pre-wrap;
+        }
+
+        /* Callouts / Alert Boxes */
+        .callout {
+            border-radius: 10px;
+            padding: 16px 20px;
+            margin: 20px 0;
+            display: flex;
+            gap: 14px;
+            align-items: flex-start;
+            font-size: 0.96rem;
+        }
+
+        .callout-icon {
+            font-size: 1.3rem;
+            flex-shrink: 0;
+            margin-top: 2px;
+        }
+
+        .callout-content h5 {
+            font-size: 1rem;
+            font-weight: 700;
+            margin-bottom: 4px;
+        }
+
+        .callout-tip {
+            background-color: #f0fdf4;
+            border-left: 4px solid var(--success);
+            color: #166534;
+        }
+        .callout-tip .callout-content h5 { color: #166534; }
+
+        .callout-note {
+            background-color: #f0f9ff;
+            border-left: 4px solid var(--secondary);
+            color: #075985;
+        }
+        .callout-note .callout-content h5 { color: #075985; }
+
+        .callout-warning {
+            background-color: #fffbeb;
+            border-left: 4px solid var(--warning);
+            color: #92400e;
+        }
+        .callout-warning .callout-content h5 { color: #92400e; }
+
+        .callout-danger {
+            background-color: #fef2f2;
+            border-left: 4px solid var(--danger);
+            color: #991b1b;
+        }
+        .callout-danger .callout-content h5 { color: #991b1b; }
+
+        /* Tables */
+        .table-responsive {
+            overflow-x: auto;
+            margin: 20px 0 26px 0;
+            border-radius: 10px;
+            border: 1px solid var(--border);
+        }
+
+        table {
+            width: 100%;
+            border-collapse: collapse;
+            text-align: left;
+            font-size: 0.94rem;
+        }
+
+        th {
+            background-color: #f8fafc;
+            color: #1e293b;
+            font-weight: 600;
+            padding: 12px 16px;
+            border-bottom: 2px solid var(--border);
+        }
+
+        td {
+            padding: 12px 16px;
+            border-bottom: 1px solid var(--border);
+            vertical-align: middle;
+        }
+
+        tr:nth-child(even) {
+            background-color: #fbfcfe;
+        }
+
+        tr:hover {
+            background-color: #f0fdfa;
+        }
+
+        /* Code Blocks */
+        pre {
+            background-color: var(--code-bg);
+            color: var(--code-text);
+            padding: 16px 20px;
+            border-radius: 10px;
+            overflow-x: auto;
+            font-family: 'Fira Code', Consolas, Monaco, monospace;
+            font-size: 0.9rem;
+            margin: 16px 0 20px 0;
+            line-height: 1.5;
+            box-shadow: 0 4px 12px rgba(0,0,0,0.08);
+        }
+
+        code.inline {
+            background-color: #f1f5f9;
+            color: #0f766e;
+            padding: 2px 6px;
+            border-radius: 4px;
+            font-family: 'Fira Code', Consolas, monospace;
+            font-size: 0.88em;
+            font-weight: 600;
+        }
+
+        kbd {
+            display: inline-block;
+            background-color: var(--kbd-bg);
+            border: 1px solid var(--kbd-border);
+            border-bottom: 2px solid #94a3b8;
+            border-radius: 5px;
+            padding: 2px 7px;
+            font-family: 'Inter', monospace;
+            font-size: 0.82rem;
+            font-weight: 600;
+            color: #1e293b;
+            margin: 0 2px;
+        }
+
+        footer {
+            margin-top: 60px;
+            border-top: 1px solid var(--border);
+            padding: 30px 0 10px 0;
+            text-align: center;
+            color: #94a3b8;
+            font-size: 0.9rem;
+        }
+
+        @media (max-width: 1024px) {
+            body {
+                flex-direction: column;
+            }
+            .sidebar {
+                width: 100%;
+                height: auto;
+                position: relative;
+                border-right: none;
+                border-bottom: 1px solid var(--border);
+            }
+            .main-wrapper {
+                padding: 20px;
+            }
+        }
+    </style>
+</head>
+<body>
+
+    <!-- Sidebar Navigation -->
+    <aside class="sidebar">
+        <div class="sidebar-brand">
+            <svg viewBox="0 0 24 24">
+                <path d="M12 2A10 10 0 0 0 2 12a10 10 0 0 0 10 10 10 10 0 0 0 10-10A10 10 0 0 0 12 2zm1 14.5h-2v-2h2v2zm0-4h-2V7h2v5.5z"/>
+            </svg>
+            <div>
+                <h2>Jupyter नोट्स</h2>
+                <span>Part 3: Python Inside Jupyter</span>
+            </div>
+        </div>
+
+        <div class="nav-links-box">
+            <a href="index.html" class="part-nav-btn" style="background:#1a365d; color:#ffffff; font-weight:700; border:1px solid #2b6cb0; box-shadow:0 2px 4px rgba(0,0,0,0.1); margin-bottom:4px;">
+                🏠 मुख्य पृष्ठ (Surya's Gist)
+            </a>
+            <a href="Jupyter_Notebook_Fundamentals_Hindi.html" class="part-nav-btn">
+                ⬅ Part 1: Fundamentals
+            </a>
+            <a href="Jupyter_Notebook_Part2_Markdown_Formatting_Hindi.html" class="part-nav-btn">
+                ⬅ Part 2: Markdown & Formatting
+            </a>
+            <a href="Jupyter_Notebook_Part4_Advanced_Features_Hindi.html" class="part-nav-btn">
+                Part 4: Advanced Features ➡
+            </a>
+            <a href="Jupyter_Notebook_Part5_Data_Science_Libraries_Hindi.html" class="part-nav-btn">
+                Part 5: Data Science Libraries ➡
+            </a>
+            <a href="Jupyter_Notebook_Part6_Database_API_Integration_Hindi.html" class="part-nav-btn">
+                Part 6: Database & API Integration ➡
+            </a>
+            <a href="Jupyter_Notebook_Part7_Data_Science_and_Machine_Learning_Hindi.html" class="part-nav-btn">
+                Part 7: Data Science & ML ➡
+            </a>
+            <a href="Jupyter_Notebook_Part8_Production_Level_Jupyter_Hindi.html" class="part-nav-btn">
+                Part 8: Production Jupyter ➡
+            </a>
+        </div>
+
+                <div class="community-sidebar-card" style="margin-bottom:16px; padding:12px; background:#f8fafc; border:1px solid #e2e8f0; border-radius:10px; text-align:center;">
+            <div style="font-size:0.8rem; font-weight:700; color:#334155; margin-bottom:8px; display:flex; align-items:center; justify-content:center; gap:5px;">
+                🤖 ProgRobo Community
+            </div>
+            <div style="display:flex; flex-direction:column; gap:6px;">
+                <a href="https://chat.whatsapp.com/LGOqoPMt3IO1C6R33qviuT?s=cl&p=a&iam=2" target="_blank" rel="noopener noreferrer" style="display:inline-flex; align-items:center; justify-content:center; gap:6px; background:#25D366; color:#ffffff; padding:7px 10px; border-radius:6px; font-size:0.78rem; font-weight:700; text-decoration:none; box-shadow:0 2px 4px rgba(37,211,102,0.2);">
+                    💬 Join WhatsApp Group
+                </a>
+                <a href="https://github.com/surya2222" target="_blank" rel="noopener noreferrer" style="display:inline-flex; align-items:center; justify-content:center; gap:6px; background:#24292e; color:#ffffff; padding:7px 10px; border-radius:6px; font-size:0.78rem; font-weight:600; text-decoration:none;">
+                    🐙 GitHub: @surya2222
+                </a>
+            </div>
+        </div>
+<ul class="toc-list">
+            <li class="toc-item">
+                <a href="#ch20" class="toc-link">
+                    <span class="toc-badge">Ch 20</span>
+                    <span>20. Python Basics (मूल तत्व)</span>
+                </a>
+            </li>
+            <li class="toc-item">
+                <a href="#ch21" class="toc-link">
+                    <span class="toc-badge">Ch 21</span>
+                    <span>21. Strings (स्ट्रिंग्स)</span>
+                </a>
+            </li>
+            <li class="toc-item">
+                <a href="#ch22" class="toc-link">
+                    <span class="toc-badge">Ch 22</span>
+                    <span>22. Data Structures (संरचनाएं)</span>
+                </a>
+            </li>
+            <li class="toc-item">
+                <a href="#ch23" class="toc-link">
+                    <span class="toc-badge">Ch 23</span>
+                    <span>23. Conditions (सशर्त कथन)</span>
+                </a>
+            </li>
+            <li class="toc-item">
+                <a href="#ch24" class="toc-link">
+                    <span class="toc-badge">Ch 24</span>
+                    <span>24. Loops (लूप्स)</span>
+                </a>
+            </li>
+            <li class="toc-item">
+                <a href="#ch25" class="toc-link">
+                    <span class="toc-badge">Ch 25</span>
+                    <span>25. Functions (फ़ंक्शंस)</span>
+                </a>
+            </li>
+            <li class="toc-item">
+                <a href="#ch26" class="toc-link">
+                    <span class="toc-badge">Ch 26</span>
+                    <span>26. Comprehensions (कंप्रिहेंशन)</span>
+                </a>
+            </li>
+            <li class="toc-item">
+                <a href="#ch27" class="toc-link">
+                    <span class="toc-badge">Ch 27</span>
+                    <span>27. Modules (मॉड्यूल व पैकेज)</span>
+                </a>
+            </li>
+            <li class="toc-item">
+                <a href="#ch28" class="toc-link">
+                    <span class="toc-badge">Ch 28</span>
+                    <span>28. Exceptions (अपवाद प्रबंधन)</span>
+                </a>
+            </li>
+            <li class="toc-item">
+                <a href="#ch29" class="toc-link">
+                    <span class="toc-badge">Ch 29</span>
+                    <span>29. File Handling (फ़ाइल ऑपरेशन्स)</span>
+                </a>
+            </li>
+            <li class="toc-item">
+                <a href="#ch30" class="toc-link">
+                    <span class="toc-badge">Ch 30</span>
+                    <span>30. OOP (ऑब्जेक्ट ओरिएंटेड)</span>
+                </a>
+            </li>
+            <li class="toc-item">
+                <a href="#ch31" class="toc-link">
+                    <span class="toc-badge">Ch 31</span>
+                    <span>31. Debugging (डीबगिंग व त्रुटियाँ)</span>
+                </a>
+            </li>
+        </ul>
+    </aside>
+
+    <!-- Main Content Area -->
+    <main class="main-wrapper">
+
+        <!-- Hero Header -->
+        <header class="hero">
+            <h1>Jupyter Notebook - Part 3: Python Programming Inside Jupyter</h1>
+            <p>Jupyter Notebook के इंटरैक्टिव वातावरण में <strong>Python 3</strong> प्रोग्रामिंग का संपूर्ण, व्यावहारिक और हैंड्स-ऑन हिंदी गाइड। वैरिएबल्स, डेटा स्ट्रक्चर्स, OOP, फ़ाइल हैंडलिंग से लेकर इंटरैक्टिव डीबगिंग तक का गहन अध्ययन।</p>
+            <div class="hero-meta">
+                <span>📑 <strong>भाग:</strong> Part 3 (अध्याय 20 से 31)</span>
+                <span>🐍 <strong>इंजन:</strong> IPython / ipykernel</span>
+                <span>💡 <strong>विशेषता:</strong> Jupyter Cell Input/Output सिमुलेशन के साथ व्यावहारिक उदाहरण</span>
+            </div>
+        </header>
+
+        <!-- Chapter 20 -->
+        <section id="ch20" class="chapter-card">
+            <div class="chapter-header">
+                <h2><span>Chapter 20: Python Basics (पायथन की मूल बातें)</span></h2>
+                <span class="chapter-num">अध्याय 20</span>
+            </div>
+
+            <h3>20.1 Variables & Dynamic Typing (वैरिएबल्स और डायनेमिक टाइपिंग)</h3>
+            <p>पायथन में वैरिएबल को किसी डेटा वैल्यू को स्टोर करने वाला कंटेनर माना जाता है। अन्य भाषाओं (C/C++, Java) के विपरीत, पायथन में डेटा टाइप पहले से घोषित (Declare) करने की आवश्यकता नहीं होती। मान असाइन करते ही पायथन स्वचालित रूप से प्रकार पहचान लेता है (<strong>Dynamically Typed</strong>)।</p>
+
+            <div class="jupyter-cell">
+                <div class="cell-input-block">
+                    <div class="cell-prompt in">In [1]:</div>
+                    <div class="cell-code-area"># वैरिएबल्स बनाना और जांचना
+x = 25              # int
+pi = 3.14159        # float
+name = "Antigravity"# str
+is_active = True    # bool
+
+# Jupyter की विशेषता: सेल की अंतिम लाइन पर वैरिएबल का नाम लिखने से वह बिना print() के प्रदर्शित होता है
+x, pi, name, is_active</div>
+                </div>
+                <div class="cell-output-block">
+                    <div class="cell-prompt out">Out [1]:</div>
+                    <div class="cell-output-area">(25, 3.14159, 'Antigravity', True)</div>
+                </div>
+            </div>
+
+            <h3>20.2 Data Types & Type Casting (डेटा प्रकार व रूपांतरण)</h3>
+            <ul>
+                <li><code>type()</code>: किसी भी ऑब्जेक्ट का डेटा प्रकार जानने के लिए।</li>
+                <li><strong>Type Casting (रूपांतरण):</strong> <code>int()</code>, <code>float()</code>, <code>str()</code>, <code>bool()</code> द्वारा डेटा टाइप बदला जा सकता है।</li>
+            </ul>
+
+            <div class="jupyter-cell">
+                <div class="cell-input-block">
+                    <div class="cell-prompt in">In [2]:</div>
+                    <div class="cell-code-area">num_str = "150"
+num_int = int(num_str)  # String to Integer
+print(type(num_str), "->", type(num_int), "मान:", num_int + 50)</div>
+                </div>
+                <div class="cell-output-block">
+                    <div class="cell-prompt out"></div>
+                    <div class="cell-output-area">&lt;class 'str'&gt; -&gt; &lt;class 'int'&gt; मान: 200</div>
+                </div>
+            </div>
+
+            <h3>20.3 Python Operators (ऑपरेटर्स)</h3>
+            <div class="table-responsive">
+                <table>
+                    <thead>
+                        <tr>
+                            <th>ऑपरेटर श्रेणी</th>
+                            <th>चिन्ह (Symbols)</th>
+                            <th>विवरण एवं उदाहरण</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        <tr>
+                            <td><strong>अंकगणितीय (Arithmetic)</strong></td>
+                            <td><code>+</code>, <code>-</code>, <code>*</code>, <code>/</code>, <code>//</code>, <code>%</code>, <code>**</code></td>
+                            <td><code>10 // 3 = 3</code> (Floor Division), <code>10 % 3 = 1</code> (Modulus), <code>2 ** 3 = 8</code> (Power)</td>
+                        </tr>
+                        <tr>
+                            <td><strong>तुलनात्मक (Comparison)</strong></td>
+                            <td><code>==</code>, <code>!=</code>, <code>&gt;</code>, <code>&lt;</code>, <code>&gt;=</code>, <code>&lt;=</code></td>
+                            <td>बुलियन परिणाम (<code>True</code> / <code>False</code>) देते हैं।</td>
+                        </tr>
+                        <tr>
+                            <td><strong>तार्किक (Logical)</strong></td>
+                            <td><code>and</code>, <code>or</code>, <code>not</code></td>
+                            <td><code>(x &gt; 5) and (y &lt; 10)</code></td>
+                        </tr>
+                        <tr>
+                            <td><strong>सदस्यता (Membership)</strong></td>
+                            <td><code>in</code>, <code>not in</code></td>
+                            <td>जांचता है कि क्या कोई मान सूची/स्ट्रिंग में मौजूद है: <code>'py' in 'python' -&gt; True</code></td>
+                        </tr>
+                        <tr>
+                            <td><strong>पहचान (Identity)</strong></td>
+                            <td><code>is</code>, <code>is not</code></td>
+                            <td>मेमोरी एड्रेस की तुलना करता है: <code>a is None</code></td>
+                        </tr>
+                    </tbody>
+                </table>
+            </div>
+        </section>
+
+        <!-- Chapter 21 -->
+        <section id="ch21" class="chapter-card">
+            <div class="chapter-header">
+                <h2><span>Chapter 21: Strings (स्ट्रिंग्स एवं स्ट्रिंग विधियाँ)</span></h2>
+                <span class="chapter-num">अध्याय 21</span>
+            </div>
+
+            <h3>21.1 String Indexing & Slicing (इंडेक्सिंग और स्लाइसिंग)</h3>
+            <p>पायथन में स्ट्रिंग्स <strong>Immutable (अपरिवर्तनीय)</strong> होती हैं। इन्हें शून्य-आधारित (0-based) पॉजिटिव इंडेक्स या अंत से नेगेटिव इंडेक्स द्वारा एक्सेस किया जाता है:</p>
+
+            <div class="jupyter-cell">
+                <div class="cell-input-block">
+                    <div class="cell-prompt in">In [3]:</div>
+                    <div class="cell-code-area">text = "Data Science with Python"
+print("पहला अक्षर (0):", text[0])
+print("अंतिम अक्षर (-1):", text[-1])
+print("स्लाइस [0:4]:", text[0:4])      # 'Data'
+print("रिवर्स स्लाइस [::-1]:", text[::-1]) # उल्टा करना</div>
+                </div>
+                <div class="cell-output-block">
+                    <div class="cell-prompt out"></div>
+                    <div class="cell-output-area">पहला अक्षर (0): D
+अंतिम अक्षर (-1): n
+स्लाइस [0:4]: Data
+रिवर्स स्लाइस [::-1]: nohtyP htiw ecneicS ataD</div>
+                </div>
+            </div>
+
+            <h3>21.2 Modern String Formatting (f-strings)</h3>
+            <p>Python 3.6+ में <strong>f-strings</strong> सबसे तेज़, पठनीय और आधुनिक फॉर्मेटिंग तकनीक है:</p>
+
+            <div class="jupyter-cell">
+                <div class="cell-input-block">
+                    <div class="cell-prompt in">In [4]:</div>
+                    <div class="cell-code-area">model_name = "RandomForest"
+accuracy = 0.94567
+epochs = 50
+
+# f-string में दशमलव स्थान और एक्सप्रेशन सीधे इम्बेड करें
+report = f"मॉडल: {model_name} | एक्यूरेसी: {accuracy * 100:.2f}% | राउंड्स: {epochs}"
+report</div>
+                </div>
+                <div class="cell-output-block">
+                    <div class="cell-prompt out">Out [4]:</div>
+                    <div class="cell-output-area">'मॉडल: RandomForest | एक्यूरेसी: 94.57% | राउंड्स: 50'</div>
+                </div>
+            </div>
+
+            <h3>21.3 Popular String Methods</h3>
+            <ul>
+                <li><code>.strip()</code>: दोनों सिरों से अनावश्यक स्पेस/व्हाइटस्पेस हटाता है।</li>
+                <li><code>.split(sep)</code>: स्ट्रिंग को विभाजक के आधार पर लिस्ट में तोड़ता है।</li>
+                <li><code>.join(iterable)</code>: लिस्ट के तत्वों को जोड़कर एक स्ट्रिंग बनाता है।</li>
+                <li><code>.replace(old, new)</code>: सबस्ट्रिंग को बदलता है।</li>
+                <li><code>.lower()</code> / <code>.upper()</code> / <code>.title()</code>: केस बदलता है।</li>
+            </ul>
+        </section>
+
+        <!-- Chapter 22 -->
+        <section id="ch22" class="chapter-card">
+            <div class="chapter-header">
+                <h2><span>Chapter 22: Data Structures (डेटा संरचनाएं: List, Tuple, Set, Dict)</span></h2>
+                <span class="chapter-num">अध्याय 22</span>
+            </div>
+
+            <p>पायथन में डेटा को व्यवस्थित और प्रबंधित करने के लिए चार प्राथमिक अंतर्निहित डेटा संरचनाएं (Built-in Data Structures) होती हैं:</p>
+
+            <div class="table-responsive">
+                <table>
+                    <thead>
+                        <tr>
+                            <th>संरचना (Structure)</th>
+                            <th>सिंटैक्स</th>
+                            <th>परिवर्तनीय (Mutable)</th>
+                            <th>क्रमबद्ध (Ordered)</th>
+                            <th>डुप्लिकेट्स (Duplicates)</th>
+                            <th>मुख्य उपयोग</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        <tr>
+                            <td><strong>List (सूची)</strong></td>
+                            <td><code>[1, 2, 3]</code></td>
+                            <td>हाँ (Yes)</td>
+                            <td>हाँ (Yes)</td>
+                            <td>अनुमत (Allowed)</td>
+                            <td>सामान्य अनुक्रमिक डेटा, गतिशील संग्रह</td>
+                        </tr>
+                        <tr>
+                            <td><strong>Tuple (टुपल)</strong></td>
+                            <td><code>(1, 2, 3)</code></td>
+                            <td>नहीं (Immutable)</td>
+                            <td>हाँ (Yes)</td>
+                            <td>अनुमत (Allowed)</td>
+                            <td>स्थिर डेटा (Coordinates, DB Records), तेज़ गति</td>
+                        </tr>
+                        <tr>
+                            <td><strong>Set (समुच्चय)</strong></td>
+                            <td><code>{1, 2, 3}</code></td>
+                            <td>हाँ (Yes)</td>
+                            <td>नहीं (Unordered)</td>
+                            <td>नहीं (Unique only)</td>
+                            <td>डुप्लिकेट्स हटाना, गणितीय सेट ऑपरेशन्स (Union, Intersection)</td>
+                        </tr>
+                        <tr>
+                            <td><strong>Dictionary (शब्दकोश)</strong></td>
+                            <td><code>{'a': 1, 'b': 2}</code></td>
+                            <td>हाँ (Yes)</td>
+                            <td>हाँ (Python 3.7+)</td>
+                            <td>कुंजियाँ यूनिक (Keys Unique)</td>
+                            <td>Key-Value डेटा, JSON डेटा, डेटाबेस रिकॉर्ड्स</td>
+                        </tr>
+                    </tbody>
+                </table>
+            </div>
+
+            <h3>22.1 Hands-on Example in Jupyter</h3>
+            <div class="jupyter-cell">
+                <div class="cell-input-block">
+                    <div class="cell-prompt in">In [5]:</div>
+                    <div class="cell-code-area"># 1. List
+fruits = ["आम", "केला", "सेब"]
+fruits.append("अंगूर")
+
+# 2. Tuple
+point = (10, 20)
+
+# 3. Set (डुप्लिकेट्स स्वतः हट जाते हैं)
+unique_ids = {101, 102, 101, 103, 102}
+
+# 4. Dictionary
+student = {"name": "राहुल", "course": "Data Science", "score": 92}
+
+print("List:", fruits)
+print("Set (Unique):", unique_ids)
+print("Dict Name:", student.get("name"))</div>
+                </div>
+                <div class="cell-output-block">
+                    <div class="cell-prompt out"></div>
+                    <div class="cell-output-area">List: ['आम', 'केला', 'सेब', 'अंगूर']
+Set (Unique): {101, 102, 103}
+Dict Name: राहुल</div>
+                </div>
+            </div>
+        </section>
+
+        <!-- Chapter 23 -->
+        <section id="ch23" class="chapter-card">
+            <div class="chapter-header">
+                <h2><span>Chapter 23: Conditions (सशर्त कथन: if, elif, else)</span></h2>
+                <span class="chapter-num">अध्याय 23</span>
+            </div>
+
+            <h3>23.1 Control Flow (निर्णय लेने की संरचना)</h3>
+            <p>पायथन कोड ब्लॉक को पहचानने के लिए कर्ली ब्रेसिस <code>{}</code> के बजाय <strong>इंडेन्टेशन (Indentation - 4 Spaces)</strong> का उपयोग करता है। कोलन (<code>:</code>) स्थिति का अंत दर्शाता है:</p>
+
+            <div class="jupyter-cell">
+                <div class="cell-input-block">
+                    <div class="cell-prompt in">In [6]:</div>
+                    <div class="cell-code-area">marks = 85
+
+if marks >= 90:
+    grade = "A+"
+elif marks >= 75:
+    grade = "A"
+elif marks >= 60:
+    grade = "B"
+else:
+    grade = "C"
+
+print(f"अंक: {marks} -> ग्रेड: {grade}")</div>
+                </div>
+                <div class="cell-output-block">
+                    <div class="cell-prompt out"></div>
+                    <div class="cell-output-area">अंक: 85 -&gt; ग्रेड: A</div>
+                </div>
+            </div>
+
+            <h3>23.2 Ternary Operator (एक-पंक्ति सशर्त ऑपरेटर)</h3>
+            <p>सरल <code>if-else</code> को एक ही लाइन में लिखने का संक्षिप्त तरीका:</p>
+            <pre><code>status = "उत्तीर्ण (Pass)" if marks &gt;= 40 else "अनुत्तीर्ण (Fail)"</code></pre>
+        </section>
+
+        <!-- Chapter 24 -->
+        <section id="ch24" class="chapter-card">
+            <div class="chapter-header">
+                <h2><span>Chapter 24: Loops (लूप्स: for, while, break, continue)</span></h2>
+                <span class="chapter-num">अध्याय 24</span>
+            </div>
+
+            <h3>24.1 The `for` Loop with `range()`, `enumerate()`, and `zip()`</h3>
+            <p>डेटा साइंस में <code>for</code> लूप का उपयोग संग्रहों (Collections) पर पुनरावृत्ति करने के लिए सबसे अधिक होता है:</p>
+
+            <div class="jupyter-cell">
+                <div class="cell-input-block">
+                    <div class="cell-prompt in">In [7]:</div>
+                    <div class="cell-code-area">features = ["Age", "Income", "Education"]
+values = [28, 65000, "Masters"]
+
+# zip() द्वारा दो सूचियों पर एक साथ चलना
+for feat, val in zip(features, values):
+    print(f"Feature: {feat:10} | Value: {val}")</div>
+                </div>
+                <div class="cell-output-block">
+                    <div class="cell-prompt out"></div>
+                    <div class="cell-output-area">Feature: Age        | Value: 28
+Feature: Income     | Value: 65000
+Feature: Education  | Value: Masters</div>
+                </div>
+            </div>
+
+            <h3>24.2 Loop Control: break, continue & pass</h3>
+            <ul>
+                <li><code>break</code>: लूप को तुरंत समाप्त करके बाहर निकल जाता है।</li>
+                <li><code>continue</code>: वर्तमान पुनरावृत्ति (Iteration) को छोड़कर सीधे अगली पुनरावृत्ति पर चला जाता है।</li>
+                <li><code>pass</code>: एक खाली प्लेसहोल्डर है जहाँ भविष्य में कोड लिखना हो।</li>
+            </ul>
+
+            <div class="callout callout-warning">
+                <div class="callout-icon">⚠️</div>
+                <div class="callout-content">
+                    <h5>Jupyter में Infinite Loop से बचाव:</h5>
+                    <p>यदि <code>while True:</code> जैसा कोई लूप गलती से बिना ब्रेक के चल जाए और सेल <code>In [*]:</code> में अटक जाए, तो तुरंत टूलबार में <strong>Stop Icon (■)</strong> पर क्लिक करें या कीबोर्ड से <kbd>I</kbd>, <kbd>I</kbd> दबाएं!</p>
+                </div>
+            </div>
+        </section>
+
+        <!-- Chapter 25 -->
+        <section id="ch25" class="chapter-card">
+            <div class="chapter-header">
+                <h2><span>Chapter 25: Functions (फ़ंक्शंस: def, arguments, return, lambda)</span></h2>
+                <span class="chapter-num">अध्याय 25</span>
+            </div>
+
+            <h3>25.1 Defining Functions (`def`) & Docstrings</h3>
+            <p>फ़ंक्शंस कोड के पुन: प्रयोज्य (Reusable) ब्लॉक होते हैं। Jupyter में फ़ंक्शन पर <kbd>Shift</kbd> + <kbd>Tab</kbd> दबाने से उसका <em>Docstring (डॉक्यूमेंटेशन)</em> तुरंत टूलटिप के रूप में दिखाई देता है:</p>
+
+            <div class="jupyter-cell">
+                <div class="cell-input-block">
+                    <div class="cell-prompt in">In [8]:</div>
+                    <div class="cell-code-area">def calculate_bmi(weight_kg, height_m=1.75):
+    """
+    व्यक्ति का Body Mass Index (BMI) निकालता है।
+    पैरामीटर्स:
+        weight_kg: वजन किलोग्राम में
+        height_m: ऊंचाई मीटर में (डिफ़ॉल्ट 1.75)
+    """
+    bmi = weight_kg / (height_m ** 2)
+    return round(bmi, 2)
+
+# फ़ंक्शन कॉल
+print("BMI:", calculate_bmi(70))</div>
+                </div>
+                <div class="cell-output-block">
+                    <div class="cell-prompt out"></div>
+                    <div class="cell-output-area">BMI: 22.86</div>
+                </div>
+            </div>
+
+            <h3>25.2 Variable Arguments: `*args` and `**kwargs`</h3>
+            <ul>
+                <li><code>*args</code>: अनिश्चित संख्या में स्थितिगत तर्कों (Positional Arguments) को एक <strong>Tuple</strong> के रूप में स्वीकार करता है।</li>
+                <li><code>**kwargs</code>: अनिश्चित संख्या में कीवर्ड तर्कों (Keyword Arguments) को एक <strong>Dictionary</strong> के रूप में स्वीकार करता है।</li>
+            </ul>
+
+            <h3>25.3 Lambda Functions (अनाम / वन-लाइनर फ़ंक्शंस)</h3>
+            <p>छोटे, तात्कालिक कार्यों के लिए <code>lambda</code> कीवर्ड का उपयोग किया जाता है। यह अक्सर <code>map()</code>, <code>filter()</code> या Pandas <code>.apply()</code> के साथ उपयोग होता है:</p>
+
+            <div class="jupyter-cell">
+                <div class="cell-input-block">
+                    <div class="cell-prompt in">In [9]:</div>
+                    <div class="cell-code-area"># दो संख्याओं का वर्ग योग
+square_sum = lambda x, y: x**2 + y**2
+square_sum(3, 4)</div>
+                </div>
+                <div class="cell-output-block">
+                    <div class="cell-prompt out">Out [9]:</div>
+                    <div class="cell-output-area">25</div>
+                </div>
+            </div>
+        </section>
+
+        <!-- Chapter 26 -->
+        <section id="ch26" class="chapter-card">
+            <div class="chapter-header">
+                <h2><span>Chapter 26: Comprehensions (कंप्रिहेंशन: List, Dict, Set)</span></h2>
+                <span class="chapter-num">अध्याय 26</span>
+            </div>
+
+            <p><strong>Comprehensions</strong> पायथन की सबसे सुरुचिपूर्ण (Pythonic) और तेज़ सुविधाओं में से एक हैं। यह कई लाइनों के लूप और अपेंड ऑपरेशन्स को एकल, पठनीय पंक्ति में बदल देती हैं।</p>
+
+            <h3>26.1 List Comprehension</h3>
+            <div class="jupyter-cell">
+                <div class="cell-input-block">
+                    <div class="cell-prompt in">In [10]:</div>
+                    <div class="cell-code-area">numbers = [1, 2, 3, 4, 5, 6, 7, 8, 9, 10]
+
+# केवल सम (Even) संख्याओं का वर्ग (Square) निकालें
+even_squares = [x**2 for x in numbers if x % 2 == 0]
+even_squares</div>
+                </div>
+                <div class="cell-output-block">
+                    <div class="cell-prompt out">Out [10]:</div>
+                    <div class="cell-output-area">[4, 16, 36, 64, 100]</div>
+                </div>
+            </div>
+
+            <h3>26.2 Dictionary & Set Comprehension</h3>
+            <div class="jupyter-cell">
+                <div class="cell-input-block">
+                    <div class="cell-prompt in">In [11]:</div>
+                    <div class="cell-code-area">words = ["python", "jupyter", "data", "science"]
+
+# Dictionary Comprehension: शब्द और उसकी लंबाई की डिक्शनरी
+word_lengths = {w: len(w) for w in words}
+
+# Set Comprehension: अक्षरों का अद्वितीय सेट
+unique_chars = {char for w in words for char in w}
+
+print("Dict:", word_lengths)
+print("Unique chars count:", len(unique_chars))</div>
+                </div>
+                <div class="cell-output-block">
+                    <div class="cell-prompt out"></div>
+                    <div class="cell-output-area">Dict: {'python': 6, 'jupyter': 7, 'data': 4, 'science': 7}
+Unique chars count: 14</div>
+                </div>
+            </div>
+        </section>
+
+        <!-- Chapter 27 -->
+        <section id="ch27" class="chapter-card">
+            <div class="chapter-header">
+                <h2><span>Chapter 27: Modules and Packages (मॉड्यूल एवं पैकेज)</span></h2>
+                <span class="chapter-num">अध्याय 27</span>
+            </div>
+
+            <h3>27.1 Importing Modules & Aliases</h3>
+            <p>मॉड्यूल पहले से लिखे गए कोड की फ़ाइलें (<code>.py</code>) होती हैं जिनमें फ़ंक्शंस और क्लासेस होते हैं।</p>
+            <pre><code>import math                     # पूरा मॉड्यूल इम्पोर्ट
+from math import sqrt, pi       # केवल विशिष्ट फ़ंक्शंस
+import numpy as np              # एलियास (Alias/उर्फ नाम) देना
+import pandas as pd</code></pre>
+
+            <h3>27.2 Standard Library Highlights</h3>
+            <ul>
+                <li><code>math</code>: गणितीय गणनाएं (<code>sin</code>, <code>cos</code>, <code>log</code>, <code>sqrt</code>).</li>
+                <li><code>random</code>: यादृच्छिक संख्या उत्पादन (Random Sampling).</li>
+                <li><code>datetime</code>: दिनांक और समय प्रबंधन.</li>
+                <li><code>os</code> और <code>sys</code>: ऑपरेटिंग सिस्टम और फ़ाइल पाथ हैंडलिंग.</li>
+            </ul>
+
+            <div class="callout callout-tip">
+                <div class="callout-icon">💡</div>
+                <div class="callout-content">
+                    <h5>Jupyter Pro-Tip (Autoreload Magic):</h5>
+                    <p>यदि आप किसी बाहरी <code>.py</code> फ़ाइल को नोटबुक में इम्पोर्ट कर रहे हैं और उस फ़ाइल में बार-बार बदलाव कर रहे हैं, तो कर्नल को बार-बार रीस्टार्ट करने के बजाय यह मैजिक कमांड चलाएं:</p>
+                    <pre style="margin: 8px 0 0 0;"><code>%load_ext autoreload
+%autoreload 2</code></pre>
+                </div>
+            </div>
+        </section>
+
+        <!-- Chapter 28 -->
+        <section id="ch28" class="chapter-card">
+            <div class="chapter-header">
+                <h2><span>Chapter 28: Exception Handling (अपवाद प्रबंधन: try, except, finally)</span></h2>
+                <span class="chapter-num">अध्याय 28</span>
+            </div>
+
+            <p>कोड के निष्पादन के दौरान आने वाली त्रुटियों (Errors) से प्रोग्राम को क्रैश होने से बचाने के लिए <strong>Exception Handling</strong> की जाती है।</p>
+
+            <div class="jupyter-cell">
+                <div class="cell-input-block">
+                    <div class="cell-prompt in">In [12]:</div>
+                    <div class="cell-code-area">def safe_division(a, b):
+    try:
+        result = a / b
+    except ZeroDivisionError as e:
+        print("त्रुटि: शून्य से भाग नहीं दिया जा सकता! [ZeroDivisionError]")
+        return None
+    except TypeError:
+        print("त्रुटि: दोनों मान संख्यात्मक होने चाहिए!")
+        return None
+    else:
+        print("गणना सफलतापूर्वक पूरी हुई!")
+        return result
+    finally:
+        print(">> क्लीनअप पूरा हुआ (यह हमेशा चलेगा)।")
+
+safe_division(10, 0)</div>
+                </div>
+                <div class="cell-output-block">
+                    <div class="cell-prompt out"></div>
+                    <div class="cell-output-area">त्रुटि: शून्य से भाग नहीं दिया जा सकता! [ZeroDivisionError]
+&gt;&gt; क्लीनअप पूरा हुआ (यह हमेशा चलेगा)।</div>
+                </div>
+            </div>
+
+            <h3>28.1 Raising Custom Exceptions (`raise`)</h3>
+            <pre><code>age = -5
+if age &lt; 0:
+    raise ValueError("आयु ऋणात्मक (Negative) नहीं हो सकती!")</code></pre>
+        </section>
+
+        <!-- Chapter 29 -->
+        <section id="ch29" class="chapter-card">
+            <div class="chapter-header">
+                <h2><span>Chapter 29: File Handling (फ़ाइल प्रबंधन: Read, Write, CSV, JSON)</span></h2>
+                <span class="chapter-num">अध्याय 29</span>
+            </div>
+
+            <h3>29.1 The `with` Statement (Context Manager)</h3>
+            <p>फ़ाइलों पर काम करते समय हमेशा <code>with open()</code> का उपयोग करें। यह सुनिश्चित करता है कि काम पूरा होते ही (या कोई एरर आने पर भी) फ़ाइल स्वतः सही ढंग से बंद हो जाए:</p>
+
+            <div class="jupyter-cell">
+                <div class="cell-input-block">
+                    <div class="cell-prompt in">In [13]:</div>
+                    <div class="cell-code-area"># 1. टेक्स्ट फ़ाइल में लिखना ('w' मोड)
+with open("sample_log.txt", "w", encoding="utf-8") as f:
+    f.write("Line 1: डेटा पाइपलाइन प्रारंभ\n")
+    f.write("Line 2: 1000 रिकॉर्ड्स प्रोसेस हुए\n")
+
+# 2. टेक्स्ट फ़ाइल को पढ़ना ('r' मोड)
+with open("sample_log.txt", "r", encoding="utf-8") as f:
+    content = f.read()
+
+print(content)</div>
+                </div>
+                <div class="cell-output-block">
+                    <div class="cell-prompt out"></div>
+                    <div class="cell-output-area">Line 1: डेटा पाइपलाइन प्रारंभ
+Line 2: 1000 रिकॉर्ड्स प्रोसेस हुए</div>
+                </div>
+            </div>
+
+            <h3>29.2 Handling CSV & JSON Files</h3>
+            <div class="jupyter-cell">
+                <div class="cell-input-block">
+                    <div class="cell-prompt in">In [14]:</div>
+                    <div class="cell-code-area">import json
+
+# JSON डेटा को स्ट्रिंग/फ़ाइल में बदलना (dump) और वापस लोड करना (load)
+user_data = {"id": 101, "skills": ["Python", "SQL", "ML"], "active": True}
+
+# JSON स्ट्रिंग में कन्वर्ट करना
+json_string = json.dumps(user_data, indent=2)
+print("JSON Output:\n", json_string)</div>
+                </div>
+                <div class="cell-output-block">
+                    <div class="cell-prompt out"></div>
+                    <div class="cell-output-area">JSON Output:
+ {
+  "id": 101,
+  "skills": [
+    "Python",
+    "SQL",
+    "ML"
+  ],
+  "active": true
+}</div>
+                </div>
+            </div>
+        </section>
+
+        <!-- Chapter 30 -->
+        <section id="ch30" class="chapter-card">
+            <div class="chapter-header">
+                <h2><span>Chapter 30: OOP (ऑब्जेक्ट ओरिएंटेड प्रोग्रामिंग)</span></h2>
+                <span class="chapter-num">अध्याय 30</span>
+            </div>
+
+            <p><strong>OOP</strong> कोड को वास्तविक दुनिया की वस्तुओं (Objects) के रूप में संरचित करने का एक शक्तिशाली प्रतिमान (Paradigm) है। इसके चार मुख्य स्तंभ हैं: <strong>Encapsulation</strong>, <strong>Inheritance</strong>, <strong>Polymorphism</strong>, और <strong>Abstraction</strong>।</p>
+
+            <h3>30.1 Class, Object & Constructor (`__init__`)</h3>
+            <div class="jupyter-cell">
+                <div class="cell-input-block">
+                    <div class="cell-prompt in">In [15]:</div>
+                    <div class="cell-code-area">class MLModel:
+    # क्लास वैरिएबल (सभी इंस्टैंसेस के लिए साझा)
+    framework = "Scikit-Learn"
+
+    # कंस्ट्रक्टर मेथड
+    def __init__(self, model_name, learning_rate=0.01):
+        self.model_name = model_name         # इंस्टेंस वैरिएबल
+        self.learning_rate = learning_rate
+        self.is_trained = False
+
+    def train(self, data):
+        self.is_trained = True
+        return f"{self.model_name} {len(data)} नमूनों पर सफलतापूर्वक ट्रेन हुआ।"
+
+# ऑब्जेक्ट बनाना
+model1 = MLModel("LogisticRegression", 0.05)
+print(model1.train([1, 2, 3, 4, 5]))</div>
+                </div>
+                <div class="cell-output-block">
+                    <div class="cell-prompt out"></div>
+                    <div class="cell-output-area">LogisticRegression 5 नमूनों पर सफलतापूर्वक ट्रेन हुआ।</div>
+                </div>
+            </div>
+
+            <h3>30.2 Inheritance (इनहेरिटेंस / विरासत) & `super()`</h3>
+            <div class="jupyter-cell">
+                <div class="cell-input-block">
+                    <div class="cell-prompt in">In [16]:</div>
+                    <div class="cell-code-area"># पैरेंट क्लास से इनहेरिट करना
+class DeepNeuralNetwork(MLModel):
+    def __init__(self, model_name, layers, learning_rate=0.001):
+        super().__init__(model_name, learning_rate) # पैरेंट कंस्ट्रक्टर कॉल
+        self.layers = layers
+
+    def summary(self):
+        return f"DNN: {self.model_name} | लेयर्स: {self.layers} | LR: {self.learning_rate}"
+
+dnn = DeepNeuralNetwork("ResNet-50", [64, 128, 256])
+dnn.summary()</div>
+                </div>
+                <div class="cell-output-block">
+                    <div class="cell-prompt out">Out [16]:</div>
+                    <div class="cell-output-area">'DNN: ResNet-50 | लेयर्स: [64, 128, 256] | LR: 0.001'</div>
+                </div>
+            </div>
+        </section>
+
+        <!-- Chapter 31 -->
+        <section id="ch31" class="chapter-card">
+            <div class="chapter-header">
+                <h2><span>Chapter 31: Debugging in Jupyter (डीबगिंग एवं त्रुटि निवारण)</span></h2>
+                <span class="chapter-num">अध्याय 31</span>
+            </div>
+
+            <h3>31.1 Understanding Traceback (एरर संदेश को कैसे पढ़ें?)</h3>
+            <p>जब जुपिटर में कोई एरर आता है, तो एक लंबा <strong>Traceback</strong> प्रदर्शित होता है। इसे पढ़ने का सुनहरा नियम है: <strong>हमेशा सबसे नीचे (Bottom) से पढ़ें!</strong></p>
+            <ul>
+                <li><strong>सबसे नीचे की लाइन:</strong> वास्तविक एरर का प्रकार और कारण दर्शाती है (जैसे <code>KeyError: 'age'</code> या <code>ZeroDivisionError</code>)।</li>
+                <li><strong>ऊपर की लाइन्स (Call Stack):</strong> वह कोड फ़ाइल और लाइन नंबर बताती हैं जहाँ से यह समस्या उत्पन्न हुई।</li>
+            </ul>
+
+            <h3>31.2 Interactive Debugging with `%debug` Magic Command</h3>
+            <p>Jupyter Notebook की सबसे बड़ी ताकतों में से एक है पोस्ट-मॉर्टम डीबगर:</p>
+            <ol>
+                <li>यदि किसी सेल में कोई अप्रत्याशित एरर आ जाए, तो तुरंत नीचे एक नया सेल बनाएं।</li>
+                <li>उस सेल में सिर्फ टाइप करें:
+                    <pre><code>%debug</code></pre>
+                </li>
+                <li>Jupyter एक इंटरैक्टिव <code>ipdb</code> प्रॉम्प्ट खोल देगा। वहाँ आप उस समय के वैरिएबल्स की वैल्यूज टाइप करके देख सकते हैं कि किस मान की वजह से कोड फटा!</li>
+            </ol>
+
+            <div class="table-responsive">
+                <table>
+                    <thead>
+                        <tr>
+                            <th>डीबगर कमांड</th>
+                            <th>कार्य (Action)</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        <tr>
+                            <td><code>p variable_name</code></td>
+                            <td>उस वैरिएबल का वर्तमान मान प्रिंट करता है।</td>
+                        </tr>
+                        <tr>
+                            <td><code>n</code> (next)</td>
+                            <td>अगली कोड लाइन पर आगे बढ़ता है।</td>
+                        </tr>
+                        <tr>
+                            <td><code>s</code> (step)</td>
+                            <td>फ़ंक्शन के अंदर कदम रखता है (Step Into)।</td>
+                        </tr>
+                        <tr>
+                            <td><code>c</code> (continue)</td>
+                            <td>कोड को तब तक चलने देता है जब तक अगला ब्रेकपॉइंट न आ जाए।</td>
+                        </tr>
+                        <tr>
+                            <td><code>q</code> (quit)</td>
+                            <td>डीबगर को समाप्त करता है।</td>
+                        </tr>
+                    </tbody>
+                </table>
+            </div>
+
+            <h3>31.3 Modern Visual Debugger in Jupyter</h3>
+            <p>JupyterLab और आधुनिक Jupyter Notebook 7+ में ऊपर दाईं ओर एक <strong>कीड़ा (Bug Icon 🐞)</strong> होता है। इसे चालू करने पर आप किसी भी कोड लाइन के नंबर के बगल में लाल बिंदु (Breakpoint) लगा सकते हैं और स्टेप-बाय-स्टेप वेरिएबल इंस्पेक्शन कर सकते हैं।</p>
+        </section>
+
+                <!-- Footer -->
+        <footer>
+            <div style="display:flex; justify-content:center; gap:16px; margin-bottom:12px; flex-wrap:wrap; font-size:0.9rem;">
+                <a href="index.html" style="color:var(--primary); text-decoration:none; font-weight:700;">🏠 Home (Surya's Gist)</a>
+                <span style="color:#cbd5e0;">•</span>
+                <a href="https://github.com/surya2222" target="_blank" rel="noopener noreferrer" style="color:#2d3748; text-decoration:none; font-weight:600; display:inline-flex; align-items:center; gap:5px;">🐙 GitHub (@surya2222)</a>
+                <span style="color:#cbd5e0;">•</span>
+                <a href="https://chat.whatsapp.com/LGOqoPMt3IO1C6R33qviuT?s=cl&p=a&iam=2" target="_blank" rel="noopener noreferrer" style="color:#25D366; text-decoration:none; font-weight:700; display:inline-flex; align-items:center; gap:5px;">💬 Join ProgRobo on WhatsApp</a>
+            </div>
+            <p>Jupyter Notebook Master Series by Surya | सर्वाधिकार सुरक्षित © 2026</p>
+        </footer>
+
+    </main>
+
+    <script>
+        // Smooth scrolling for table of contents
+        document.querySelectorAll('.toc-link').forEach(anchor => {
+            anchor.addEventListener('click', function (e) {
+                e.preventDefault();
+                const targetId = this.getAttribute('href');
+                const targetElement = document.querySelector(targetId);
+                if (targetElement) {
+                    targetElement.scrollIntoView({
+                        behavior: 'smooth'
+                    });
+                    document.querySelectorAll('.toc-link').forEach(link => link.classList.remove('active'));
+                    this.classList.add('active');
+                }
+            });
+        });
+
+        // Intersection Observer for highlighting current TOC link on scroll
+        const observerOptions = {
+            root: null,
+            rootMargin: '0px 0px -70% 0px',
+            threshold: 0
+        };
+
+        const observer = new IntersectionObserver((entries) => {
+            entries.forEach(entry => {
+                if (entry.isIntersecting) {
+                    const id = entry.target.getAttribute('id');
+                    document.querySelectorAll('.toc-link').forEach(link => {
+                        if (link.getAttribute('href') === `#${id}`) {
+                            link.classList.add('active');
+                        } else {
+                            link.classList.remove('active');
+                        }
+                    });
+                }
+            });
+        }, observerOptions);
+
+        document.querySelectorAll('.chapter-card').forEach(section => {
+            observer.observe(section);
+        });
+    </script>
+</body>
+</html>

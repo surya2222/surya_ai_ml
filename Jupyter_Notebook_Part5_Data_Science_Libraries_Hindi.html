@@ -1,0 +1,1217 @@
+<!DOCTYPE html>
+<html lang="hi">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Jupyter Notebook - Part 5: Data Science Libraries (संपूर्ण हिंदी नोट्स)</title>
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Fira+Code:wght@400;500;600&family=Inter:wght@300;400;500;600;700&family=Noto+Sans+Devanagari:wght@400;500;600;700&display=swap" rel="stylesheet">
+    <style>
+        :root {
+            --primary: #0284c7;
+            --primary-dark: #0369a1;
+            --primary-light: #f0f9ff;
+            --secondary: #0ea5e9;
+            --accent: #f43f5e;
+            --accent-light: #fff1f2;
+            --bg-main: #f8fafc;
+            --bg-card: #ffffff;
+            --text-main: #0f172a;
+            --text-muted: #475569;
+            --border: #e2e8f0;
+            --code-bg: #0b1120;
+            --code-text: #e2e8f0;
+            --cell-in: #0284c7;
+            --cell-out: #f43f5e;
+            --kbd-bg: #f1f5f9;
+            --kbd-border: #cbd5e1;
+            --success: #10b981;
+            --warning: #f59e0b;
+            --danger: #ef4444;
+            --info: #0284c7;
+        }
+
+        * {
+            box-sizing: border-box;
+            margin: 0;
+            padding: 0;
+        }
+
+        body {
+            font-family: 'Noto Sans Devanagari', 'Inter', -apple-system, BlinkMacSystemFont, sans-serif;
+            background-color: var(--bg-main);
+            color: var(--text-main);
+            line-height: 1.8;
+            display: flex;
+            min-height: 100vh;
+        }
+
+        /* Sidebar Navigation */
+        .sidebar {
+            width: 330px;
+            background: #ffffff;
+            border-right: 1px solid var(--border);
+            height: 100vh;
+            position: sticky;
+            top: 0;
+            overflow-y: auto;
+            padding: 24px 16px;
+            flex-shrink: 0;
+            box-shadow: 2px 0 10px rgba(0,0,0,0.02);
+        }
+
+        .sidebar-brand {
+            display: flex;
+            align-items: center;
+            gap: 12px;
+            padding-bottom: 16px;
+            border-bottom: 2px solid var(--border);
+            margin-bottom: 16px;
+        }
+
+        .sidebar-brand svg {
+            width: 38px;
+            height: 38px;
+            fill: var(--primary);
+        }
+
+        .sidebar-brand h2 {
+            font-size: 1.25rem;
+            color: var(--text-main);
+            font-weight: 700;
+            line-height: 1.2;
+        }
+
+        .sidebar-brand span {
+            font-size: 0.8rem;
+            color: var(--primary);
+            font-weight: 600;
+            display: block;
+        }
+
+        .nav-links-box {
+            display: flex;
+            flex-direction: column;
+            gap: 6px;
+            margin-bottom: 18px;
+        }
+
+        .part-nav-btn {
+            display: block;
+            background: var(--primary-light);
+            color: var(--primary-dark);
+            text-align: center;
+            padding: 7px 10px;
+            border-radius: 7px;
+            font-size: 0.82rem;
+            font-weight: 600;
+            text-decoration: none;
+            border: 1px solid #bae6fd;
+            transition: all 0.2s ease;
+        }
+
+        .part-nav-btn:hover {
+            background: #e0f2fe;
+            transform: translateY(-1px);
+        }
+
+        .toc-list {
+            list-style: none;
+        }
+
+        .toc-item {
+            margin-bottom: 4px;
+        }
+
+        .toc-link {
+            display: flex;
+            align-items: center;
+            gap: 10px;
+            padding: 8px 12px;
+            border-radius: 8px;
+            color: var(--text-muted);
+            text-decoration: none;
+            font-size: 0.88rem;
+            font-weight: 500;
+            transition: all 0.2s ease;
+        }
+
+        .toc-link:hover, .toc-link.active {
+            background-color: var(--primary-light);
+            color: var(--primary-dark);
+            font-weight: 600;
+            transform: translateX(4px);
+        }
+
+        .toc-badge {
+            background: #f1f5f9;
+            color: #475569;
+            font-size: 0.72rem;
+            padding: 2px 7px;
+            border-radius: 12px;
+            font-weight: 600;
+        }
+
+        .toc-link:hover .toc-badge, .toc-link.active .toc-badge {
+            background: var(--primary);
+            color: white;
+        }
+
+        /* Main Content Container */
+        .main-wrapper {
+            flex-grow: 1;
+            padding: 40px 60px;
+            max-width: 1200px;
+            overflow-x: hidden;
+        }
+
+        header.hero {
+            background: linear-gradient(135deg, #f0f9ff 0%, #ffffff 100%);
+            border: 1px solid #bae6fd;
+            border-radius: 16px;
+            padding: 36px 40px;
+            margin-bottom: 40px;
+            box-shadow: 0 4px 20px rgba(2, 132, 199, 0.08);
+            position: relative;
+        }
+
+        .hero h1 {
+            font-size: 2.2rem;
+            color: var(--primary-dark);
+            margin-bottom: 12px;
+            font-weight: 700;
+        }
+
+        .hero p {
+            font-size: 1.08rem;
+            color: #334155;
+            max-width: 850px;
+        }
+
+        .hero-meta {
+            display: flex;
+            gap: 20px;
+            margin-top: 18px;
+            font-size: 0.88rem;
+            color: #64748b;
+            flex-wrap: wrap;
+        }
+
+        .hero-meta span {
+            display: flex;
+            align-items: center;
+            gap: 6px;
+        }
+
+        /* Chapter Sections */
+        .chapter-card {
+            background: var(--bg-card);
+            border-radius: 14px;
+            border: 1px solid var(--border);
+            padding: 36px 40px;
+            margin-bottom: 40px;
+            box-shadow: 0 2px 12px rgba(0,0,0,0.03);
+            scroll-margin-top: 30px;
+        }
+
+        .chapter-header {
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            border-bottom: 2px solid #f1f5f9;
+            padding-bottom: 16px;
+            margin-bottom: 24px;
+        }
+
+        .chapter-header h2 {
+            font-size: 1.65rem;
+            color: #0f172a;
+            display: flex;
+            align-items: center;
+            gap: 12px;
+        }
+
+        .chapter-num {
+            background: var(--primary);
+            color: white;
+            font-size: 0.95rem;
+            padding: 4px 14px;
+            border-radius: 20px;
+            font-weight: 600;
+            display: inline-block;
+        }
+
+        h3 {
+            font-size: 1.25rem;
+            color: #0369a1;
+            margin: 28px 0 12px 0;
+            font-weight: 600;
+            display: flex;
+            align-items: center;
+            gap: 8px;
+        }
+
+        h3::before {
+            content: "❖";
+            color: var(--accent);
+            font-size: 0.95rem;
+        }
+
+        h4 {
+            font-size: 1.06rem;
+            color: #334155;
+            margin: 20px 0 8px 0;
+            font-weight: 600;
+        }
+
+        p {
+            margin-bottom: 14px;
+            color: #334155;
+        }
+
+        ul, ol {
+            margin-left: 24px;
+            margin-bottom: 18px;
+        }
+
+        li {
+            margin-bottom: 8px;
+            color: #334155;
+        }
+
+        strong {
+            color: #0f172a;
+        }
+
+        /* Jupyter Cell Simulator */
+        .jupyter-cell {
+            background: #ffffff;
+            border: 1px solid #cbd5e1;
+            border-radius: 8px;
+            margin: 20px 0;
+            overflow: hidden;
+            box-shadow: 0 2px 8px rgba(0,0,0,0.04);
+        }
+
+        .cell-input-block {
+            display: flex;
+            background: #f8fafc;
+            border-bottom: 1px solid #e2e8f0;
+        }
+
+        .cell-prompt {
+            font-family: 'Fira Code', monospace;
+            font-size: 0.84rem;
+            font-weight: 600;
+            padding: 12px 14px;
+            min-width: 90px;
+            text-align: right;
+            user-select: none;
+        }
+
+        .cell-prompt.in {
+            color: var(--cell-in);
+        }
+
+        .cell-prompt.out {
+            color: var(--cell-out);
+        }
+
+        .cell-code-area {
+            flex-grow: 1;
+            padding: 12px 16px;
+            font-family: 'Fira Code', Consolas, monospace;
+            font-size: 0.9rem;
+            background: #0b1120;
+            color: #f8fafc;
+            overflow-x: auto;
+            line-height: 1.5;
+        }
+
+        .cell-output-block {
+            display: flex;
+            background: #ffffff;
+            padding: 10px 0;
+        }
+
+        .cell-output-area {
+            flex-grow: 1;
+            padding: 2px 16px;
+            font-family: 'Fira Code', Consolas, monospace;
+            font-size: 0.88rem;
+            color: #1e293b;
+            overflow-x: auto;
+            white-space: pre-wrap;
+        }
+
+        /* Callouts / Alert Boxes */
+        .callout {
+            border-radius: 10px;
+            padding: 16px 20px;
+            margin: 20px 0;
+            display: flex;
+            gap: 14px;
+            align-items: flex-start;
+            font-size: 0.96rem;
+        }
+
+        .callout-icon {
+            font-size: 1.3rem;
+            flex-shrink: 0;
+            margin-top: 2px;
+        }
+
+        .callout-content h5 {
+            font-size: 1rem;
+            font-weight: 700;
+            margin-bottom: 4px;
+        }
+
+        .callout-tip {
+            background-color: #f0fdf4;
+            border-left: 4px solid var(--success);
+            color: #166534;
+        }
+        .callout-tip .callout-content h5 { color: #166534; }
+
+        .callout-note {
+            background-color: #f0f9ff;
+            border-left: 4px solid var(--primary);
+            color: #0369a1;
+        }
+        .callout-note .callout-content h5 { color: #0369a1; }
+
+        .callout-warning {
+            background-color: #fffbeb;
+            border-left: 4px solid var(--warning);
+            color: #92400e;
+        }
+        .callout-warning .callout-content h5 { color: #92400e; }
+
+        /* Tables */
+        .table-responsive {
+            overflow-x: auto;
+            margin: 20px 0 26px 0;
+            border-radius: 10px;
+            border: 1px solid var(--border);
+        }
+
+        table {
+            width: 100%;
+            border-collapse: collapse;
+            text-align: left;
+            font-size: 0.94rem;
+        }
+
+        th {
+            background-color: #f8fafc;
+            color: #1e293b;
+            font-weight: 600;
+            padding: 12px 16px;
+            border-bottom: 2px solid var(--border);
+        }
+
+        td {
+            padding: 12px 16px;
+            border-bottom: 1px solid var(--border);
+            vertical-align: middle;
+        }
+
+        tr:nth-child(even) {
+            background-color: #fbfcfe;
+        }
+
+        tr:hover {
+            background-color: #f0f9ff;
+        }
+
+        /* Code Blocks */
+        pre {
+            background-color: var(--code-bg);
+            color: var(--code-text);
+            padding: 16px 20px;
+            border-radius: 10px;
+            overflow-x: auto;
+            font-family: 'Fira Code', Consolas, Monaco, monospace;
+            font-size: 0.9rem;
+            margin: 16px 0 20px 0;
+            line-height: 1.5;
+            box-shadow: 0 4px 12px rgba(0,0,0,0.08);
+        }
+
+        code.inline {
+            background-color: #f1f5f9;
+            color: #0369a1;
+            padding: 2px 6px;
+            border-radius: 4px;
+            font-family: 'Fira Code', Consolas, monospace;
+            font-size: 0.88em;
+            font-weight: 600;
+        }
+
+        kbd {
+            display: inline-block;
+            background-color: var(--kbd-bg);
+            border: 1px solid var(--kbd-border);
+            border-bottom: 2px solid #94a3b8;
+            border-radius: 5px;
+            padding: 2px 7px;
+            font-family: 'Inter', monospace;
+            font-size: 0.82rem;
+            font-weight: 600;
+            color: #1e293b;
+            margin: 0 2px;
+        }
+
+        /* Sample Visual Figures */
+        .sample-figure {
+            margin: 24px 0;
+            background: #ffffff;
+            border: 1px solid var(--border);
+            border-radius: 12px;
+            overflow: hidden;
+            box-shadow: 0 4px 14px rgba(0,0,0,0.05);
+            transition: all 0.2s ease;
+        }
+
+        .sample-figure:hover {
+            box-shadow: 0 6px 20px rgba(2, 132, 199, 0.12);
+            border-color: #bae6fd;
+        }
+
+        .sample-figure img {
+            width: 100%;
+            height: auto;
+            display: block;
+            border-bottom: 1px solid var(--border);
+        }
+
+        .sample-figure figcaption {
+            padding: 12px 18px;
+            background: #f8fafc;
+            font-size: 0.9rem;
+            color: #334155;
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            flex-wrap: wrap;
+            gap: 10px;
+        }
+
+        .sample-figure figcaption strong {
+            color: #0369a1;
+        }
+
+        .image-tag {
+            background: #e0f2fe;
+            color: #0369a1;
+            font-size: 0.76rem;
+            padding: 3px 8px;
+            border-radius: 6px;
+            font-weight: 600;
+        }
+
+        footer {
+            margin-top: 60px;
+            border-top: 1px solid var(--border);
+            padding: 30px 0 10px 0;
+            text-align: center;
+            color: #94a3b8;
+            font-size: 0.9rem;
+        }
+
+        @media (max-width: 1024px) {
+            body {
+                flex-direction: column;
+            }
+            .sidebar {
+                width: 100%;
+                height: auto;
+                position: relative;
+                border-right: none;
+                border-bottom: 1px solid var(--border);
+            }
+            .main-wrapper {
+                padding: 20px;
+            }
+        }
+    </style>
+</head>
+<body>
+
+    <!-- Sidebar Navigation -->
+    <aside class="sidebar">
+        <div class="sidebar-brand">
+            <svg viewBox="0 0 24 24">
+                <path d="M19 3H5c-1.1 0-2 .9-2 2v14c0 1.1.9 2 2 2h14c1.1 0 2-.9 2-2V5c0-1.1-.9-2-2-2zM9 17H7v-7h2v7zm4 0h-2V7h2v10zm4 0h-2v-4h2v4z"/>
+            </svg>
+            <div>
+                <h2>Jupyter नोट्स</h2>
+                <span>Part 5: Data Science</span>
+            </div>
+        </div>
+
+        <div class="nav-links-box">
+            <a href="index.html" class="part-nav-btn" style="background:#1a365d; color:#ffffff; font-weight:700; border:1px solid #2b6cb0; box-shadow:0 2px 4px rgba(0,0,0,0.1); margin-bottom:4px;">
+                🏠 मुख्य पृष्ठ (Surya's Gist)
+            </a>
+            <a href="Jupyter_Notebook_Fundamentals_Hindi.html" class="part-nav-btn">
+                ⬅ Part 1: Fundamentals
+            </a>
+            <a href="Jupyter_Notebook_Part2_Markdown_Formatting_Hindi.html" class="part-nav-btn">
+                ⬅ Part 2: Markdown & Formatting
+            </a>
+            <a href="Jupyter_Notebook_Part3_Python_Inside_Jupyter_Hindi.html" class="part-nav-btn">
+                ⬅ Part 3: Python Inside Jupyter
+            </a>
+            <a href="Jupyter_Notebook_Part4_Advanced_Features_Hindi.html" class="part-nav-btn">
+                ⬅ Part 4: Advanced Features
+            </a>
+            <a href="Jupyter_Notebook_Part6_Database_API_Integration_Hindi.html" class="part-nav-btn">
+                Part 6: DB & API Integration ➡
+            </a>
+            <a href="Jupyter_Notebook_Part7_Data_Science_and_Machine_Learning_Hindi.html" class="part-nav-btn">
+                Part 7: Data Science & ML ➡
+            </a>
+            <a href="Jupyter_Notebook_Part8_Production_Level_Jupyter_Hindi.html" class="part-nav-btn">
+                Part 8: Production Jupyter ➡
+            </a>
+        </div>
+
+                <div class="community-sidebar-card" style="margin-bottom:16px; padding:12px; background:#f8fafc; border:1px solid #e2e8f0; border-radius:10px; text-align:center;">
+            <div style="font-size:0.8rem; font-weight:700; color:#334155; margin-bottom:8px; display:flex; align-items:center; justify-content:center; gap:5px;">
+                🤖 ProgRobo Community
+            </div>
+            <div style="display:flex; flex-direction:column; gap:6px;">
+                <a href="https://chat.whatsapp.com/LGOqoPMt3IO1C6R33qviuT?s=cl&p=a&iam=2" target="_blank" rel="noopener noreferrer" style="display:inline-flex; align-items:center; justify-content:center; gap:6px; background:#25D366; color:#ffffff; padding:7px 10px; border-radius:6px; font-size:0.78rem; font-weight:700; text-decoration:none; box-shadow:0 2px 4px rgba(37,211,102,0.2);">
+                    💬 Join WhatsApp Group
+                </a>
+                <a href="https://github.com/surya2222" target="_blank" rel="noopener noreferrer" style="display:inline-flex; align-items:center; justify-content:center; gap:6px; background:#24292e; color:#ffffff; padding:7px 10px; border-radius:6px; font-size:0.78rem; font-weight:600; text-decoration:none;">
+                    🐙 GitHub: @surya2222
+                </a>
+            </div>
+        </div>
+<ul class="toc-list">
+            <li class="toc-item">
+                <a href="#ch45" class="toc-link">
+                    <span class="toc-badge">Ch 45</span>
+                    <span>45. NumPy (न्यूमेरिकल कंप्यूटिंग)</span>
+                </a>
+            </li>
+            <li class="toc-item">
+                <a href="#ch46" class="toc-link">
+                    <span class="toc-badge">Ch 46</span>
+                    <span>46. Pandas (डेटा विश्लेषण व हेरफेर)</span>
+                </a>
+            </li>
+            <li class="toc-item">
+                <a href="#ch47" class="toc-link">
+                    <span class="toc-badge">Ch 47</span>
+                    <span>47. Matplotlib (आधारभूत विज़ुअलाइज़ेशन)</span>
+                </a>
+            </li>
+            <li class="toc-item">
+                <a href="#ch48" class="toc-link">
+                    <span class="toc-badge">Ch 48</span>
+                    <span>48. Seaborn (सांख्यिकीय चार्ट्स)</span>
+                </a>
+            </li>
+            <li class="toc-item">
+                <a href="#ch49" class="toc-link">
+                    <span class="toc-badge">Ch 49</span>
+                    <span>49. Plotly (इंटरैक्टिव व वित्तीय चार्ट्स)</span>
+                </a>
+            </li>
+        </ul>
+    </aside>
+
+    <!-- Main Content Area -->
+    <main class="main-wrapper">
+
+        <!-- Hero Header -->
+        <header class="hero">
+            <h1>Jupyter Notebook - Part 5: Data Science Libraries</h1>
+            <p>पायथन डेटा साइंस इकोसिस्टम की 5 सबसे महत्वपूर्ण और शक्तिशाली लाइब्रेरीज का संपूर्ण, हैंड्स-ऑन हिंदी गाइड: <strong>NumPy, Pandas, Matplotlib, Seaborn</strong> और <strong>Plotly</strong>। डेटा मैनिपुलेशन, स्टैटिस्टिकल एनालिसिस और फाइनेंशियल विज़ुअलाइज़ेशन का व्यावहारिक अध्ययन।</p>
+            <div class="hero-meta">
+                <span>📊 <strong>भाग:</strong> Part 5 (अध्याय 45 से 49)</span>
+                <span>🔢 <strong>टूलस्टैक:</strong> NumPy | Pandas | Matplotlib | Seaborn | Plotly</span>
+                <span>💡 <strong>स्तर:</strong> Industry & Production-Grade Data Science</span>
+            </div>
+        </header>
+
+        <!-- Chapter 45 -->
+        <section id="ch45" class="chapter-card">
+            <div class="chapter-header">
+                <h2><span>Chapter 45: NumPy (Numerical Python)</span></h2>
+                <span class="chapter-num">अध्याय 45</span>
+            </div>
+
+            <p><strong>NumPy (Numerical Python)</strong> पायथन में वैज्ञानिक कंप्यूटिंग और डेटा साइंस की आधारशिला है। यह बहु-आयामी ऐरे (Multi-dimensional Arrays - <code>ndarray</code>) और उन पर अत्यधिक तीव्र गति से गणितीय संचालन करने के लिए C और Fortran में लिखे गए वेक्टराइज़्ड फंक्शन्स प्रदान करता है।</p>
+
+            <h3>45.1 NumPy Arrays (`ndarray`) vs Python Lists</h3>
+            <div class="table-responsive">
+                <table>
+                    <thead>
+                        <tr>
+                            <th>विशेषता</th>
+                            <th>NumPy Array (`ndarray`)</th>
+                            <th>Python Standard List</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        <tr>
+                            <td><strong>मेमोरी संरचना</strong></td>
+                            <td>सघन व निरंतर मेमोरी (Contiguous memory blocks)।</td>
+                            <td>पॉइंटर्स की बंटी हुई सूची (Non-contiguous pointers)।</td>
+                        </tr>
+                        <tr>
+                            <td><strong>गति (Speed)</strong></td>
+                            <td>अत्यधिक तेज़ (50x से 100x तेज़, SIMD हार्डवेयर ऑप्टिमाइज़्ड)।</td>
+                            <td>धीमी (हर तत्व का टाइप-चेक रनटाइम पर होता है)।</td>
+                        </tr>
+                        <tr>
+                            <td><strong>डेटा प्रकार</strong></td>
+                            <td>सजातीय (Homogeneous - सभी तत्व एक ही प्रकार के)।</td>
+                            <td>विजातीय (Heterogeneous - अलग-अलग प्रकार संभव)।</td>
+                        </tr>
+                        <tr>
+                            <td><strong>वेक्टराइज़ेशन</strong></td>
+                            <td>बिना लूप के सीधे गणितीय संक्रियाएं (<code>arr * 2</code>)।</td>
+                            <td>लूप या लिस्ट कंप्रिहेंशन की आवश्यकता होती है।</td>
+                        </tr>
+                    </tbody>
+                </table>
+            </div>
+
+            <h3>45.2 Array Creation & Attributes</h3>
+            <div class="jupyter-cell">
+                <div class="cell-input-block">
+                    <div class="cell-prompt in">In [1]:</div>
+                    <div class="cell-code-area">import numpy as np
+
+# 1D और 2D ऐरे बनाना
+arr_1d = np.array([10, 20, 30, 40])
+arr_2d = np.array([[1, 2, 3], [4, 5, 6]])
+
+# इनबिल्ट जनरेटर्स
+zeros = np.zeros((2, 3))        # 0s से भरा 2x3 मैट्रिक्स
+linear = np.linspace(0, 1, 5)   # 0 से 1 के बीच समान दूरी पर 5 संख्याएं
+
+print("2D Shape:", arr_2d.shape, "| Dtype:", arr_2d.dtype, "| Dim:", arr_2d.ndim)
+print("Linspace:", linear)</div>
+                </div>
+                <div class="cell-output-block">
+                    <div class="cell-prompt out"></div>
+                    <div class="cell-output-area">2D Shape: (2, 3) | Dtype: int32 | Dim: 2
+Linspace: [0.   0.25 0.5  0.75 1.  ]</div>
+                </div>
+            </div>
+
+            <h3>45.3 Indexing, Slicing & Boolean Masking</h3>
+            <div class="jupyter-cell">
+                <div class="cell-input-block">
+                    <div class="cell-prompt in">In [2]:</div>
+                    <div class="cell-code-area">matrix = np.array([
+    [10, 20, 30],
+    [40, 50, 60],
+    [70, 80, 90]
+])
+
+# 1. विशिष्ट तत्व [row, col]
+elem = matrix[1, 2]     # Row 1, Col 2 -> 60
+
+# 2. 2D स्लाइसिंग [rows, cols] (पहली दो पंक्तियाँ और अंतिम दो कॉलम)
+sub_matrix = matrix[0:2, 1:3]
+
+# 3. बूलियन मास्किंग (Filtering without loop)
+filtered = matrix[matrix > 50]
+
+print("Element [1,2]:", elem)
+print("Sub-matrix:\n", sub_matrix)
+print("मान जो 50 से बड़े हैं:", filtered)</div>
+                </div>
+                <div class="cell-output-block">
+                    <div class="cell-prompt out"></div>
+                    <div class="cell-output-area">Element [1,2]: 60
+Sub-matrix:
+ [[20 30]
+ [50 60]]
+मान जो 50 से बड़े हैं: [60 70 80 90]</div>
+                </div>
+            </div>
+
+            <h3>45.4 Broadcasting (ब्रॉडकास्टिंग के नियम)</h3>
+            <p><strong>Broadcasting</strong> NumPy की वह क्षमता है जिसके द्वारा अलग-अलग आकारों (Shapes) के ऐरेज़ पर बिना अतिरिक्त मेमोरी खर्च किए सीधे अंकगणितीय संक्रियाएं की जा सकती हैं:</p>
+            <ul>
+                <li><strong>नियम:</strong> दो ऐरे ब्रॉडकास्ट हो सकते हैं यदि उनके पिछले आयाम (Trailing dimensions) या तो बराबर हों, या उनमें से कोई एक <code>1</code> हो।</li>
+            </ul>
+
+            <figure class="sample-figure">
+                <img src="images/numpy_broadcasting_diagram.png" alt="NumPy Broadcasting Visual Diagram">
+                <figcaption>
+                    <span><strong>चित्र 45.1:</strong> NumPy Broadcasting का दृश्य चित्रण — Matrix (3, 3) + Row Vector (1, 3) = Result (3, 3)</span>
+                    <span class="image-tag">NumPy Array Architecture</span>
+                </figcaption>
+            </figure>
+
+            <div class="jupyter-cell">
+                <div class="cell-input-block">
+                    <div class="cell-prompt in">In [3]:</div>
+                    <div class="cell-code-area"># (3, 3) मैट्रिक्स में (1, 3) पंक्ति वेक्टर जोड़ना
+mat = np.ones((3, 3))
+row_vec = np.array([10, 20, 30])
+result = mat + row_vec      # पंक्ति वेक्टर अपने आप 3 बार प्रसारित (Broadcast) हो जाता है
+result</div>
+                </div>
+                <div class="cell-output-block">
+                    <div class="cell-prompt out">Out [3]:</div>
+                    <div class="cell-output-area">array([[11., 21., 31.],
+       [11., 21., 31.],
+       [11., 21., 31.]])</div>
+                </div>
+            </div>
+
+            <h3>45.5 Mathematical & Statistical Operations</h3>
+            <ul>
+                <li><code>np.dot(A, B)</code> या <code>A @ B</code>: मैट्रिक्स गुणन (Matrix Multiplication)।</li>
+                <li><code>arr.sum(axis=0)</code>: कॉलम-वार योग | <code>arr.sum(axis=1)</code>: पंक्ति-वार योग।</li>
+                <li><code>np.mean()</code>, <code>np.std()</code>, <code>np.median()</code>, <code>np.min()</code>, <code>np.max()</code>।</li>
+                <li><code>np.argmax()</code> / <code>np.argmin()</code>: अधिकतम/न्यूनतम मान का इंडेक्स लौटाता है।</li>
+                <li><code>arr.reshape(rows, cols)</code>: ऐरे का आकार बदलना।</li>
+            </ul>
+        </section>
+
+        <!-- Chapter 46 -->
+        <section id="ch46" class="chapter-card">
+            <div class="chapter-header">
+                <h2><span>Chapter 46: Pandas (डेटा विश्लेषण एवं हेरफेर)</span></h2>
+                <span class="chapter-num">अध्याय 46</span>
+            </div>
+
+            <p><strong>Pandas</strong> पायथन में सारणीबद्ध (Tabular) और संरचित डेटा के विश्लेषण का सबसे शक्तिशाली टूल है। यह दो मुख्य डेटा संरचनाएं प्रदान करता है: <strong>Series (1-आयामी)</strong> और <strong>DataFrame (2-आयामी टेबल)</strong>।</p>
+
+            <h3>46.1 DataFrame Creation & Inspection</h3>
+            <p>Pandas DataFrame की आंतरिक संरचना में Index (पंक्ति पहचानकर्ता), Columns (शीर्षक), और अंतर्निहित 2D NumPy डेटा ऐरे शामिल होते हैं। प्रत्येक अलग कॉलम वास्तव में एक 1D Pandas Series होता है:</p>
+
+            <figure class="sample-figure">
+                <img src="images/pandas_dataframe_anatomy.png" alt="Pandas DataFrame Architecture Diagram">
+                <figcaption>
+                    <span><strong>चित्र 46.1:</strong> Pandas DataFrame की आंतरिक संरचना — Index, Columns और 1D Series का संयोजन</span>
+                    <span class="image-tag">Pandas Architecture</span>
+                </figcaption>
+            </figure>
+            <div class="jupyter-cell">
+                <div class="cell-input-block">
+                    <div class="cell-prompt in">In [4]:</div>
+                    <div class="cell-code-area">import pandas as pd
+
+data = {
+    'EmpID': [101, 102, 103, 104, 105],
+    'Name': ['अमित', 'प्रिया', 'रोहित', 'स्नेहा', 'विकास'],
+    'Department': ['IT', 'HR', 'IT', 'Finance', 'HR'],
+    'Salary': [75000, 62000, 80000, 92000, 58000],
+    'Experience': [4, 3, 5, 7, 2]
+}
+
+df = pd.DataFrame(data)
+df.head(3)</div>
+                </div>
+                <div class="cell-output-block">
+                    <div class="cell-prompt out">Out [4]:</div>
+                    <div class="cell-output-area">   EmpID   Name Department  Salary  Experience
+0    101   अमित         IT   75000           4
+1    102  प्रिया         HR   62000           3
+2    103  रोहित         IT   80000           5</div>
+                </div>
+            </div>
+
+            <h3>46.2 Indexing: `loc` vs `iloc`</h3>
+            <div class="table-responsive">
+                <table>
+                    <thead>
+                        <tr>
+                            <th>इंडेक्सर</th>
+                            <th>प्रकार</th>
+                            <th>सिंटैक्स उदाहरण</th>
+                            <th>विवरण</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        <tr>
+                            <td><strong><code>df.loc[]</code></strong></td>
+                            <td>लेबल-आधारित (Label-based)</td>
+                            <td><code>df.loc[0:2, ['Name', 'Salary']]</code></td>
+                            <td>इंडेक्स के वास्तविक नाम और कॉलम के शीर्षक द्वारा एक्सेस करता है (अंतिम सीमा शामिल होती है)।</td>
+                        </tr>
+                        <tr>
+                            <td><strong><code>df.iloc[]</code></strong></td>
+                            <td>संख्यात्मक स्थिति (Integer-position)</td>
+                            <td><code>df.iloc[0:2, 1:3]</code></td>
+                            <td>शुद्ध 0-आधारित पूर्णांक स्थिति द्वारा एक्सेस करता है (Python स्लाइस की तरह अंतिम सीमा शामिल नहीं होती)।</td>
+                        </tr>
+                    </tbody>
+                </table>
+            </div>
+
+            <h3>46.3 Filtering & Sorting</h3>
+            <div class="jupyter-cell">
+                <div class="cell-input-block">
+                    <div class="cell-prompt in">In [5]:</div>
+                    <div class="cell-code-area"># मल्टी-कंडीशन फ़िल्टरिंग: IT विभाग और 75k से अधिक वेतन
+it_high_earners = df[(df['Department'] == 'IT') & (df['Salary'] >= 75000)]
+
+# सॉर्टिंग: वेतन के घटते क्रम (Descending) में व्यवस्थित करना
+sorted_df = df.sort_values(by='Salary', ascending=False)
+sorted_df[['Name', 'Department', 'Salary']]</div>
+                </div>
+                <div class="cell-output-block">
+                    <div class="cell-prompt out">Out [5]:</div>
+                    <div class="cell-output-area">    Name Department  Salary
+3  स्नेहा    Finance   92000
+2  रोहित         IT   80000
+0   अमित         IT   75000
+1  प्रिया         HR   62000
+4  विकास         HR   58000</div>
+                </div>
+            </div>
+
+            <h3>46.4 GroupBy Operations (Split-Apply-Combine)</h3>
+            <p>डेटा को श्रेणियों में बांटकर सांख्यिकीय सारांश निकालने के लिए <code>groupby()</code> का उपयोग होता है:</p>
+
+            <div class="jupyter-cell">
+                <div class="cell-input-block">
+                    <div class="cell-prompt in">In [6]:</div>
+                    <div class="cell-code-area"># प्रत्येक विभाग का औसत वेतन और कुल कर्मचारी संख्या
+dept_summary = df.groupby('Department').agg(
+    Avg_Salary=('Salary', 'mean'),
+    Emp_Count=('EmpID', 'count')
+).reset_index()
+
+dept_summary</div>
+                </div>
+                <div class="cell-output-block">
+                    <div class="cell-prompt out">Out [6]:</div>
+                    <div class="cell-output-area">  Department  Avg_Salary  Emp_Count
+0    Finance     92000.0          1
+1         HR     60000.0          2
+2         IT     77500.0          2</div>
+                </div>
+            </div>
+
+            <h3>46.5 Handling Missing Data (NaN)</h3>
+            <ul>
+                <li><code>df.isna().sum()</code>: प्रत्येक कॉलम में मिसिंग वैल्यूज की संख्या गिनना।</li>
+                <li><code>df.dropna()</code>: उन सभी पंक्तियों को हटाना जिनमें कोई भी मान मिसिंग (NaN) हो।</li>
+                <li><code>df['Salary'].fillna(df['Salary'].mean(), inplace=True)</code>: मिसिंग मानों को औसत (Mean/Median) से भरना।</li>
+            </ul>
+
+            <h3>46.6 Merging & Joining (SQL-like Joins)</h3>
+            <pre><code># दो DataFrames को कॉमन Key पर जोड़ना
+merged_df = pd.merge(df_employees, df_departments, on='DeptID', how='inner') # inner, left, right, outer</code></pre>
+
+            <h3>46.7 Data Input/Output (CSV, Excel, SQL)</h3>
+            <pre><code># CSV पढ़ना व लिखना
+df = pd.read_csv('dataset.csv')
+df.to_csv('cleaned_dataset.csv', index=False)
+
+# Excel फ़ाइलें (openpyxl आवश्यक)
+df = pd.read_excel('sales_data.xlsx', sheet_name='Q1')
+
+# SQL Database से सीधे लोड करना
+import sqlite3
+conn = sqlite3.connect('company.db')
+df = pd.read_sql_query("SELECT * FROM employees WHERE salary > 50000", conn)</code></pre>
+        </section>
+
+        <!-- Chapter 47 -->
+        <section id="ch47" class="chapter-card">
+            <div class="chapter-header">
+                <h2><span>Chapter 47: Matplotlib (आधारभूत विज़ुअलाइज़ेशन)</span></h2>
+                <span class="chapter-num">अध्याय 47</span>
+            </div>
+
+            <p><strong>Matplotlib</strong> पायथन का सबसे पुराना और मूल 2D प्लॉटिंग पैकेज है। इसका सब-मॉड्यूल <code>matplotlib.pyplot</code> MATLAB जैसी सरल प्लॉटिंग इंटरफ़ेस प्रदान करता है।</p>
+
+            <h3>47.1 The Anatomy of a Plot (चार्ट के अंग)</h3>
+            <ul>
+                <li><strong>Figure:</strong> पूरा कैनवास या विंडो जिस पर सभी प्लॉट्स बने होते हैं।</li>
+                <li><strong>Axes:</strong> वास्तविक प्लॉटिंग क्षेत्र जिसमें X और Y अक्ष, शीर्षक (Title), और डेटा पॉइंट्स होते हैं।</li>
+            </ul>
+
+            <h3>47.2 Core Chart Types</h3>
+            <figure class="sample-figure">
+                <img src="images/matplotlib_gallery.png" alt="Matplotlib Core Charts Gallery">
+                <figcaption>
+                    <span><strong>चित्र 47.1:</strong> Matplotlib के चार प्रमुख चार्ट — Line Chart (ट्रेंड), Bar Chart (तुलना), Histogram (वितरण), और Scatter Plot (सहसंबंध)</span>
+                    <span class="image-tag">Matplotlib Visual Gallery</span>
+                </figcaption>
+            </figure>
+
+            <h4>A. Line Chart (ट्रेंड एनालिसिस):</h4>
+            <pre><code>import matplotlib.pyplot as plt
+
+months = ['Jan', 'Feb', 'Mar', 'Apr', 'May']
+revenue = [12000, 15000, 14000, 19000, 24000]
+
+plt.figure(figsize=(8, 4))
+plt.plot(months, revenue, color='#0284c7', marker='o', linewidth=2, linestyle='--', label='2026 Revenue')
+plt.title("मासिक आय विश्लेषण", fontsize=14, fontweight='bold')
+plt.xlabel("महीने")
+plt.ylabel("आय ($)")
+plt.grid(True, linestyle=':', alpha=0.6)
+plt.legend()
+plt.show()</code></pre>
+
+            <h4>B. Bar Chart, Histogram & Scatter Plot:</h4>
+            <div class="table-responsive">
+                <table>
+                    <thead>
+                        <tr>
+                            <th>चार्ट का प्रकार</th>
+                            <th>फ़ंक्शन सिंटैक्स</th>
+                            <th>उपयोग का परिदृश्य</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        <tr>
+                            <td><strong>Bar Chart</strong></td>
+                            <td><code>plt.bar(categories, values, color='teal')</code></td>
+                            <td>अलग-अलग श्रेणियों (Categories) के मानों की तुलना करने के लिए।</td>
+                        </tr>
+                        <tr>
+                            <td><strong>Histogram</strong></td>
+                            <td><code>plt.hist(data, bins=20, edgecolor='black')</code></td>
+                            <td>डेटा के निरंतर वितरण (Distribution, Skewness) को समझने के लिए।</td>
+                        </tr>
+                        <tr>
+                            <td><strong>Scatter Plot</strong></td>
+                            <td><code>plt.scatter(x, y, alpha=0.7, c=colors, cmap='viridis')</code></td>
+                            <td>दो संख्यात्मक चरों के बीच सहसंबंध (Correlation/Relationship) देखने के लिए।</td>
+                        </tr>
+                    </tbody>
+                </table>
+            </div>
+
+            <h3>47.3 Financial Candlestick Visualization (`mplfinance`)</h3>
+            <p>स्टॉक मार्केट और वित्तीय विश्लेषण में शेयर की कीमतों (Open, High, Low, Close - OHLC) को दर्शाने के लिए <strong>Candlestick Charts</strong> का उपयोग किया जाता है। आधुनिक Matplotlib में इसे <code>mplfinance</code> द्वारा सहजता से बनाया जाता है:</p>
+
+            <pre><code>%pip install mplfinance
+import mplfinance as mpf
+
+# DataFrame में 'Open', 'High', 'Low', 'Close', 'Volume' कॉलम्स और DatetimeIndex होना चाहिए
+mpf.plot(df_stock, type='candle', volume=True, mav=(10, 20), style='charles',
+         title="निफ्टी 50 - Candlestick Chart (with 10/20 MA)")</code></pre>
+
+            <figure class="sample-figure">
+                <img src="images/candlestick_financial_chart.png" alt="Financial Candlestick OHLC Chart">
+                <figcaption>
+                    <span><strong>चित्र 47.2:</strong> वित्तीय Candlestick (OHLC) चार्ट — वॉल्यूम बार्स और 5-Day Moving Average के साथ शेयर मूल्य का तकनीकी विश्लेषण</span>
+                    <span class="image-tag">Financial OHLC Chart</span>
+                </figcaption>
+            </figure>
+        </section>
+
+        <!-- Chapter 48 -->
+        <section id="ch48" class="chapter-card">
+            <div class="chapter-header">
+                <h2><span>Chapter 48: Seaborn (सांख्यिकीय डेटा विज़ुअलाइज़ेशन)</span></h2>
+                <span class="chapter-num">अध्याय 48</span>
+            </div>
+
+            <p><strong>Seaborn</strong> Matplotlib के ऊपर निर्मित एक उच्च-स्तरीय लाइब्रेरी है। यह सुंदर डिफ़ॉल्ट थीम्स, आकर्षक रंग पट्टियाँ (Color Palettes) और Pandas DataFrame के साथ सहज एकीकरण प्रदान करती है।</p>
+
+            <h3>48.1 Statistical Distribution Plots (Boxplot & Violinplot)</h3>
+            <p>आउटलायर्स (Outliers) और चतुर्थक (Quartiles) का पता लगाने के लिए <code>boxplot</code> सर्वोत्तम है, जबकि <code>violinplot</code> बॉक्सप्लॉट के साथ KDE डिस्ट्रीब्यूशन को भी मिलाता है:</p>
+
+            <div class="jupyter-cell">
+                <div class="cell-input-block">
+                    <div class="cell-prompt in">In [7]:</div>
+                    <div class="cell-code-area">import seaborn as sns
+import matplotlib.pyplot as plt
+
+# इनबिल्ट टिप्स डेटासेट लोड करें
+tips = sns.load_dataset('tips')
+
+plt.figure(figsize=(7, 4))
+sns.boxplot(x='day', y='total_bill', hue='sex', data=tips, palette='Set2')
+plt.title("दिन और लिंग के अनुसार बिल राशि का वितरण (Boxplot)")
+plt.show()</div>
+                </div>
+                <div class="cell-output-block">
+                    <div class="cell-prompt out"></div>
+                    <div class="cell-output-area">[दिन-वार सुंदर बॉक्सप्लॉट आउटपुट सेल में रेंडर होगा]</div>
+                </div>
+            </div>
+
+            <h3>48.2 Correlation Heatmap (सहसंबंध हीटमैप)</h3>
+            <p>मशीन लर्निंग में फीचर सेलेक्शन के लिए यह देखना अनिवार्य होता है कि कौन-से फीचर्स आपस में अत्यधिक संबंधित हैं:</p>
+
+            <div class="jupyter-cell">
+                <div class="cell-input-block">
+                    <div class="cell-prompt in">In [8]:</div>
+                    <div class="cell-code-area"># सहसंबंध मैट्रिक्स निकालना
+corr = tips.corr(numeric_only=True)
+
+plt.figure(figsize=(6, 5))
+sns.heatmap(corr, annot=True, cmap='coolwarm', fmt=".2f", linewidths=0.5)
+plt.title("फ़ीचर्स के बीच सहसंबंध (Correlation Heatmap)")
+plt.show()</div>
+                </div>
+                <div class="cell-output-block">
+                    <div class="cell-prompt out"></div>
+                    <div class="cell-output-area">[कलर-कोडेड एनोटेटेड हीटमैप यहाँ प्रदर्शित होगा]</div>
+                </div>
+            </div>
+
+            <figure class="sample-figure">
+                <img src="images/seaborn_heatmap_boxplot.png" alt="Seaborn Correlation Heatmap & Boxplot">
+                <figcaption>
+                    <span><strong>चित्र 48.1:</strong> Seaborn सांख्यिकीय विज़ुअलाइज़ेशन — (A) Correlation Heatmap Matrix और (B) Boxplot (Five-Number Summary व Outliers)</span>
+                    <span class="image-tag">Seaborn Statistical Plots</span>
+                </figcaption>
+            </figure>
+
+            <h3>48.3 Pairplot (बहु-चरणीय एक्सप्लोरेशन)</h3>
+            <p><code>sns.pairplot(df, hue='target')</code> डेटासेट के सभी संख्यात्मक कॉलमों के बीच एक साथ स्कैटर प्लॉट्स का ग्रिड और विकर्ण (Diagonal) पर हिस्टोग्राम तैयार करता है।</p>
+        </section>
+
+        <!-- Chapter 49 -->
+        <section id="ch49" class="chapter-card">
+            <div class="chapter-header">
+                <h2><span>Chapter 49: Plotly (इंटरैक्टिव व वित्तीय चार्ट्स)</span></h2>
+                <span class="chapter-num">अध्याय 49</span>
+            </div>
+
+            <p><strong>Plotly</strong> डेटा साइंस में अत्याधुनिक इंटरैक्टिव वेब-आधारित विज़ुअलाइज़ेशन लाइब्रेरी है। यह D3.js इंजन पर काम करती है और उपयोगकर्ता को चार्ट में सीधे ज़ूम करने, पैन करने, विशिष्ट क्षेत्रों को सेलेक्ट करने और होवर टूलटिप्स देखने की सुविधा देती है।</p>
+
+            <h3>49.1 Interactive Plotly Express</h3>
+            <div class="jupyter-cell">
+                <div class="cell-input-block">
+                    <div class="cell-prompt in">In [9]:</div>
+                    <div class="cell-code-area">import plotly.express as px
+
+df_iris = px.data.iris()
+
+# इंटरैक्टिव स्कैटर प्लॉट जिसमें होवर डेटा और स्पीशीज कलरिंग हो
+fig = px.scatter(df_iris, x="sepal_width", y="sepal_length", color="species",
+                 size='petal_length', hover_data=['petal_width'],
+                 title="इंटरैक्टिव Iris डेटासेट विश्लेषण")
+fig.show()</div>
+                </div>
+                <div class="cell-output-block">
+                    <div class="cell-prompt out"></div>
+                    <div class="cell-output-area">[पूरी तरह इंटरैक्टिव ज़ूमेबल स्कैटर चार्ट यहाँ लाइव प्रस्तुत होगा]</div>
+                </div>
+            </div>
+
+            <h3>49.2 Interactive Financial Candlestick Charts (`plotly.graph_objects`)</h3>
+            <p>Plotly का <strong>Candlestick</strong> चार्ट वित्त (Finance) और अल्गोरिदमिक ट्रेडिंग का उद्योग मानक है। इसमें इनबिल्ट <strong>रेंज स्लाइडर (Range Slider)</strong> और टाइमलाइन पैनिंग मिलती है:</p>
+
+            <div class="jupyter-cell">
+                <div class="cell-input-block">
+                    <div class="cell-prompt in">In [10]:</div>
+                    <div class="cell-code-area">import plotly.graph_objects as go
+import pandas as pd
+
+# स्टॉक डेटा सिमुलेशन
+stock_df = pd.DataFrame({
+    'Date': pd.date_range(start='2026-01-01', periods=5),
+    'Open': [150, 155, 152, 160, 165],
+    'High': [158, 160, 157, 168, 170],
+    'Low': [148, 151, 150, 158, 162],
+    'Close': [155, 153, 161, 166, 163]
+})
+
+fig = go.Figure(data=[go.Candlestick(
+    x=stock_df['Date'],
+    open=stock_df['Open'],
+    high=stock_df['High'],
+    low=stock_df['Low'],
+    close=stock_df['Close'],
+    increasing_line_color='#10b981', decreasing_line_color='#ef4444'
+)])
+
+fig.update_layout(title="स्टॉक मार्केट कैंडलस्टिक विश्लेषण (Interactive Candlestick)",
+                  xaxis_rangeslider_visible=True)
+fig.show()</div>
+                </div>
+                <div class="cell-output-block">
+                    <div class="cell-prompt out"></div>
+                    <div class="cell-output-area">[ज़ूमेबल टाइमलाइन स्लाइडर के साथ लाइव फाइनेंशियल कैंडलस्टिक चार्ट रेंडर होगा]</div>
+                </div>
+            </div>
+
+            <h3>49.3 Exporting Standalone Interactive Dashboards</h3>
+            <p>Plotly चार्ट्स की सबसे बड़ी खूबी यह है कि आप उन्हें एक स्टैंडअलोन HTML फ़ाइल में सहेज सकते हैं, जिसे कोई भी व्यक्ति बिना पायथन या जुपिटर के अपने ब्राउज़र में खोलकर इंटरैक्ट कर सकता है:</p>
+            <pre><code># पूरे इंटरैक्टिव चार्ट को HTML के रूप में एक्सपोर्ट करें
+fig.write_html("interactive_financial_report.html")</code></pre>
+
+            <figure class="sample-figure">
+                <img src="images/plotly_interactive_dashboard.png" alt="Plotly Interactive Dashboard Architecture">
+                <figcaption>
+                    <span><strong>चित्र 49.1:</strong> Plotly इंटरैक्टिव वेब विज़ुअलाइज़ेशन — लाइव होवर टूलटिप, इंटरैक्टिव मोडबार (Zoom/Pan), और रेंज स्लाइडर टाइमलाइन</span>
+                    <span class="image-tag">Plotly Web Dashboard</span>
+                </figcaption>
+            </figure>
+        </section>
+
+                <!-- Footer -->
+        <footer>
+            <div style="display:flex; justify-content:center; gap:16px; margin-bottom:12px; flex-wrap:wrap; font-size:0.9rem;">
+                <a href="index.html" style="color:var(--primary); text-decoration:none; font-weight:700;">🏠 Home (Surya's Gist)</a>
+                <span style="color:#cbd5e0;">•</span>
+                <a href="https://github.com/surya2222" target="_blank" rel="noopener noreferrer" style="color:#2d3748; text-decoration:none; font-weight:600; display:inline-flex; align-items:center; gap:5px;">🐙 GitHub (@surya2222)</a>
+                <span style="color:#cbd5e0;">•</span>
+                <a href="https://chat.whatsapp.com/LGOqoPMt3IO1C6R33qviuT?s=cl&p=a&iam=2" target="_blank" rel="noopener noreferrer" style="color:#25D366; text-decoration:none; font-weight:700; display:inline-flex; align-items:center; gap:5px;">💬 Join ProgRobo on WhatsApp</a>
+            </div>
+            <p>Jupyter Notebook Master Series by Surya | सर्वाधिकार सुरक्षित © 2026</p>
+        </footer>
+
+    </main>
+
+    <script>
+        // Smooth scrolling for table of contents
+        document.querySelectorAll('.toc-link').forEach(anchor => {
+            anchor.addEventListener('click', function (e) {
+                e.preventDefault();
+                const targetId = this.getAttribute('href');
+                const targetElement = document.querySelector(targetId);
+                if (targetElement) {
+                    targetElement.scrollIntoView({
+                        behavior: 'smooth'
+                    });
+                    document.querySelectorAll('.toc-link').forEach(link => link.classList.remove('active'));
+                    this.classList.add('active');
+                }
+            });
+        });
+
+        // Intersection Observer for highlighting current TOC link on scroll
+        const observerOptions = {
+            root: null,
+            rootMargin: '0px 0px -70% 0px',
+            threshold: 0
+        };
+
+        const observer = new IntersectionObserver((entries) => {
+            entries.forEach(entry => {
+                if (entry.isIntersecting) {
+                    const id = entry.target.getAttribute('id');
+                    document.querySelectorAll('.toc-link').forEach(link => {
+                        if (link.getAttribute('href') === `#${id}`) {
+                            link.classList.add('active');
+                        } else {
+                            link.classList.remove('active');
+                        }
+                    });
+                }
+            });
+        }, observerOptions);
+
+        document.querySelectorAll('.chapter-card').forEach(section => {
+            observer.observe(section);
+        });
+    </script>
+</body>
+</html>

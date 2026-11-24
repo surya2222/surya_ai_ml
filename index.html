@@ -1,0 +1,953 @@
+<!DOCTYPE html>
+<html lang="hi">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Surya's Gist - Complete AI & ML Master Guide under Jupyter Notebook</title>
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Fira+Code:wght@400;500;600&family=Inter:wght@300;400;500;600;700;800&family=Noto+Sans+Devanagari:wght@400;500;600;700;800&display=swap" rel="stylesheet">
+    <style>
+        :root {
+            --primary: #4f46e5;
+            --primary-dark: #3730a3;
+            --primary-light: #eef2ff;
+            --accent: #f43f5e;
+            --accent-glow: rgba(244, 63, 94, 0.25);
+            --secondary: #0ea5e9;
+            --emerald: #10b981;
+            --amber: #f59e0b;
+            --bg-dark: #090d16;
+            --bg-card: #111827;
+            --bg-card-hover: #1f2937;
+            --border: #1f2937;
+            --border-highlight: #374151;
+            --text-main: #f8fafc;
+            --text-muted: #94a3b8;
+        }
+
+        * {
+            box-sizing: border-box;
+            margin: 0;
+            padding: 0;
+        }
+
+        body {
+            font-family: 'Noto Sans Devanagari', 'Inter', -apple-system, BlinkMacSystemFont, sans-serif;
+            background-color: var(--bg-dark);
+            color: var(--text-main);
+            line-height: 1.75;
+            overflow-x: hidden;
+        }
+
+        /* Background glow effect */
+        .ambient-glow {
+            position: absolute;
+            top: 0;
+            left: 50%;
+            transform: translateX(-50%);
+            width: 1000px;
+            height: 500px;
+            background: radial-gradient(circle, rgba(79, 70, 229, 0.15) 0%, rgba(244, 63, 94, 0.08) 40%, rgba(9, 13, 22, 0) 70%);
+            pointer-events: none;
+            z-index: 0;
+        }
+
+        /* Container */
+        .container {
+            max-width: 1280px;
+            margin: 0 auto;
+            padding: 0 24px;
+            position: relative;
+            z-index: 1;
+        }
+
+        /* Navbar */
+        nav.navbar {
+            padding: 24px 0;
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            border-bottom: 1px solid rgba(255, 255, 255, 0.08);
+        }
+
+        .brand-logo {
+            display: flex;
+            align-items: center;
+            gap: 12px;
+            text-decoration: none;
+        }
+
+        .brand-icon {
+            width: 42px;
+            height: 42px;
+            background: linear-gradient(135deg, var(--accent) 0%, var(--primary) 100%);
+            border-radius: 10px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            box-shadow: 0 4px 15px var(--accent-glow);
+        }
+
+        .brand-icon svg {
+            width: 24px;
+            height: 24px;
+            fill: white;
+        }
+
+        .brand-text h1 {
+            font-size: 1.25rem;
+            color: #ffffff;
+            font-weight: 800;
+            letter-spacing: -0.02em;
+        }
+
+        .brand-text span {
+            font-size: 0.78rem;
+            color: var(--secondary);
+            font-weight: 600;
+            display: block;
+        }
+
+        .nav-actions {
+            display: flex;
+            gap: 12px;
+        }
+
+        .btn-outline {
+            display: inline-flex;
+            align-items: center;
+            gap: 8px;
+            padding: 8px 16px;
+            background: rgba(255, 255, 255, 0.05);
+            border: 1px solid rgba(255, 255, 255, 0.15);
+            border-radius: 8px;
+            color: #ffffff;
+            font-size: 0.88rem;
+            font-weight: 600;
+            text-decoration: none;
+            transition: all 0.2s ease;
+        }
+
+        
+        .btn-github {
+            display: inline-flex;
+            align-items: center;
+            gap: 8px;
+            padding: 8px 16px;
+            background: #24292e;
+            border: 1px solid #444d56;
+            border-radius: 8px;
+            color: #ffffff;
+            font-size: 0.88rem;
+            font-weight: 600;
+            text-decoration: none;
+            transition: all 0.2s ease;
+        }
+        .btn-github:hover {
+            background: #2f363d;
+            border-color: #58a6ff;
+            color: #ffffff;
+            transform: translateY(-2px);
+            box-shadow: 0 4px 12px rgba(0,0,0,0.3);
+        }
+
+        .btn-whatsapp {
+            display: inline-flex;
+            align-items: center;
+            gap: 8px;
+            padding: 8px 16px;
+            background: #25D366;
+            border: 1px solid #1ebe5d;
+            border-radius: 8px;
+            color: #ffffff;
+            font-size: 0.88rem;
+            font-weight: 700;
+            text-decoration: none;
+            transition: all 0.2s ease;
+        }
+        .btn-whatsapp:hover {
+            background: #20ba5a;
+            color: #ffffff;
+            transform: translateY(-2px);
+            box-shadow: 0 4px 15px rgba(37, 211, 102, 0.4);
+        }
+
+        .btn-outline:hover {
+            background: rgba(255, 255, 255, 0.1);
+            border-color: #ffffff;
+            transform: translateY(-2px);
+        }
+
+        /* Hero Section */
+        header.hero {
+            padding: 70px 0 50px 0;
+            text-align: center;
+        }
+
+        .badge-pill {
+            display: inline-flex;
+            align-items: center;
+            gap: 8px;
+            padding: 6px 16px;
+            background: rgba(79, 70, 229, 0.15);
+            border: 1px solid rgba(79, 70, 229, 0.4);
+            border-radius: 30px;
+            color: #a5b4fc;
+            font-size: 0.85rem;
+            font-weight: 600;
+            margin-bottom: 24px;
+        }
+
+        .hero h2 {
+            font-size: 2.8rem;
+            font-weight: 800;
+            line-height: 1.25;
+            margin-bottom: 20px;
+            background: linear-gradient(135deg, #ffffff 30%, #94a3b8 100%);
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+        }
+
+        .hero h2 span {
+            background: linear-gradient(135deg, #f43f5e 0%, #a855f7 50%, #38bdf8 100%);
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+        }
+
+        /* Statement Box */
+        .statement-card {
+            background: linear-gradient(180deg, rgba(31, 41, 55, 0.6) 0%, rgba(17, 24, 39, 0.8) 100%);
+            border: 1px solid rgba(255, 255, 255, 0.12);
+            border-radius: 16px;
+            padding: 32px 38px;
+            max-width: 980px;
+            margin: 0 auto 40px auto;
+            text-align: left;
+            position: relative;
+            box-shadow: 0 10px 30px rgba(0, 0, 0, 0.3);
+            backdrop-filter: blur(10px);
+        }
+
+        .statement-card::before {
+            content: "“";
+            position: absolute;
+            top: 10px;
+            left: 20px;
+            font-size: 5rem;
+            color: rgba(79, 70, 229, 0.2);
+            font-family: serif;
+            line-height: 1;
+            pointer-events: none;
+        }
+
+        .statement-card p {
+            font-size: 1.15rem;
+            color: #e2e8f0;
+            line-height: 1.85;
+            position: relative;
+            z-index: 1;
+        }
+
+        .statement-card p strong {
+            color: #38bdf8;
+            font-weight: 700;
+        }
+
+        .statement-card .author-tag {
+            display: flex;
+            align-items: center;
+            justify-content: flex-end;
+            gap: 12px;
+            margin-top: 18px;
+            font-size: 0.92rem;
+            color: #94a3b8;
+            font-weight: 600;
+        }
+
+        .author-tag .name {
+            color: #f43f5e;
+            font-weight: 700;
+        }
+
+        /* Metrics Bar */
+        .metrics-grid {
+            display: grid;
+            grid-template-columns: repeat(4, 1fr);
+            gap: 16px;
+            max-width: 1000px;
+            margin: 0 auto 60px auto;
+        }
+
+        .metric-box {
+            background: rgba(17, 24, 39, 0.7);
+            border: 1px solid var(--border);
+            border-radius: 12px;
+            padding: 20px 16px;
+            text-align: center;
+        }
+
+        .metric-box .number {
+            font-size: 2.1rem;
+            font-weight: 800;
+            color: #ffffff;
+            line-height: 1;
+            margin-bottom: 6px;
+            font-family: 'Inter', sans-serif;
+        }
+
+        .metric-box .number.accent1 { color: #f43f5e; }
+        .metric-box .number.accent2 { color: #38bdf8; }
+        .metric-box .number.accent3 { color: #a855f7; }
+        .metric-box .number.accent4 { color: #10b981; }
+
+        .metric-box .label {
+            font-size: 0.84rem;
+            color: var(--text-muted);
+            font-weight: 500;
+        }
+
+        /* Search / Filter Bar */
+        .search-container {
+            max-width: 600px;
+            margin: 0 auto 50px auto;
+            position: relative;
+        }
+
+        .search-input {
+            width: 100%;
+            background: rgba(17, 24, 39, 0.9);
+            border: 1px solid rgba(255, 255, 255, 0.15);
+            border-radius: 12px;
+            padding: 14px 20px 14px 48px;
+            color: #ffffff;
+            font-size: 1rem;
+            outline: none;
+            transition: all 0.2s ease;
+        }
+
+        .search-input:focus {
+            border-color: var(--primary);
+            box-shadow: 0 0 20px rgba(79, 70, 229, 0.3);
+        }
+
+        .search-icon {
+            position: absolute;
+            left: 16px;
+            top: 50%;
+            transform: translateY(-50%);
+            color: var(--text-muted);
+            font-size: 1.1rem;
+        }
+
+        /* Modules Section */
+        .section-header {
+            text-align: center;
+            margin-bottom: 40px;
+        }
+
+        .section-header h3 {
+            font-size: 1.9rem;
+            font-weight: 800;
+            color: #ffffff;
+            margin-bottom: 8px;
+        }
+
+        .section-header p {
+            color: var(--text-muted);
+            font-size: 1rem;
+        }
+
+        .modules-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(360px, 1fr));
+            gap: 24px;
+            margin-bottom: 80px;
+        }
+
+        .module-card {
+            background: var(--bg-card);
+            border: 1px solid var(--border);
+            border-radius: 16px;
+            padding: 28px;
+            display: flex;
+            flex-direction: column;
+            justify-content: space-between;
+            transition: all 0.25s ease;
+            position: relative;
+            overflow: hidden;
+        }
+
+        .module-card:hover {
+            transform: translateY(-4px);
+            border-color: rgba(255, 255, 255, 0.25);
+            box-shadow: 0 12px 30px rgba(0, 0, 0, 0.4);
+        }
+
+        .card-top {
+            margin-bottom: 20px;
+        }
+
+        .card-meta {
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            margin-bottom: 14px;
+        }
+
+        .part-badge {
+            font-size: 0.75rem;
+            font-weight: 700;
+            padding: 4px 10px;
+            border-radius: 20px;
+            text-transform: uppercase;
+            letter-spacing: 0.05em;
+        }
+
+        .badge-p1 { background: rgba(243, 118, 38, 0.15); color: #fb923c; border: 1px solid rgba(243, 118, 38, 0.3); }
+        .badge-p2 { background: rgba(79, 70, 229, 0.15); color: #a5b4fc; border: 1px solid rgba(79, 70, 229, 0.3); }
+        .badge-p3 { background: rgba(13, 148, 136, 0.15); color: #2dd4bf; border: 1px solid rgba(13, 148, 136, 0.3); }
+        .badge-p4 { background: rgba(124, 58, 237, 0.15); color: #c084fc; border: 1px solid rgba(124, 58, 237, 0.3); }
+        .badge-p5 { background: rgba(2, 132, 199, 0.15); color: #38bdf8; border: 1px solid rgba(2, 132, 199, 0.3); }
+        .badge-p6 { background: rgba(67, 56, 202, 0.15); color: #818cf8; border: 1px solid rgba(67, 56, 202, 0.3); }
+        .badge-p7 { background: rgba(225, 29, 72, 0.15); color: #fb7185; border: 1px solid rgba(225, 29, 72, 0.3); }
+        .badge-p8 { background: rgba(15, 118, 110, 0.15); color: #5eead4; border: 1px solid rgba(15, 118, 110, 0.3); }
+
+        .chapter-count {
+            font-size: 0.8rem;
+            color: var(--text-muted);
+            font-weight: 600;
+        }
+
+        .module-card h4 {
+            font-size: 1.35rem;
+            font-weight: 700;
+            color: #ffffff;
+            margin-bottom: 8px;
+            line-height: 1.3;
+        }
+
+        .module-card p.desc {
+            font-size: 0.92rem;
+            color: var(--text-muted);
+            margin-bottom: 18px;
+            line-height: 1.6;
+        }
+
+        .tags-list {
+            display: flex;
+            flex-wrap: wrap;
+            gap: 6px;
+            margin-bottom: 24px;
+        }
+
+        .tag {
+            background: rgba(255, 255, 255, 0.05);
+            color: #cbd5e1;
+            font-size: 0.74rem;
+            padding: 3px 8px;
+            border-radius: 6px;
+            font-family: 'Fira Code', monospace;
+            border: 1px solid rgba(255, 255, 255, 0.06);
+        }
+
+        .btn-card {
+            display: inline-flex;
+            align-items: center;
+            justify-content: center;
+            gap: 8px;
+            width: 100%;
+            padding: 11px 18px;
+            border-radius: 10px;
+            font-size: 0.92rem;
+            font-weight: 700;
+            text-decoration: none;
+            transition: all 0.2s ease;
+        }
+
+        .btn-p1 { background: #ea580c; color: white; }
+        .btn-p1:hover { background: #c2410c; }
+        .btn-p2 { background: #4f46e5; color: white; }
+        .btn-p2:hover { background: #4338ca; }
+        .btn-p3 { background: #0d9488; color: white; }
+        .btn-p3:hover { background: #0f766e; }
+        .btn-p4 { background: #7c3aed; color: white; }
+        .btn-p4:hover { background: #6d28d9; }
+        .btn-p5 { background: #0284c7; color: white; }
+        .btn-p5:hover { background: #0369a1; }
+        .btn-p6 { background: #4338ca; color: white; }
+        .btn-p6:hover { background: #3730a3; }
+        .btn-p7 { background: #e11d48; color: white; }
+        .btn-p7:hover { background: #be123c; }
+        .btn-p8 { background: #0f766e; color: white; }
+        .btn-p8:hover { background: #115e59; }
+
+        /* 3-Hour Roadmap Section */
+        .roadmap-card {
+            background: rgba(17, 24, 39, 0.8);
+            border: 1px solid var(--border);
+            border-radius: 20px;
+            padding: 40px;
+            margin-bottom: 80px;
+        }
+
+        .roadmap-grid {
+            display: grid;
+            grid-template-columns: repeat(3, 1fr);
+            gap: 24px;
+            margin-top: 30px;
+        }
+
+        .hour-box {
+            background: rgba(255, 255, 255, 0.03);
+            border: 1px solid rgba(255, 255, 255, 0.08);
+            border-radius: 14px;
+            padding: 24px;
+            position: relative;
+        }
+
+        .hour-header {
+            display: flex;
+            align-items: center;
+            gap: 10px;
+            margin-bottom: 14px;
+        }
+
+        .hour-badge {
+            background: var(--primary);
+            color: white;
+            font-size: 0.8rem;
+            font-weight: 800;
+            padding: 4px 10px;
+            border-radius: 20px;
+        }
+
+        .hour-box h5 {
+            font-size: 1.15rem;
+            color: #ffffff;
+            font-weight: 700;
+        }
+
+        .hour-box ul {
+            list-style: none;
+            margin-top: 10px;
+        }
+
+        .hour-box li {
+            font-size: 0.88rem;
+            color: var(--text-muted);
+            margin-bottom: 8px;
+            display: flex;
+            align-items: flex-start;
+            gap: 8px;
+        }
+
+        .hour-box li::before {
+            content: "✔";
+            color: var(--emerald);
+            font-weight: bold;
+        }
+
+        /* Footer */
+        footer {
+            border-top: 1px solid rgba(255, 255, 255, 0.08);
+            padding: 40px 0;
+            text-align: center;
+            color: var(--text-muted);
+            font-size: 0.9rem;
+        }
+
+        footer strong {
+            color: #ffffff;
+        }
+
+        @media (max-width: 900px) {
+            .hero h2 { font-size: 2.1rem; }
+            .statement-card p { font-size: 1.02rem; }
+            .metrics-grid { grid-template-columns: repeat(2, 1fr); }
+            .roadmap-grid { grid-template-columns: 1fr; }
+            .modules-grid { grid-template-columns: 1fr; }
+        }
+    </style>
+</head>
+<body>
+
+    <div class="ambient-glow"></div>
+
+    <div class="container">
+
+        <!-- Navigation Bar -->
+        <nav class="navbar">
+            <a href="index.html" class="brand-logo">
+                <div class="brand-icon">
+                    <svg viewBox="0 0 24 24">
+                        <path d="M12 2L2 7l10 5 10-5-10-5zM2 17l10 5 10-5M2 12l10 5 10-5"/>
+                    </svg>
+                </div>
+                <div class="brand-text">
+                    <h1>Surya's Gist</h1>
+                    <span>Complete AI & ML Master Guide under Jupyter</span>
+                </div>
+            </a>
+            <div class="nav-actions">
+                <a href="#roadmap" class="btn-outline">🗺️ 3-Hour Roadmap</a>
+                <a href="#modules" class="btn-outline" style="background:var(--primary); border-color:var(--primary);">🚀 Browse All Parts</a>
+                <a href="https://github.com/surya2222" target="_blank" rel="noopener noreferrer" class="btn-github">
+                    <svg style="width:16px; height:16px; fill:currentColor;" viewBox="0 0 24 24"><path d="M12 0C5.37 0 0 5.37 0 12c0 5.31 3.435 9.795 8.205 11.385.6.105.825-.255.825-.57 0-.285-.015-1.23-.015-2.235-3.015.555-3.795-.735-4.035-1.41-.135-.345-.72-1.41-1.23-1.695-.42-.225-1.02-.78-.015-.795.945-.015 1.62.87 1.845 1.23 1.08 1.815 2.805 1.305 3.495.99.105-.78.42-1.305.765-1.605-2.67-.3-5.46-1.335-5.46-5.925 0-1.305.465-2.385 1.23-3.225-.12-.3-.54-1.53.12-3.18 0 0 1.005-.315 3.3 1.23.96-.27 1.98-.405 3-.405s2.04.135 3 .405c2.295-1.56 3.3-1.23 3.3-1.23.66 1.65.24 2.88.12 3.18.765.84 1.23 1.905 1.23 3.225 0 4.605-2.805 5.625-5.475 5.925.435.375.81 1.095.81 2.22 0 1.605-.015 2.895-.015 3.3 0 .315.225.69.825.57A12.02 12.02 0 0024 12c0-6.63-5.37-12-12-12z"/></svg>
+                    GitHub
+                </a>
+                <a href="https://chat.whatsapp.com/LGOqoPMt3IO1C6R33qviuT?s=cl&p=a&iam=2" target="_blank" rel="noopener noreferrer" class="btn-whatsapp">
+                    <svg style="width:16px; height:16px; fill:currentColor;" viewBox="0 0 24 24"><path d="M12.04 2c-5.46 0-9.91 4.45-9.91 9.91 0 1.75.46 3.45 1.32 4.95L2.05 22l5.25-1.38c1.45.79 3.08 1.21 4.74 1.21 5.46 0 9.91-4.45 9.91-9.91 0-2.65-1.03-5.14-2.9-7.01A9.816 9.816 0 0012.04 2m.01 1.67c2.2 0 4.26.86 5.82 2.42a8.225 8.225 0 012.41 5.83c0 4.54-3.7 8.24-8.24 8.24-1.48 0-2.93-.4-4.2-1.15l-.3-.18-3.12.82.83-3.04-.2-.31a8.196 8.196 0 01-1.26-4.38c0-4.54 3.7-8.24 8.24-8.24m4.52 11.66c-.25-.13-1.47-.72-1.7-.81-.23-.08-.39-.13-.56.13-.17.25-.64.81-.79.97-.14.17-.29.19-.54.06-.25-.13-1.06-.39-2.03-1.25-.75-.67-1.26-1.5-1.41-1.75-.14-.25-.02-.39.11-.51.11-.11.25-.29.37-.44.13-.14.17-.25.25-.42.08-.17.04-.31-.02-.44-.06-.13-.56-1.35-.77-1.85-.2-.49-.41-.42-.56-.43h-.48c-.17 0-.44.06-.67.31-.23.25-.88.86-.88 2.1s.9 2.43 1.03 2.6c.13.17 1.77 2.7 4.29 3.79.6.26 1.07.41 1.44.53.61.19 1.16.17 1.6.1.49-.07 1.47-.6 1.68-1.18.21-.58.21-1.07.15-1.18-.06-.12-.22-.19-.47-.31z"/></svg>
+                    ProgRobo Community
+                </a>
+            </div>
+        </nav>
+
+        <!-- Hero Section -->
+        <header class="hero">
+            <div class="badge-pill">
+                ✨ The Complete 84-Chapter Master Series under Jupyter Notebook
+            </div>
+            <h2>
+                डेटा साइंस, एआई और मशीन लर्निंग का<br>
+                <span>संपूर्ण ज्ञानकोश (Surya's Gist)</span>
+            </h2>
+
+            <!-- The Refined, Inspiring Statement Card -->
+            <div class="statement-card">
+                <p>
+                    "डेटा साइंस, मशीन लर्निंग और आर्टिफिशियल इंटेलिजेंस का संसार अनंत संभावनाओं से भरा और <strong>अत्यंत विस्तृत</strong> है। परंतु जब आपके पास सही दिशा-निर्देश और एक सुव्यवस्थित रोडमैप हो, तो जटिल से जटिल विषय भी अत्यंत सहज हो जाते हैं। इस संपूर्ण मास्टर-सीरीज़ (<strong>Surya's Gist</strong>) का निर्माण इसी विज़न के साथ किया गया है। यहाँ सभी <strong>84 प्रमुख अध्यायों</strong> के सारतत्व को इस प्रकार संकलित किया गया है कि मात्र <strong>3 घंटे के गहन अध्ययन</strong> में आप न केवल आधुनिक उद्योग में प्रयुक्त होने वाले प्रत्येक टूल, लाइब्रेरी और एल्गोरिदम की स्पष्ट समझ प्राप्त कर लेंगे, बल्कि यह भी तय कर सकेंगे कि आपकी करियर यात्रा में किन विषयों पर सर्वाधिक ध्यान केंद्रित करना है। यह केवल एक तकनीकी दस्तावेज़ नहीं, बल्कि डेटा थिंकिंग और प्रॉब्लम सॉल्विंग का एक नया <strong>माइंडसेट विकसित करने वाला</strong> आपका व्यक्तिगत ब्लूप्रिंट है।"
+                </p>
+                <div class="author-tag" style="display:flex; align-items:center; justify-content:space-between; flex-wrap:wrap; gap:14px;">
+                    <div style="display:flex; align-items:center; gap:8px;">
+                        <span>मार्गदर्शन एवं संकलन:</span>
+                        <span class="name">सूरज (Surya)</span>
+                    </div>
+                    <div style="display:flex; align-items:center; gap:10px; flex-wrap:wrap;">
+                        <a href="https://github.com/surya2222" target="_blank" rel="noopener noreferrer" class="btn-github" style="padding:6px 14px; font-size:0.82rem;">
+                            <svg style="width:15px; height:15px; fill:currentColor;" viewBox="0 0 24 24"><path d="M12 0C5.37 0 0 5.37 0 12c0 5.31 3.435 9.795 8.205 11.385.6.105.825-.255.825-.57 0-.285-.015-1.23-.015-2.235-3.015.555-3.795-.735-4.035-1.41-.135-.345-.72-1.41-1.23-1.695-.42-.225-1.02-.78-.015-.795.945-.015 1.62.87 1.845 1.23 1.08 1.815 2.805 1.305 3.495.99.105-.78.42-1.305.765-1.605-2.67-.3-5.46-1.335-5.46-5.925 0-1.305.465-2.385 1.23-3.225-.12-.3-.54-1.53.12-3.18 0 0 1.005-.315 3.3 1.23.96-.27 1.98-.405 3-.405s2.04.135 3 .405c2.295-1.56 3.3-1.23 3.3-1.23.66 1.65.24 2.88.12 3.18.765.84 1.23 1.905 1.23 3.225 0 4.605-2.805 5.625-5.475 5.925.435.375.81 1.095.81 2.22 0 1.605-.015 2.895-.015 3.3 0 .315.225.69.825.57A12.02 12.02 0 0024 12c0-6.63-5.37-12-12-12z"/></svg>
+                            GitHub: @surya2222
+                        </a>
+                        <a href="https://chat.whatsapp.com/LGOqoPMt3IO1C6R33qviuT?s=cl&p=a&iam=2" target="_blank" rel="noopener noreferrer" class="btn-whatsapp" style="padding:6px 14px; font-size:0.82rem;">
+                            <svg style="width:15px; height:15px; fill:currentColor;" viewBox="0 0 24 24"><path d="M12.04 2c-5.46 0-9.91 4.45-9.91 9.91 0 1.75.46 3.45 1.32 4.95L2.05 22l5.25-1.38c1.45.79 3.08 1.21 4.74 1.21 5.46 0 9.91-4.45 9.91-9.91 0-2.65-1.03-5.14-2.9-7.01A9.816 9.816 0 0012.04 2m.01 1.67c2.2 0 4.26.86 5.82 2.42a8.225 8.225 0 012.41 5.83c0 4.54-3.7 8.24-8.24 8.24-1.48 0-2.93-.4-4.2-1.15l-.3-.18-3.12.82.83-3.04-.2-.31a8.196 8.196 0 01-1.26-4.38c0-4.54 3.7-8.24 8.24-8.24m4.52 11.66c-.25-.13-1.47-.72-1.7-.81-.23-.08-.39-.13-.56.13-.17.25-.64.81-.79.97-.14.17-.29.19-.54.06-.25-.13-1.06-.39-2.03-1.25-.75-.67-1.26-1.5-1.41-1.75-.14-.25-.02-.39.11-.51.11-.11.25-.29.37-.44.13-.14.17-.25.25-.42.08-.17.04-.31-.02-.44-.06-.13-.56-1.35-.77-1.85-.2-.49-.41-.42-.56-.43h-.48c-.17 0-.44.06-.67.31-.23.25-.88.86-.88 2.1s.9 2.43 1.03 2.6c.13.17 1.77 2.7 4.29 3.79.6.26 1.07.41 1.44.53.61.19 1.16.17 1.6.1.49-.07 1.47-.6 1.68-1.18.21-.58.21-1.07.15-1.18-.06-.12-.22-.19-.47-.31z"/></svg>
+                            Join ProgRobo Community
+                        </a>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Key Metrics Bar -->
+            <div class="metrics-grid">
+                <div class="metric-box">
+                    <div class="number accent1">8</div>
+                    <div class="label">मास्टर मॉड्यूल (Parts)</div>
+                </div>
+                <div class="metric-box">
+                    <div class="number accent2">84</div>
+                    <div class="label">विस्तृत अध्याय (Chapters)</div>
+                </div>
+                <div class="metric-box">
+                    <div class="number accent3">~3 Hrs</div>
+                    <div class="label">त्वरित रिविजन समय</div>
+                </div>
+                <div class="metric-box">
+                    <div class="number accent4">100%</div>
+                    <div class="label">प्रैक्टिकल हिंदी + टेक कोड</div>
+                </div>
+            </div>
+
+            <!-- Search / Filter Box -->
+            <div class="search-container">
+                <span class="search-icon">🔍</span>
+                <input type="text" id="topicSearch" class="search-input" placeholder="किसी भी टूल या विषय को खोजें (उदा. Pandas, Regression, WebSocket, Docker, Colab)...">
+            </div>
+        </header>
+
+        <!-- Modules Section -->
+        <section id="modules">
+            <div class="section-header">
+                <h3>📚 संपूर्ण मास्टर सीरीज़ डायरेक्टरी (All 8 Modules)</h3>
+                <p>अपनी सुविधानुसार किसी भी भाग का चयन करें और तुरंत गहन अध्ययन प्रारंभ करें</p>
+            </div>
+
+            <div class="modules-grid" id="modulesGrid">
+
+                <!-- Module 1 -->
+                <div class="module-card" data-tags="jupyter basics installation kernel dashboard files shortcuts modal">
+                    <div class="card-top">
+                        <div class="card-meta">
+                            <span class="part-badge badge-p1">Part 1</span>
+                            <span class="chapter-count">अध्याय 1 – 10</span>
+                        </div>
+                        <h4>1. Jupyter Notebook Fundamentals</h4>
+                        <p class="desc">जुपिटर का परिचय, फीचर्स, IDE तुलना, pip व Anaconda इंस्टॉलेशन, लोकल सर्वर आर्किटेक्चर, डैशबोर्ड, सेल्स के प्रकार, रन ऑप्शन्स, मोडल शॉर्टकट्स और कर्नल प्रबंधन।</p>
+                        <div class="tags-list">
+                            <span class="tag">#Introduction</span>
+                            <span class="tag">#Installation</span>
+                            <span class="tag">#Kernel</span>
+                            <span class="tag">#Shortcuts</span>
+                            <span class="tag">#FileManagement</span>
+                        </div>
+                    </div>
+                    <a href="Jupyter_Notebook_Fundamentals_Hindi.html" class="btn-card btn-p1">अध्ययन प्रारंभ करें ➜</a>
+                </div>
+
+                <!-- Module 2 -->
+                <div class="module-card" data-tags="markdown formatting latex math tables images links html documentation story">
+                    <div class="card-top">
+                        <div class="card-meta">
+                            <span class="part-badge badge-p2">Part 2</span>
+                            <span class="chapter-count">अध्याय 11 – 19</span>
+                        </div>
+                        <h4>2. Markdown & Notebook Formatting</h4>
+                        <p class="desc">पेशेवर प्रलेखन, हेडिंग्स, सूचियाँ, टेबल्स, कोड ब्लॉक्स, MathJax/LaTeX गणितीय समीकरण, इमेज रीसाइज़िंग, इंटरैक्टिव एंकर नेविगेशन (TOC), HTML5 स्टाइलिंग और स्टोरीटेलिंग।</p>
+                        <div class="tags-list">
+                            <span class="tag">#Markdown</span>
+                            <span class="tag">#LaTeXMath</span>
+                            <span class="tag">#Tables</span>
+                            <span class="tag">#Images</span>
+                            <span class="tag">#Documentation</span>
+                        </div>
+                    </div>
+                    <a href="Jupyter_Notebook_Part2_Markdown_Formatting_Hindi.html" class="btn-card btn-p2">अध्ययन प्रारंभ करें ➜</a>
+                </div>
+
+                <!-- Module 3 -->
+                <div class="module-card" data-tags="python basics strings data structures lists dicts oop functions debugging">
+                    <div class="card-top">
+                        <div class="card-meta">
+                            <span class="part-badge badge-p3">Part 3</span>
+                            <span class="chapter-count">अध्याय 20 – 31</span>
+                        </div>
+                        <h4>3. Python Programming Inside Jupyter</h4>
+                        <p class="desc">पायथन के मूल तत्व, डायनामिक टाइपिंग, f-strings, 4 मुख्य डेटा स्ट्रक्चर्स (List, Tuple, Set, Dict), लूप्स, Lambda, Comprehensions, मॉड्यूल्स, एक्सेप्शन हैंडलिंग, OOP और %debug।</p>
+                        <div class="tags-list">
+                            <span class="tag">#PythonBasics</span>
+                            <span class="tag">#DataStructures</span>
+                            <span class="tag">#OOP</span>
+                            <span class="tag">#FileHandling</span>
+                            <span class="tag">#Debugging</span>
+                        </div>
+                    </div>
+                    <a href="Jupyter_Notebook_Part3_Python_Inside_Jupyter_Hindi.html" class="btn-card btn-p3">अध्ययन प्रारंभ करें ➜</a>
+                </div>
+
+                <!-- Module 4 -->
+                <div class="module-card" data-tags="magic commands shell ipython widgets rich media multi-kernel performance parallel">
+                    <div class="card-top">
+                        <div class="card-meta">
+                            <span class="part-badge badge-p4">Part 4</span>
+                            <span class="chapter-count">अध्याय 32 – 44</span>
+                        </div>
+                        <h4>4. Jupyter Advanced Features & Tools</h4>
+                        <p class="desc">सुपर-पावर मैजिक कमांड्स (%timeit, %who, %%writefile), शेल कमांड्स (!pip vs %pip), IPython इंजन, Rich Media (Audio/Video), ipywidgets GUI डैशबोर्ड, R/Julia कर्नल्स, और पैरेलल कंप्यूटिंग।</p>
+                        <div class="tags-list">
+                            <span class="tag">#MagicCommands</span>
+                            <span class="tag">#ipywidgets</span>
+                            <span class="tag">#MultiKernel</span>
+                            <span class="tag">#Profiling</span>
+                            <span class="tag">#Parallel</span>
+                        </div>
+                    </div>
+                    <a href="Jupyter_Notebook_Part4_Advanced_Features_Hindi.html" class="btn-card btn-p4">अध्ययन प्रारंभ करें ➜</a>
+                </div>
+
+                <!-- Module 5 -->
+                <div class="module-card" data-tags="data science numpy pandas matplotlib seaborn plotly candlestick visualization">
+                    <div class="card-top">
+                        <div class="card-meta">
+                            <span class="part-badge badge-p5">Part 5</span>
+                            <span class="chapter-count">अध्याय 45 – 49</span>
+                        </div>
+                        <h4>5. Data Science Libraries (Visual Gallery)</h4>
+                        <p class="desc">डेटा साइंस के 5 महा-स्तंभ: NumPy (ndarray, ब्रॉडकास्टिंग), Pandas (Series, DataFrame, GroupBy, Merging), Matplotlib (कोर चार्ट्स, कैंडलस्टिक), Seaborn (हीटमैप, बॉक्सप्लॉट), और Plotly (इंटरैक्टिव 3D चार्ट्स)।</p>
+                        <div class="tags-list">
+                            <span class="tag">#NumPy</span>
+                            <span class="tag">#Pandas</span>
+                            <span class="tag">#Matplotlib</span>
+                            <span class="tag">#Seaborn</span>
+                            <span class="tag">#Plotly</span>
+                        </div>
+                    </div>
+                    <a href="Jupyter_Notebook_Part5_Data_Science_Libraries_Hindi.html" class="btn-card btn-p5">अध्ययन प्रारंभ करें ➜</a>
+                </div>
+
+                <!-- Module 6 -->
+                <div class="module-card" data-tags="database api csv excel json sql postgresql sqlite redis rest websocket">
+                    <div class="card-top">
+                        <div class="card-meta">
+                            <span class="part-badge badge-p6">Part 6</span>
+                            <span class="chapter-count">अध्याय 50 – 59</span>
+                        </div>
+                        <h4>6. Database and API Integration</h4>
+                        <p class="desc">डेटा वेयरहाउसिंग और क्लाउड APIs: CSV चंकिंग, Multi-sheet Excel, JSON Flattening, %sql मैजिक, PostgreSQL (SQLAlchemy), SQLite इन-मेमोरी, Redis इन-मेमोरी कैश, REST APIs (Requests), और लाइव WebSockets।</p>
+                        <div class="tags-list">
+                            <span class="tag">#SQLAlchemy</span>
+                            <span class="tag">#PostgreSQL</span>
+                            <span class="tag">#Redis</span>
+                            <span class="tag">#REST_APIs</span>
+                            <span class="tag">#WebSockets</span>
+                        </div>
+                    </div>
+                    <a href="Jupyter_Notebook_Part6_Database_API_Integration_Hindi.html" class="btn-card btn-p6">अध्ययन प्रारंभ करें ➜</a>
+                </div>
+
+                <!-- Module 7 -->
+                <div class="module-card" data-tags="machine learning data cleaning statistics eda regression classification clustering deep learning ai llm">
+                    <div class="card-top">
+                        <div class="card-meta">
+                            <span class="part-badge badge-p7">Part 7</span>
+                            <span class="chapter-count">अध्याय 60 – 72</span>
+                        </div>
+                        <h4>7. Data Science & Machine Learning</h4>
+                        <p class="desc">मशीन लर्निंग का मास्टर क्लास: डेटा क्लीनिंग (Missing, Outliers), EDA, Statistics, Scikit-learn Pipelines, Linear/Logistic Regression, Trees, Random Forest, K-Means, Confusion Matrix, Deep Learning और GenAI LLMs।</p>
+                        <div class="tags-list">
+                            <span class="tag">#MachineLearning</span>
+                            <span class="tag">#ScikitLearn</span>
+                            <span class="tag">#DeepLearning</span>
+                            <span class="tag">#PyTorch</span>
+                            <span class="tag">#GenAI_LLMs</span>
+                        </div>
+                    </div>
+                    <a href="Jupyter_Notebook_Part7_Data_Science_and_Machine_Learning_Hindi.html" class="btn-card btn-p7">अध्ययन प्रारंभ करें ➜</a>
+                </div>
+
+                <!-- Module 8 -->
+                <div class="module-card" data-tags="production jupyter venv conda git papermill jupyterlab remote ssh security nbconvert">
+                    <div class="card-top">
+                        <div class="card-meta">
+                            <span class="part-badge badge-p8">Part 8</span>
+                            <span class="chapter-count">अध्याय 73 – 84</span>
+                        </div>
+                        <h4>8. Professional & Production Jupyter</h4>
+                        <p class="desc">एंटरप्राइज MLOps: Virtual Envs (venv/conda), requirements.txt, Git (nbstripout/nbdime), Assertions & Unit Tests, Papermill बैच ऑटोमेशन, JupyterLab, रिमोट SSH टनलिंग, Colab/Kaggle, सुरक्षा और Top 10 Best Practices।</p>
+                        <div class="tags-list">
+                            <span class="tag">#MLOps</span>
+                            <span class="tag">#Papermill</span>
+                            <span class="tag">#SSHTunnel</span>
+                            <span class="tag">#Security</span>
+                            <span class="tag">#BestPractices</span>
+                        </div>
+                    </div>
+                    <a href="Jupyter_Notebook_Part8_Production_Level_Jupyter_Hindi.html" class="btn-card btn-p8">अध्ययन प्रारंभ करें ➜</a>
+                </div>
+
+            </div>
+        </section>
+
+        <!-- 3-Hour Accelerated Roadmap Section -->
+        <section id="roadmap" class="roadmap-card">
+            <div class="section-header" style="margin-bottom: 20px;">
+                <h3>⏱️ 3 घंटे का संरचित अध्ययन रोडमैप (Structured 3-Hour Roadmap)</h3>
+                <p>यदि आपके पास समय सीमित है, तो इस 3-घंटे के रणनीतिक प्लान का अनुसरण करें:</p>
+            </div>
+
+            <div class="roadmap-grid">
+                <!-- Hour 1 -->
+                <div class="hour-box">
+                    <div class="hour-header">
+                        <span class="hour-badge">Hour 1</span>
+                        <h5>फाउंडेशन एवं पायथन</h5>
+                    </div>
+                    <ul>
+                        <li><strong>Part 1:</strong> जुपिटर इंटरफ़ेस, कर्नल और शॉर्टकट्स।</li>
+                        <li><strong>Part 2:</strong> मार्कडाउन और स्टोरीटेलिंग फ़ॉर्मेटिंग।</li>
+                        <li><strong>Part 3:</strong> डेटा स्ट्रक्चर्स, फंक्शन्स और OOP।</li>
+                    </ul>
+                    <small style="color:var(--text-muted); display:block; margin-top:12px;">🎯 लक्ष्य: इंटरफ़ेस पर पूरी कमांड और कोड लिखने की त्वरित गति।</small>
+                </div>
+
+                <!-- Hour 2 -->
+                <div class="hour-box">
+                    <div class="hour-header">
+                        <span class="hour-badge" style="background:var(--secondary);">Hour 2</span>
+                        <h5>पावर टूल्स व डेटा विश्लेषण</h5>
+                    </div>
+                    <ul>
+                        <li><strong>Part 4:</strong> मैजिक कमांड्स (%timeit), विजेट्स, शेल।</li>
+                        <li><strong>Part 5:</strong> NumPy ऐरेज़, ब्रॉडकास्टिंग नियम।</li>
+                        <li><strong>Part 5:</strong> Pandas GroupBy, Merging और चार्ट्स।</li>
+                    </ul>
+                    <small style="color:var(--text-muted); display:block; margin-top:12px;">🎯 लक्ष्य: डेटा हेरफेर, चार्टिंग और इंटरैक्टिव डैशबोर्ड्स में महारत।</small>
+                </div>
+
+                <!-- Hour 3 -->
+                <div class="hour-box">
+                    <div class="hour-header">
+                        <span class="hour-badge" style="background:var(--accent);">Hour 3</span>
+                        <h5>एमएल, क्लाउड व प्रोडक्शन</h5>
+                    </div>
+                    <ul>
+                        <li><strong>Part 6:</strong> SQL, PostgreSQL, REST APIs, WebSockets।</li>
+                        <li><strong>Part 7:</strong> ML Pipelines, Trees, Deep Learning, LLMs।</li>
+                        <li><strong>Part 8:</strong> Papermill ऑटोमेशन, SSH और MLOps नियम।</li>
+                    </ul>
+                    <small style="color:var(--text-muted); display:block; margin-top:12px;">🎯 लक्ष्य: एंटरप्राइज प्रोडक्शन सिस्टम और आधुनिक AI इंटीग्रेशन।</small>
+                </div>
+            </div>
+        </section>
+
+        <!-- ProgRobo & GitHub Community Section -->
+        <section class="community-section" style="margin-top:60px; background:linear-gradient(135deg, rgba(30, 41, 59, 0.9) 0%, rgba(15, 23, 42, 0.95) 100%); border:1px solid rgba(99, 102, 241, 0.35); border-radius:18px; padding:40px 32px; text-align:center; position:relative; overflow:hidden; box-shadow: 0 10px 30px rgba(0,0,0,0.4);">
+            <div style="max-width:760px; margin:0 auto;">
+                <div class="badge-pill" style="background:rgba(37, 211, 102, 0.15); border-color:rgba(37, 211, 102, 0.4); color:#4ade80; margin-bottom:18px;">
+                    🤖 Official ProgRobo Community & Open Source Learning
+                </div>
+                <h3 style="font-size:2.1rem; font-weight:800; margin-bottom:14px; color:#ffffff;">
+                    Interested in <span style="background:linear-gradient(135deg, #22c55e, #38bdf8); -webkit-background-clip:text; -webkit-text-fill-color:transparent;">ProgRobo</span>? Join Our Community!
+                </h3>
+                <p style="color:#cbd5e1; font-size:1.05rem; line-height:1.75; margin-bottom:28px;">
+                    यदि आप <strong>ProgRobo (Programming, AI, Automation & Robotics)</strong> में रुचि रखते हैं, नई तकनीकें सीखना चाहते हैं और साथी इनोवेटर्स के साथ मिलकर काम करना चाहते हैं, तो हमारे आधिकारिक WhatsApp कम्युनिटी ग्रुप से अभी जुड़ें और GitHub पर प्रोजेक्ट्स को एक्सप्लोर करें!
+                </p>
+                <div style="display:flex; justify-content:center; gap:16px; flex-wrap:wrap;">
+                    <a href="https://chat.whatsapp.com/LGOqoPMt3IO1C6R33qviuT?s=cl&p=a&iam=2" target="_blank" rel="noopener noreferrer" class="btn-whatsapp" style="font-size:1.05rem; padding:12px 28px; border-radius:12px; box-shadow:0 6px 20px rgba(37, 211, 102, 0.35);">
+                        <svg style="width:20px; height:20px; fill:currentColor;" viewBox="0 0 24 24"><path d="M12.04 2c-5.46 0-9.91 4.45-9.91 9.91 0 1.75.46 3.45 1.32 4.95L2.05 22l5.25-1.38c1.45.79 3.08 1.21 4.74 1.21 5.46 0 9.91-4.45 9.91-9.91 0-2.65-1.03-5.14-2.9-7.01A9.816 9.816 0 0012.04 2m.01 1.67c2.2 0 4.26.86 5.82 2.42a8.225 8.225 0 012.41 5.83c0 4.54-3.7 8.24-8.24 8.24-1.48 0-2.93-.4-4.2-1.15l-.3-.18-3.12.82.83-3.04-.2-.31a8.196 8.196 0 01-1.26-4.38c0-4.54 3.7-8.24 8.24-8.24m4.52 11.66c-.25-.13-1.47-.72-1.7-.81-.23-.08-.39-.13-.56.13-.17.25-.64.81-.79.97-.14.17-.29.19-.54.06-.25-.13-1.06-.39-2.03-1.25-.75-.67-1.26-1.5-1.41-1.75-.14-.25-.02-.39.11-.51.11-.11.25-.29.37-.44.13-.14.17-.25.25-.42.08-.17.04-.31-.02-.44-.06-.13-.56-1.35-.77-1.85-.2-.49-.41-.42-.56-.43h-.48c-.17 0-.44.06-.67.31-.23.25-.88.86-.88 2.1s.9 2.43 1.03 2.6c.13.17 1.77 2.7 4.29 3.79.6.26 1.07.41 1.44.53.61.19 1.16.17 1.6.1.49-.07 1.47-.6 1.68-1.18.21-.58.21-1.07.15-1.18-.06-.12-.22-.19-.47-.31z"/></svg>
+                        💬 Join ProgRobo on WhatsApp
+                    </a>
+                    <a href="https://github.com/surya2222" target="_blank" rel="noopener noreferrer" class="btn-github" style="font-size:1.05rem; padding:12px 28px; border-radius:12px; box-shadow:0 6px 20px rgba(0,0,0,0.4);">
+                        <svg style="width:20px; height:20px; fill:currentColor;" viewBox="0 0 24 24"><path d="M12 0C5.37 0 0 5.37 0 12c0 5.31 3.435 9.795 8.205 11.385.6.105.825-.255.825-.57 0-.285-.015-1.23-.015-2.235-3.015.555-3.795-.735-4.035-1.41-.135-.345-.72-1.41-1.23-1.695-.42-.225-1.02-.78-.015-.795.945-.015 1.62.87 1.845 1.23 1.08 1.815 2.805 1.305 3.495.99.105-.78.42-1.305.765-1.605-2.67-.3-5.46-1.335-5.46-5.925 0-1.305.465-2.385 1.23-3.225-.12-.3-.54-1.53.12-3.18 0 0 1.005-.315 3.3 1.23.96-.27 1.98-.405 3-.405s2.04.135 3 .405c2.295-1.56 3.3-1.23 3.3-1.23.66 1.65.24 2.88.12 3.18.765.84 1.23 1.905 1.23 3.225 0 4.605-2.805 5.625-5.475 5.925.435.375.81 1.095.81 2.22 0 1.605-.015 2.895-.015 3.3 0 .315.225.69.825.57A12.02 12.02 0 0024 12c0-6.63-5.37-12-12-12z"/></svg>
+                        🐙 Explore GitHub (@surya2222)
+                    </a>
+                </div>
+            </div>
+        </section>
+
+        <!-- Footer -->
+        <footer>
+            <div style="display:flex; justify-content:center; gap:20px; margin-bottom:16px; flex-wrap:wrap; font-size:0.95rem;">
+                <a href="https://github.com/surya2222" target="_blank" rel="noopener noreferrer" style="color:#94a3b8; text-decoration:none; display:inline-flex; align-items:center; gap:6px; font-weight:600;">
+                    🐙 GitHub: surya2222
+                </a>
+                <span style="color:#475569;">|</span>
+                <a href="https://chat.whatsapp.com/LGOqoPMt3IO1C6R33qviuT?s=cl&p=a&iam=2" target="_blank" rel="noopener noreferrer" style="color:#22c55e; text-decoration:none; display:inline-flex; align-items:center; gap:6px; font-weight:700;">
+                    💬 ProgRobo WhatsApp Community
+                </a>
+            </div>
+            <p><strong>Surya's Gist</strong> — Complete Data Science, AI & Machine Learning Master Guide under Jupyter Notebook</p>
+            <p>© 2026 Surya. सर्वाधिकार सुरक्षित (All Rights Reserved)। ज्ञान बांटने से बढ़ता है!</p>
+        </footer>
+
+    </div>
+
+    <!-- Live Search & Filtering Script -->
+    <script>
+        const searchInput = document.getElementById('topicSearch');
+        const cards = document.querySelectorAll('.module-card');
+
+        searchInput.addEventListener('input', function(e) {
+            const query = e.target.value.toLowerCase().trim();
+
+            cards.forEach(card => {
+                const textContent = card.innerText.toLowerCase();
+                const tags = card.getAttribute('data-tags') || '';
+
+                if (textContent.includes(query) || tags.toLowerCase().includes(query)) {
+                    card.style.display = 'flex';
+                } else {
+                    card.style.display = 'none';
+                }
+            });
+        });
+    </script>
+</body>
+</html>
